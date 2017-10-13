@@ -24,7 +24,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Tabs");
+        primaryStage.setTitle("Barber Program");
         Group root = new Group();
         Scene scene = new Scene(root, 400, 250, Color.WHITE);
 
