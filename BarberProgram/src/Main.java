@@ -35,6 +35,7 @@ public class Main extends Application {
         // Create pages
         ArrayList<Page> pages = new ArrayList<Page>();
         pages.add(new Summary("Summary"));
+        pages.add(new Login("Login"));
         
         
         // Make the tabs equal to pages
