@@ -20,6 +20,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+    	
+    	//helllo
+    	
         primaryStage.setTitle("Barber Program");
         Group root = new Group();
         Scene scene = new Scene(root, 800, 600, Color.WHITE);
