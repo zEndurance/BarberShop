@@ -26,7 +26,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Barber Program");
         Group root = new Group();
-        Scene scene = new Scene(root, 400, 250, Color.WHITE);
+        Scene scene = new Scene(root, 800, 600, Color.WHITE);
 
         TabPane tabPane = new TabPane();
 
