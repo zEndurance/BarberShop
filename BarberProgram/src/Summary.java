@@ -10,4 +10,8 @@ public class Summary extends Page {
 	public void createGUI() {
 		
 	}
+	
+	public String getName() {
+		return this.name;
+	}
 }
