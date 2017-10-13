@@ -4,9 +4,9 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -20,22 +20,29 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-    	
-    	//helllo
+
     	
         primaryStage.setTitle("Barber Program");
         Group root = new Group();
         Scene scene = new Scene(root, 800, 600, Color.WHITE);
 
+        // The tab pane
         TabPane tabPane = new TabPane();
-
+        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        
+        
+        // layout
         BorderPane borderPane = new BorderPane();
         
         
         // Create pages
         ArrayList<Page> pages = new ArrayList<Page>();
+        
+        
+        
+        
         pages.add(new Summary("Summary"));
-        pages.add(new Login("Login"));
+        pages.add(new Appointments("Appointments"));
         
         
         // Make the tabs equal to pages
