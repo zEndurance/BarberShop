@@ -31,6 +31,8 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         BorderPane borderPane = new BorderPane();
+        
+        
         for (int i = 0; i < 5; i++) {
             Tab tab = new Tab();
             tab.setText("Tab" + i);
