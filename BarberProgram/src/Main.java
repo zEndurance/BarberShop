@@ -31,7 +31,7 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         BorderPane borderPane = new BorderPane();
-        
+        //mikdhad was ere
         
         for (int i = 0; i < 5; i++) {
             Tab tab = new Tab();
