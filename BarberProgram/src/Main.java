@@ -48,10 +48,10 @@ public class Main extends Application {
         // Make the tabs equal to pages
         for (int i = 0; i < pages.size(); i++) {
         	
-            Tab tab = new Tab();
+            //Tab tab = new Tab();
             
             
-            tab.setText(pages.get(i).getName());
+            //
             
             HBox hbox = new HBox();
             
@@ -59,8 +59,8 @@ public class Main extends Application {
             
             
             hbox.setAlignment(Pos.CENTER);
-            tab.setContent(hbox);
-            tabPane.getTabs().add(tab);
+            pages.get(i).setContent(hbox);
+            tabPane.getTabs().add(pages.get(i));
         }
         // bind to take available space
         borderPane.prefHeightProperty().bind(scene.heightProperty());
