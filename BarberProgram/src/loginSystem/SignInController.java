@@ -57,21 +57,26 @@ public class SignInController {
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 		actiontarget.setText("Sign in button pressed");
+		
+		
+		// CONNECTION TO MYSQL HERE
+		
+		
+		// CHECK FOR MYSQL DETAILS ARE CORRECT
+		
 
 		// Check for details
 		if (passwordField.getText().equals("admin") && userField.getText().equals("admin")) {
+			
+			
+				// CHANGE SCENES
 			 	Parent blah = FXMLLoader.load(getClass().getResource("main.fxml"));
 	            Scene scene = new Scene(blah);
 	            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	            appStage.setScene(scene);
-	            
 	            appStage.setTitle("Barber Shop");
 	            appStage.setWidth(944);
 	            appStage.setHeight(600);
-	            
-	            
-	            
-	            
 	            appStage.show();
 		}
 
