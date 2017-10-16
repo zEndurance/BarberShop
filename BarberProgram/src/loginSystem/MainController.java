@@ -1,4 +1,4 @@
-package mainProgram;
+package loginSystem;
 /*
  * Copyright (c) 2011, 2012 Oracle and/or its affiliates.
  * All rights reserved. Use is subject to license terms.
@@ -46,7 +46,7 @@ import javafx.stage.Stage;
 public class MainController {
 
     @FXML
-	protected void handleButtonAction(ActionEvent event) throws IOException {
+	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
 		
 	}
