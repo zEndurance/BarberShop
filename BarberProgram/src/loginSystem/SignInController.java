@@ -43,6 +43,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SignInController {
 	@FXML
@@ -61,25 +66,46 @@ public class SignInController {
 		
 		
 		// CONNECTION TO MYSQL HERE
-		
-		
-		// CHECK FOR MYSQL DETAILS ARE CORRECT
-		
+		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
+		String username = "mm335";
+		String password = "NpgigVp28He0g";
 
-		// Check for details
-		if (passwordField.getText().equals("admin") && userField.getText().equals("admin")) {
-			
-			
-				// CHANGE SCENES
-			 	Parent blah = FXMLLoader.load(getClass().getResource("main.fxml"));
-	            Scene scene = new Scene(blah);
-	            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-	            appStage.setScene(scene);
-	            appStage.setTitle("Barber Shop");
-	            appStage.setWidth(944);
-	            appStage.setHeight(600);
-	            appStage.show();
+		System.out.println("Connecting database...");
+
+		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		    System.out.println("Database connected!");
+		    Statement myStmt = connection.createStatement();
+		    ResultSet myRs = myStmt.executeQuery("SELECT * FROM Login");
+		    while (myRs.next()) {
+		    	// CHECK FOR MYSQL DETAILS ARE CORRECT
+		    	String Username  = myRs.getString("Username");
+		    	String Password = myRs.getString("Password");
+		    	
+		
+		    	// Check for details
+		        
+		    	if (passwordField.getText().equals(Password) && userField.getText().equals(Username)) {
+					
+					
+					// CHANGE SCENES
+				 	Parent blah = FXMLLoader.load(getClass().getResource("main.fxml"));
+		            Scene scene = new Scene(blah);
+		            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		            appStage.setScene(scene);
+		            appStage.setTitle("Barber Shop");
+		            appStage.setWidth(944);
+		            appStage.setHeight(600);
+		            appStage.show();
+			}
+		    	
+		       }
+		} catch (SQLException e) {
+		    throw new IllegalStateException("Cannot connect the database!", e);
 		}
+		
+		
+	
+		
 
 	}
 
