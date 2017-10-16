@@ -63,7 +63,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TreeTableView prefHeight="572.0" prefWidth="944.0">
+                        <TreeTableView prefHeight="571.0" prefWidth="944.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TreeTableColumn prefWidth="75.0" text="Day" />
                             <TreeTableColumn prefWidth="75.0" text="09:00" />
