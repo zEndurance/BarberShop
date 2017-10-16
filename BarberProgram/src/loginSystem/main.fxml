@@ -65,16 +65,16 @@
                      <children>
                         <TreeTableView prefHeight="571.0" prefWidth="944.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TreeTableColumn prefWidth="75.0" text="Day" />
-                            <TreeTableColumn prefWidth="75.0" text="09:00" />
-                              <TreeTableColumn prefWidth="75.0" text="10:00" />
-                              <TreeTableColumn prefWidth="75.0" text="11:00" />
-                              <TreeTableColumn prefWidth="75.0" text="12:00" />
-                              <TreeTableColumn prefWidth="75.0" text="13:00" />
-                              <TreeTableColumn prefWidth="75.0" text="14:00" />
-                              <TreeTableColumn prefWidth="75.0" text="15:00" />
-                              <TreeTableColumn prefWidth="75.0" text="16:00" />
-                              <TreeTableColumn prefWidth="75.0" text="17:00" />
+                            <TreeTableColumn prefWidth="110.0" text="Day" />
+                            <TreeTableColumn prefWidth="92.6" text="09:00" />
+                              <TreeTableColumn prefWidth="92.6" text="10:00" />
+                              <TreeTableColumn prefWidth="92.6" text="11:00" />
+                              <TreeTableColumn prefWidth="92.6" text="12:00" />
+                              <TreeTableColumn prefWidth="92.6" text="13:00" />
+                              <TreeTableColumn prefWidth="92.6" text="14:00" />
+                              <TreeTableColumn prefWidth="92.6" text="15:00" />
+                              <TreeTableColumn prefWidth="92.6" text="16:00" />
+                              <TreeTableColumn prefWidth="92.6" text="17:00" />
                           </columns>
                         </TreeTableView>
                      </children>
