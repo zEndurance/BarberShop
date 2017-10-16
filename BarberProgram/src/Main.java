@@ -38,7 +38,7 @@ public class Main extends Application {
         // Create pages
         ArrayList<Page> pages = new ArrayList<Page>();
         
-        
+        System.out.println("Test");
         
         
         pages.add(new Summary("Summary"));
