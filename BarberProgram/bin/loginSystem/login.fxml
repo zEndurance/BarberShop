@@ -48,7 +48,7 @@
 		GridPane.rowIndex="2" />
 
 	<PasswordField fx:id="passwordField"
-		GridPane.columnIndex="1" GridPane.rowIndex="2" />
+		GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#handleSubmitButtonAction" />
 
 	<HBox spacing="10" alignment="bottom_right" GridPane.columnIndex="1"
 		GridPane.rowIndex="4">

@@ -53,6 +53,7 @@ public class SignInController {
 
 	@FXML
 	private TextField userField;
+	
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
