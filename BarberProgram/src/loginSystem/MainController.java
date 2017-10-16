@@ -48,7 +48,14 @@ public class MainController {
     @FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
-		
+    	Parent blah = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Scene scene = new Scene(blah);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setTitle("Barber Shop Login");
+        appStage.setWidth(944);
+        appStage.setHeight(600);
+        appStage.show();
 	}
 
 }
