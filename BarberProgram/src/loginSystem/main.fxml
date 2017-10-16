@@ -21,10 +21,13 @@
       <TabPane prefHeight="600.0" prefWidth="944.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Summary">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="605.0" prefWidth="950.0" />
-            </content>
+         	 <content>
+         	 	<fx:include source="summary.fxml"/>
+         	 </content>
           </Tab>
+          
+          
+          
           <Tab text="Appointments">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
