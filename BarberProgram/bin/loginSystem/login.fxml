@@ -36,7 +36,7 @@
 		<Insets top="25" right="25" bottom="10" left="25" />
 	</padding>
 
-	<Text id="welcome-text" text="Welcome" GridPane.columnIndex="0"
+	<Text id="welcome-text" text="Login" GridPane.columnIndex="0"
 		GridPane.rowIndex="0" GridPane.columnSpan="2" />
 
 	<Label text="Username:" GridPane.columnIndex="0"
