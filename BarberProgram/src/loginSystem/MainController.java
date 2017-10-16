@@ -51,11 +51,11 @@ public class MainController {
     @FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
-    	Alert alert = new Alert(AlertType.CONFIRMATION);
-    	alert.setTitle("Confirmation");
+    	Alert alert = new Alert(AlertType.NONE);
+    	//alert.setTitle("Confirmation");
     	alert.setContentText("Are you sure you want to logout?");
-    	ButtonType buttonTypeOne = new ButtonType("One");
-    	ButtonType buttonTypeTwo = new ButtonType("Two");
+    	ButtonType buttonTypeOne = new ButtonType("Yes");
+    	ButtonType buttonTypeTwo = new ButtonType("No");
     	
     	alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
   
