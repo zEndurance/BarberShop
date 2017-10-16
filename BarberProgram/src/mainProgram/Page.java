@@ -1,3 +1,4 @@
+package mainProgram;
 import javafx.scene.control.Tab;
 
 public class Page extends Tab{
