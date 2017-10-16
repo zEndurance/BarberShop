@@ -121,7 +121,7 @@
                                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                    <Button mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="25.0" prefWidth="126.0" text="Change Password" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                    <Button mnemonicParsing="false" text="Change Password" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                  </children>
                               </GridPane>
                               <GridPane prefHeight="199.0" prefWidth="924.0">
@@ -140,7 +140,7 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <Button mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="25.0" prefWidth="126.0" text="Upload New Image" GridPane.columnIndex="2" />
+                                    <Button mnemonicParsing="false" text="Upload New Image" GridPane.columnIndex="2" />
                                  </children>
                               </GridPane>
                            </children>
