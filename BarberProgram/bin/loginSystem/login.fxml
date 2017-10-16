@@ -29,7 +29,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane fx:controller="loginSystem.SignInController"
+<GridPane fx:id="rootGrid" fx:controller="loginSystem.SignInController"
 	xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10"
 	styleClass="root">
 	<padding>

@@ -31,7 +31,6 @@ package loginSystem;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -44,30 +43,38 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
- 
-public class SignInController {
-    @FXML private Text actiontarget;
-    
-    @FXML private PasswordField passwordField;
-    
-    @FXML private TextField userField;
-    
-    @FXML protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
-        actiontarget.setText("Sign in button pressed");
-        
-        // Check for details
-        if(passwordField.getText().equals("admin") && userField.getText().equals("admin")) {
-        	
-        	Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        	Node node = root.getParent();
-        	
 
-        	/*
-        	theStage.setTitle("Barber Shop Main");
-        	theStage.setScene(new Scene(root, 944, 600));
-        	theStage.show();*/
-        }
-        
-    }
+public class SignInController {
+	@FXML
+	private Text actiontarget;
+
+	@FXML
+	private PasswordField passwordField;
+
+	@FXML
+	private TextField userField;
+
+	@FXML
+	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
+		actiontarget.setText("Sign in button pressed");
+
+		// Check for details
+		if (passwordField.getText().equals("admin") && userField.getText().equals("admin")) {
+			 	Parent blah = FXMLLoader.load(getClass().getResource("main.fxml"));
+	            Scene scene = new Scene(blah);
+	            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	            appStage.setScene(scene);
+	            
+	            appStage.setTitle("Barber Shop");
+	            appStage.setWidth(944);
+	            appStage.setHeight(600);
+	            
+	            
+	            
+	            
+	            appStage.show();
+		}
+
+	}
 
 }
