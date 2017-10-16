@@ -39,7 +39,7 @@
 	<Text id="welcome-text" text="Welcome" GridPane.columnIndex="0"
 		GridPane.rowIndex="0" GridPane.columnSpan="2" />
 
-	<Label text="User Name:" GridPane.columnIndex="0"
+	<Label text="Username:" GridPane.columnIndex="0"
 		GridPane.rowIndex="1" />
 
 	<TextField fx:id="userField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
