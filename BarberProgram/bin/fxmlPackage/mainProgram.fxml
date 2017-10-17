@@ -23,6 +23,13 @@ xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.MainProgra
       <TabPane prefHeight="600.0" prefWidth="944.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
         
+        <Tab text="Today">
+         	 <content>
+         	 	<fx:include source="todayTab.fxml"/>
+         	 </content>
+          </Tab>
+        
+        
           <Tab text="Summary">
          	 <content>
          	 	<fx:include source="summaryTab.fxml"/>
