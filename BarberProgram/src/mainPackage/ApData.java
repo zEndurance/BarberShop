@@ -78,7 +78,7 @@ public class ApData {
     // 9
     
     public String getT9() {
-        return t9.get();
+        return cS(t9.get());
     }
     public void setT9(String t) {
         t9.set(t);
@@ -87,7 +87,7 @@ public class ApData {
     // 10
     
     public String getT10() {
-        return t10.get();
+        return cS(t10.get());
     }
     public void setT10(String t) {
         t10.set(t);
@@ -96,7 +96,7 @@ public class ApData {
     // 11
     
     public String getT11() {
-        return t11.get();
+        return cS(t11.get());
     }
     public void setT11(String t) {
         t11.set(t);
@@ -105,7 +105,7 @@ public class ApData {
     // 12
     
     public String getT12() {
-        return t12.get();
+        return cS(t12.get());
     }
     public void setT12(String t) {
         t12.set(t);
@@ -114,7 +114,7 @@ public class ApData {
     // 13
     
     public String getT13() {
-        return t13.get();
+        return cS(t13.get());
     }
     public void setT13(String t) {
         t13.set(t);
@@ -123,7 +123,7 @@ public class ApData {
     // 14
     
     public String getT14() {
-        return t14.get();
+        return cS(t14.get());
     }
     public void setT14(String t) {
         t14.set(t);
@@ -132,7 +132,7 @@ public class ApData {
     
     // 15
     public String getT15() {
-        return t15.get();
+        return cS(t15.get());
     }
     public void setT15(String t) {
         t15.set(t);
@@ -140,7 +140,7 @@ public class ApData {
     
     // 16
     public String getT16() {
-        return t16.get();
+        return cS(t16.get());
     }
     public void setT16(String t) {
         t16.set(t);
@@ -148,9 +148,22 @@ public class ApData {
     
     // 17
     public String getT17() {
-        return t17.get();
+        return cS(t17.get());
     }
     public void setT17(String t) {
         t17.set(t);
+    }
+    
+    private String cS(String value) {
+    	String returnStr = "";
+    	if(value.equals("1")) {
+    		returnStr = "Booked";
+    	}else if(value.equals("2")) {
+    		returnStr = "-------------";	
+    	}else {
+    		returnStr = "Available";
+    	}
+    	
+    	return returnStr;
     }
 }
