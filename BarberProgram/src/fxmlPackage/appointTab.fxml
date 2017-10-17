@@ -10,16 +10,16 @@
 		
 	<TableView fx:id="appointTable" prefHeight="400.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 		<columns>
-			<TableColumn prefWidth="75.0" text="Day" />
-			<TableColumn prefWidth="75.0" text="09:00" />
-			<TableColumn prefWidth="75.0" text="10:00" />
-			<TableColumn prefWidth="75.0" text="11:00" />
-			<TableColumn prefWidth="75.0" text="12:00" />
-			<TableColumn prefWidth="75.0" text="13:00" />
-			<TableColumn prefWidth="75.0" text="14:00" />
-			<TableColumn prefWidth="75.0" text="15:00" />
-			<TableColumn prefWidth="75.0" text="16:00" />
-			<TableColumn prefWidth="75.0" text="17:00" />
+			<TableColumn fx:id="cDay" prefWidth="75.0" text="Day" />
+			<TableColumn fx:id="cT9" prefWidth="75.0" text="09:00" />
+			<TableColumn fx:id="cT10" prefWidth="75.0" text="10:00" />
+			<TableColumn fx:id="cT11" prefWidth="75.0" text="11:00" />
+			<TableColumn fx:id="cT12" prefWidth="75.0" text="12:00" />
+			<TableColumn fx:id="cT13" prefWidth="75.0" text="13:00" />
+			<TableColumn fx:id="cT14" prefWidth="75.0" text="14:00" />
+			<TableColumn fx:id="cT15" prefWidth="75.0" text="15:00" />
+			<TableColumn fx:id="cT16" prefWidth="75.0" text="16:00" />
+			<TableColumn fx:id="cT17" prefWidth="75.0" text="17:00" />
 		</columns>
 	</TableView>
 	
