@@ -83,12 +83,12 @@
                                     </Label>
                                     <TextField fx:id="tfEmployeeID" editable="false" prefHeight="25.0" prefWidth="650.0" GridPane.columnIndex="1" />
                                     <TextField fx:id="tfEmployeeName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                    <TextField editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                    <Button mnemonicParsing="false" text="Change Password" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                    <TextField fx:id="tfMobile" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="tfECName" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="tfECNum" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="tfEmployeeEmail" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                    <TextField fx:id="tfEmployeePassword" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    <Button mnemonicParsing="false" onAction="#handleSubmitButtonAction" text="Change Password" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                  </children>
                               </GridPane>
                               <GridPane prefHeight="199.0" prefWidth="924.0">

@@ -28,21 +28,29 @@ public class SignInController {
 	@FXML
 	private TextField userField;
 	
+	
+	// These values are for the current logged in user
+	public static int currentID = -1;
 	public static String currentUser = "";
 	public static String currentPass = "";
-	public static int currentID = -1;
+	public static String currentEmail = "";
+	public static String currentName = "";
+	public static String currentMobile = "";
+	public static String currentECName = "";
+	public static String currentECNum = "";
+	
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
 		// CONNECTION TO MYSQL HERE
 		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
-		String username = "mm335";
-		String password = "NpgigVp28He0g";
+		String dbUsername = "mm335";
+		String dbPassword = "NpgigVp28He0g";
 
 		System.out.println("Connecting database...");
 
-		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
 			System.out.println("Database connected!");
 			Statement myStmt = connection.createStatement();
 			ResultSet myRs = myStmt.executeQuery("SELECT * FROM login");
@@ -51,18 +59,29 @@ public class SignInController {
 				
 				int id = myRs.getInt(1);
 				
-				String Username = myRs.getString("Username");
-				String Password = myRs.getString("Password");
-				
+				String username = myRs.getString("Username");
+				String password = myRs.getString("Password");
+				String email = myRs.getString("Email");
+				String name = myRs.getString("Name");
+				String ecName = myRs.getString("ECName");
+				String ecNum = myRs.getString("ECNum");
+				String mobile = myRs.getString("Mobile");
 				
 
 				// Check for details
 
-				if (passwordField.getText().equals(Password) && userField.getText().equals(Username)) {
+				if (passwordField.getText().equals(password) && userField.getText().equals(username)) {
 
-					currentUser = Username;
-					currentPass = Password;
+					// Store values of the 'now' user
 					currentID = id;
+					currentUser = username;
+					currentPass = password;
+					currentEmail = email;
+					currentName = name;
+					currentECName = ecName;
+					currentECNum = ecNum;
+					currentMobile = mobile;
+					
 					
 					
 					// CHANGE SCENES
