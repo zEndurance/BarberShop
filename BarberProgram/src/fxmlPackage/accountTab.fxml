@@ -89,8 +89,8 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField prefHeight="21.0" prefWidth="688.0" GridPane.columnIndex="1" />
-                                    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="tfEmployeeID" prefHeight="21.0" prefWidth="688.0" GridPane.columnIndex="1" />
+                                    <TextField fx:id="tfEmployeeName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                     <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />

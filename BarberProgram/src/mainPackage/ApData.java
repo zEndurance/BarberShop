@@ -7,7 +7,7 @@ public class ApData {
     private final SimpleStringProperty userID;
     private final SimpleStringProperty day;
     private final SimpleStringProperty date;
-    private final SimpleStringProperty customerName;
+    //private final SimpleStringProperty customerName;
     private final SimpleStringProperty t9;
     private final SimpleStringProperty t10;
     private final SimpleStringProperty t11;
@@ -18,14 +18,23 @@ public class ApData {
     private final SimpleStringProperty t16;
     private final SimpleStringProperty t17;
     
-    public ApData(String ID, String userID, String day, String date, String customerName, 
+    // Public for now
+    
+    public String[] bookingValue = {"", "", "", "", "", "", "", "", ""};
+    public String[] bookingName = {"", "", "", "", "", "", "", "", ""};
+    public String[] bookingDesc = {"", "", "", "", "", "", "", "", ""};
+    public String[] bookingContact = {"", "", "", "", "", "", "", "", ""};
+    public String[] bookingImage = {"", "", "", "", "", "", "", "", ""};
+    
+    
+    public ApData(String ID, String userID, String day, String date,
     		String t9, String t10, String t11, String t12, String t13, String t14, String t15, String t16, String t17) {
     	
         this.ID = new SimpleStringProperty(ID);
         this.userID = new SimpleStringProperty(userID);
         this.day = new SimpleStringProperty(day);
         this.date = new SimpleStringProperty(date);
-        this.customerName = new SimpleStringProperty(customerName);
+        //this.customerName = new SimpleStringProperty(customerName);
         
         this.t9 = new SimpleStringProperty(t9);
         this.t10 = new SimpleStringProperty(t10);
@@ -66,19 +75,20 @@ public class ApData {
         date.set(fName);
     }
     
+    /*
     public String getCustomerName() {
         return customerName.get();
     }
     public void setCustomerName(String fName) {
         customerName.set(fName);
-    }
+    }*/
     
     // Part that needs changing/refactoring (THIS IS HORRIBLE)
     
     // 9
     
     public String getT9() {
-        return cS(t9.get());
+        return cS(0, t9.get());
     }
     public void setT9(String t) {
         t9.set(t);
@@ -87,7 +97,7 @@ public class ApData {
     // 10
     
     public String getT10() {
-        return cS(t10.get());
+        return cS(1, t10.get());
     }
     public void setT10(String t) {
         t10.set(t);
@@ -96,7 +106,7 @@ public class ApData {
     // 11
     
     public String getT11() {
-        return cS(t11.get());
+        return cS(2, t11.get());
     }
     public void setT11(String t) {
         t11.set(t);
@@ -105,7 +115,7 @@ public class ApData {
     // 12
     
     public String getT12() {
-        return cS(t12.get());
+        return cS(3, t12.get());
     }
     public void setT12(String t) {
         t12.set(t);
@@ -114,7 +124,7 @@ public class ApData {
     // 13
     
     public String getT13() {
-        return cS(t13.get());
+        return cS(4, t13.get());
     }
     public void setT13(String t) {
         t13.set(t);
@@ -123,7 +133,7 @@ public class ApData {
     // 14
     
     public String getT14() {
-        return cS(t14.get());
+        return cS(5, t14.get());
     }
     public void setT14(String t) {
         t14.set(t);
@@ -132,7 +142,7 @@ public class ApData {
     
     // 15
     public String getT15() {
-        return cS(t15.get());
+        return cS(6, t15.get());
     }
     public void setT15(String t) {
         t15.set(t);
@@ -140,7 +150,7 @@ public class ApData {
     
     // 16
     public String getT16() {
-        return cS(t16.get());
+        return cS(7, t16.get());
     }
     public void setT16(String t) {
         t16.set(t);
@@ -148,17 +158,43 @@ public class ApData {
     
     // 17
     public String getT17() {
-        return cS(t17.get());
+        return cS(8, t17.get());
     }
     public void setT17(String t) {
         t17.set(t);
     }
     
-    private String cS(String value) {
+    private void saveSplitData(int index, String[] values) {
+    	
+    	this.bookingValue[index] = values[0];
+    	this.bookingName[index] = values[1];
+    	this.bookingDesc[index] = values[2];
+    	this.bookingContact[index] = values[3];
+    	this.bookingImage[index] = values[4];
+    }
+    
+    public String getDescription(int index) {
+    	return this.bookingDesc[index];
+    }
+    
+    public String getName(int index) {
+    	return this.bookingName[index];
+    }
+    
+    private String cS(int index, String value) {
     	String returnStr = "";
-    	if(value.equals("1")) {
+    	
+    	// Split up the string
+    	
+    	String[] splitStr = value.split(",");
+    	
+    	// Save data on the other strings
+    	if (splitStr.length > 1) saveSplitData(index, splitStr);
+    	
+    	// Now return what the user sees in the time table
+    	if(splitStr[0].equals("1")) {
     		returnStr = "Booked";
-    	}else if(value.equals("2")) {
+    	}else if(splitStr[0].equals("2")) {
     		returnStr = "-------------";	
     	}else {
     		returnStr = "Available";
@@ -166,4 +202,12 @@ public class ApData {
     	
     	return returnStr;
     }
+
+	public String getContactInfo(int i) {
+		return this.bookingContact[i];
+	}
+
+	public String getImage(int i) {
+		return this.bookingImage[i];
+	}
 }

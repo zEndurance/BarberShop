@@ -27,6 +27,10 @@ public class SignInController {
 
 	@FXML
 	private TextField userField;
+	
+	public static String currentUser = "";
+	public static String currentPass = "";
+	public static int currentID = -1;
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
@@ -41,16 +45,26 @@ public class SignInController {
 		try (Connection connection = DriverManager.getConnection(url, username, password)) {
 			System.out.println("Database connected!");
 			Statement myStmt = connection.createStatement();
-			ResultSet myRs = myStmt.executeQuery("SELECT * FROM Login");
+			ResultSet myRs = myStmt.executeQuery("SELECT * FROM login");
 			while (myRs.next()) {
 				// CHECK FOR MYSQL DETAILS ARE CORRECT
+				
+				int id = myRs.getInt(1);
+				
 				String Username = myRs.getString("Username");
 				String Password = myRs.getString("Password");
+				
+				
 
 				// Check for details
 
 				if (passwordField.getText().equals(Password) && userField.getText().equals(Username)) {
 
+					currentUser = Username;
+					currentPass = Password;
+					currentID = id;
+					
+					
 					// CHANGE SCENES
 					Parent blah = FXMLLoader.load(getClass().getResource("/fxmlPackage/mainProgram.fxml"));
 					Scene scene = new Scene(blah);

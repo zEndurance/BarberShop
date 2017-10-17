@@ -1,5 +1,6 @@
 package controllersPackage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,13 +9,23 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import mainPackage.ApData;
 
 public class AppointTabController implements Initializable {
@@ -26,6 +37,9 @@ public class AppointTabController implements Initializable {
 	// Columns
 	@FXML
 	TableColumn<ApData, String> cDay;
+	@FXML
+	TableColumn<ApData, String> cDate;
+	
 	@FXML
 	TableColumn<ApData, String> cT9;
 	@FXML
@@ -62,6 +76,7 @@ public class AppointTabController implements Initializable {
 
 		// GRAB DATA FROM SQL
 		cDay.setCellValueFactory(new PropertyValueFactory<ApData, String>("Day"));
+		cDate.setCellValueFactory(new PropertyValueFactory<ApData, String>("Date"));
 
 		// Set column names to grab certain data
 		cT9.setCellValueFactory(new PropertyValueFactory<ApData, String>("T9"));
@@ -78,12 +93,16 @@ public class AppointTabController implements Initializable {
 		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
 		String username = "mm335";
 		String password = "NpgigVp28He0g";
+		
+		
+		
 
 		try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
 			Statement myStmt = connection.createStatement();
 
-			ResultSet myRs = myStmt.executeQuery("SELECT * FROM appointments");
+			System.out.println("CURRENT ID TO FIND IS >>>>>>>>>>>>>" + SignInController.currentID);
+			ResultSet myRs = myStmt.executeQuery("SELECT * FROM appointments WHERE userID ='" + SignInController.currentID + "'");
 
 			ResultSetMetaData rsmd = myRs.getMetaData();
 
@@ -98,7 +117,7 @@ public class AppointTabController implements Initializable {
 				String userID = myRs.getString("userID");
 				String day = myRs.getString("Day");
 				String date = myRs.getString("Date");
-				String customerName = myRs.getString("customerName");
+				//String customerName = myRs.getString("customerName");
 				String t9 = myRs.getString("t9");
 				String t10 = myRs.getString("t10");
 				String t11 = myRs.getString("t11");
@@ -110,13 +129,13 @@ public class AppointTabController implements Initializable {
 				String t17 = myRs.getString("t17");
 
 				// Add String data
-				data.add(new ApData(ID, userID, day, date, customerName, t9, t10, t11, t12, t13, t14, t15, t16, t17));
+				data.add(new ApData(ID, userID, day, date, t9, t10, t11, t12, t13, t14, t15, t16, t17));
 
 				// Debugging statements
 				System.out.println("ID: " + ID);
 				System.out.println("Day: " + day);
 				System.out.println("date: " + date);
-				System.out.println("customerName: " + customerName);
+				System.out.println("customerName: ");
 			}
 		} catch (SQLException e) {
 			System.out.println("ERROR IN SQL");
@@ -127,4 +146,65 @@ public class AppointTabController implements Initializable {
 		System.out.println("// END of AppointTab Initialize");
 	}
 
+	
+	@FXML
+	private void handleClickTableView(MouseEvent click) {
+		// Grab the person data
+		ApData person = appointTable.getSelectionModel().getSelectedItem();
+		
+		// Grab the column index to find values
+		@SuppressWarnings("rawtypes")
+		TablePosition tp = appointTable.getFocusModel().getFocusedCell();
+		
+		if(tp.getColumn() >= 2 && !person.getDescription(tp.getColumn() - 2).equals("")) {
+
+			String name = person.getName(tp.getColumn() - 2);
+			String desc = person.getDescription(tp.getColumn() - 2);
+			String date = person.getDate();
+			
+			int nTime = (tp.getColumn() - 2) + 9;
+			
+			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime+1) + ":00";
+			
+			String contact = person.getContactInfo(tp.getColumn() - 2);
+			
+			String image =  person.getImage(tp.getColumn() - 2);
+			
+			
+			// Open new window
+			
+			Parent root;
+	        try {
+	        	FXMLLoader loader = new FXMLLoader(
+	        		    getClass().getResource(
+	        		      "/fxmlPackage/infoMiniTab.fxml"
+	        		    )
+	        		  );
+
+	        		  Stage stage = new Stage(StageStyle.DECORATED);
+	        		  stage.setTitle("Client Information");
+	        		  stage.setScene(
+	        		    new Scene(
+	        		      (Pane) loader.load()
+	        		    )
+	        		  );
+	        		  
+	        		  InfoMiniTabController controller = 
+	        				    loader.<InfoMiniTabController>getController();
+	        				  controller.initData(name, desc, date, time, contact, image);
+	            
+	            
+	            stage.show();
+	        }
+	        catch (IOException e) {
+	            e.printStackTrace();
+	        }
+			
+		}
+		
+		
+		
+		
+	}
+	
 }
