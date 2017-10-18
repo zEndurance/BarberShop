@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mainPackage.Main;
+import mainPackage.MySQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -54,14 +55,16 @@ public class SignInController {
 		
 		///////////////////////////////////////////////////////////////////// EVERYWHERE ELSE CONNECTION
 		
+		/*
 		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
 		String dbUsername = "sql2199713";
 		String dbPassword = "nW7*wP8!";
+		*/
 		
 		System.out.println("Connecting database...");
 		
 
-		try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
 			System.out.println("Database connected!");
 			Statement myStmt = connection.createStatement();
 			ResultSet myRs = myStmt.executeQuery("SELECT * FROM login");
