@@ -24,6 +24,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
+import mainPackage.Main;
 
 public class AccountTabController implements Initializable {
 	
@@ -42,13 +43,13 @@ public class AccountTabController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Set values for this logged in user
-		tfEmployeeID.setText(Integer.toString(SignInController.currentID));
-		tfEmployeeName.setText(SignInController.currentName);
-		tfMobile.setText(SignInController.currentMobile);
-		tfECName.setText(SignInController.currentECName);
-		tfECNum.setText(SignInController.currentECNum);
-		tfEmployeeEmail.setText(SignInController.currentEmail);
-		tfEmployeePassword.setText(SignInController.currentPass);
+		tfEmployeeID.setText(Integer.toString(Main.currentID));
+		tfEmployeeName.setText(Main.currentName);
+		tfMobile.setText(Main.currentMobile);
+		tfECName.setText(Main.currentECName);
+		tfECNum.setText(Main.currentECNum);
+		tfEmployeeEmail.setText(Main.currentEmail);
+		tfEmployeePassword.setText(Main.currentPass);
 	}
 	
 	@FXML

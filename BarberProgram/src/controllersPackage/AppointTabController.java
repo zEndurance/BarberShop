@@ -27,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.ApData;
+import mainPackage.Main;
 
 public class AppointTabController implements Initializable {
 
@@ -110,8 +111,8 @@ public class AppointTabController implements Initializable {
 
 			Statement myStmt = connection.createStatement();
 
-			System.out.println("CURRENT ID TO FIND IS >>>>>>>>>>>>>" + SignInController.currentID);
-			ResultSet myRs = myStmt.executeQuery("SELECT * FROM appointments WHERE userID ='" + SignInController.currentID + "'");
+			System.out.println("CURRENT ID TO FIND IS >>>>>>>>>>>>>" + Main.currentID);
+			ResultSet myRs = myStmt.executeQuery("SELECT * FROM appointments WHERE userID ='" + Main.currentID + "'");
 
 			ResultSetMetaData rsmd = myRs.getMetaData();
 

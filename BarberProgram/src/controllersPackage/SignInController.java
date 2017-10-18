@@ -12,6 +12,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mainPackage.Main;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -30,14 +32,7 @@ public class SignInController {
 	
 	
 	// These values are for the current logged in user
-	public static int currentID = -1;
-	public static String currentUser = "";
-	public static String currentPass = "";
-	public static String currentEmail = "";
-	public static String currentName = "";
-	public static String currentMobile = "";
-	public static String currentECName = "";
-	public static String currentECNum = "";
+	
 	
 
 	@FXML
@@ -89,14 +84,14 @@ public class SignInController {
 				if (passwordField.getText().equals(password) && userField.getText().equals(username)) {
 
 					// Store values of the 'now' user
-					currentID = id;
-					currentUser = username;
-					currentPass = password;
-					currentEmail = email;
-					currentName = name;
-					currentECName = ecName;
-					currentECNum = ecNum;
-					currentMobile = mobile;
+					Main.currentID = id;
+					Main.currentUser = username;
+					Main.currentPass = password;
+					Main.currentEmail = email;
+					Main.currentName = name;
+					Main.currentECName = ecName;
+					Main.currentECNum = ecNum;
+					Main.currentMobile = mobile;
 					
 					
 					
