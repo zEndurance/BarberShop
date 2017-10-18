@@ -31,7 +31,7 @@ import mainPackage.Main;
 
 public class AppointTabController implements Initializable {
 
-	// Editing stuff
+	// FXML Table GUI
 	@FXML
 	TableView<ApData> appointTable;
 
@@ -40,7 +40,6 @@ public class AppointTabController implements Initializable {
 	TableColumn<ApData, String> cDay;
 	@FXML
 	TableColumn<ApData, String> cDate;
-	
 	@FXML
 	TableColumn<ApData, String> cT9;
 	@FXML
@@ -60,17 +59,8 @@ public class AppointTabController implements Initializable {
 	@FXML
 	TableColumn<ApData, String> cT17;
 
-	public ObservableList<ApData> data = FXCollections.observableArrayList(
-	/*
-	 * new ApData("1", "1", "Monday", "16/10/2017", "Shrek", "", "", "Booked", "",
-	 * "", "", "", "", ""), new ApData("2", "2", "Monday", "16/10/2017", "Taq", "",
-	 * "Booked", "", "", "", "", "", "", ""), new ApData("3", "3", "Monday",
-	 * "16/10/2017", "Bari", "", "", "", "Booked by Rari", "", "", "", "", ""), new
-	 * ApData("4", "4", "Monday", "16/10/2017", "Tom", "", "", "Booked", "", "", "",
-	 * "", "", ""), new ApData("4", "4", "Monday", "16/10/2017", "Alex", "Booked",
-	 * "", "", "", "", "", "", "", "")
-	 */
-	);
+	// Collects ApData objects as each MySQL row
+	public ObservableList<ApData> data = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -90,30 +80,23 @@ public class AppointTabController implements Initializable {
 		cT16.setCellValueFactory(new PropertyValueFactory<ApData, String>("T16"));
 		cT17.setCellValueFactory(new PropertyValueFactory<ApData, String>("T17"));
 
-		// Mysql reconnect
 		
-		/*
-		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
-		String username = "mm335";
-		String password = "NpgigVp28He0g";
-		*/
-		
-		///////////////////////////////////////////////////////////////////// EVERYWHERE ELSE CONNECTION
-				
+		// MySQL Connection
 		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
 		String username = "sql2199713";
 		String password = "nW7*wP8!";
-		
-		
-		
-
 		try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
+			// Create a statement
 			Statement myStmt = connection.createStatement();
 
-			System.out.println("CURRENT ID TO FIND IS >>>>>>>>>>>>>" + Main.currentID);
-			ResultSet myRs = myStmt.executeQuery("SELECT * FROM appointments WHERE userID ='" + Main.currentID + "'");
+			System.out.println("Current logged in ID: " + Main.currentID);
+			
+			// Execute a statement
+			ResultSet myRs = myStmt.executeQuery(
+					"SELECT * FROM appointments WHERE userID ='" + Main.currentID + "'");
 
+			// Grab the whole row data from the above statement
 			ResultSetMetaData rsmd = myRs.getMetaData();
 
 			// Debug statements to find column names
@@ -121,24 +104,25 @@ public class AppointTabController implements Initializable {
 				System.out.println("Column names: " + rsmd.getColumnName(i));
 			}
 
+			// While we have row data 
 			while (myRs.next()) {
 
-				String ID = myRs.getString("ID");
-				String userID = myRs.getString("userID");
-				String day = myRs.getString("Day");
-				String date = myRs.getString("Date");
-				//String customerName = myRs.getString("customerName");
-				String t9 = myRs.getString("t9");
-				String t10 = myRs.getString("t10");
-				String t11 = myRs.getString("t11");
-				String t12 = myRs.getString("t12");
-				String t13 = myRs.getString("t13");
-				String t14 = myRs.getString("t14");
-				String t15 = myRs.getString("t15");
-				String t16 = myRs.getString("t16");
-				String t17 = myRs.getString("t17");
+				// Grab the data from the table 
+				String ID 		= myRs.getString("ID");
+				String userID 	= myRs.getString("userID");
+				String day 		= myRs.getString("Day");
+				String date	 	= myRs.getString("Date");
+				String t9 		= myRs.getString("t9");
+				String t10 		= myRs.getString("t10");
+				String t11 		= myRs.getString("t11");
+				String t12 		= myRs.getString("t12");
+				String t13 		= myRs.getString("t13");
+				String t14 		= myRs.getString("t14");
+				String t15 		= myRs.getString("t15");
+				String t16 		= myRs.getString("t16");
+				String t17 		= myRs.getString("t17");
 
-				// Add String data
+				// Put the string data from the table into separate objects
 				data.add(new ApData(ID, userID, day, date, t9, t10, t11, t12, t13, t14, t15, t16, t17));
 
 				// Debugging statements
@@ -154,14 +138,16 @@ public class AppointTabController implements Initializable {
 				System.out.println("t15: " + t15);
 				System.out.println("t16: " + t16);
 				System.out.println("t17: " + t17);
-				
 			}
 		} catch (SQLException e) {
 			System.out.println("ERROR IN SQL");
 			e.printStackTrace();
 		}
 
+		// Set the data for the table
 		appointTable.setItems(data);
+		
+		// END
 		System.out.println("// END of AppointTab Initialize");
 	}
 
@@ -175,24 +161,26 @@ public class AppointTabController implements Initializable {
 		@SuppressWarnings("rawtypes")
 		TablePosition tp = appointTable.getFocusModel().getFocusedCell();
 		
+		// Grab values after Day and Date
 		if(tp.getColumn() >= 2 && !person.getDescription(tp.getColumn() - 2).equals("")) {
 
+			// Gets data from the column selected based off index
+			// If we clicked on the first available booking it would be the 2nd index in the table
+			// But this 9am booking starts from 0 in the array stored in the ApData object person
 			String name = person.getName(tp.getColumn() - 2);
 			String desc = person.getDescription(tp.getColumn() - 2);
 			String date = person.getDate();
 			
+			// Converting the time value we receive, since the value of 9am starts from index 0
+			// We add 9 and then convert the rest by adding :00 string and then adding 1 to 9 because
+			// its 9:00-10:00
 			int nTime = (tp.getColumn() - 2) + 9;
-			
 			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime+1) + ":00";
-			
 			String contact = person.getContactInfo(tp.getColumn() - 2);
-			
 			String image =  person.getImage(tp.getColumn() - 2);
 			
 			
 			// Open new window
-			
-			Parent root;
 	        try {
 	        	FXMLLoader loader = new FXMLLoader(
 	        		    getClass().getResource(
@@ -218,12 +206,8 @@ public class AppointTabController implements Initializable {
 	        catch (IOException e) {
 	            e.printStackTrace();
 	        }
-			
-		}
-		
-		
-		
-		
+		}	
+		// END handleClickTableView
 	}
-	
+	// END
 }
