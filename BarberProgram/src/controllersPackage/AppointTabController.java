@@ -116,7 +116,7 @@ public class AppointTabController implements Initializable {
 			ResultSetMetaData rsmd = myRs.getMetaData();
 
 			// Debug statements to find column names
-			for (int i = 1; i < rsmd.getColumnCount(); i++) {
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 				System.out.println("Column names: " + rsmd.getColumnName(i));
 			}
 
@@ -144,7 +144,16 @@ public class AppointTabController implements Initializable {
 				System.out.println("ID: " + ID);
 				System.out.println("Day: " + day);
 				System.out.println("date: " + date);
-				System.out.println("customerName: ");
+				System.out.println("t9: " + t9);
+				System.out.println("t10: " + t10);
+				System.out.println("t11: " + t11);
+				System.out.println("t12: " + t12);
+				System.out.println("t13: " + t13);
+				System.out.println("t14: " + t14);
+				System.out.println("t15: " + t15);
+				System.out.println("t16: " + t16);
+				System.out.println("t17: " + t17);
+				
 			}
 		} catch (SQLException e) {
 			System.out.println("ERROR IN SQL");

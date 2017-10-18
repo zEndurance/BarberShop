@@ -166,11 +166,25 @@ public class ApData {
     
     private void saveSplitData(int index, String[] values) {
     	
-    	this.bookingValue[index] = values[0];
-    	this.bookingName[index] = values[1];
-    	this.bookingDesc[index] = values[2];
-    	this.bookingContact[index] = values[3];
-    	this.bookingImage[index] = values[4];
+    	System.out.println("Added data for hour: " + index);
+    	System.out.println("Data found is length: " + values.length);
+    	
+    	if(values.length >= 3){
+    		
+    		
+    		for(int i=0; i<values.length; i++){
+    			System.out.println("Values found: " + values[i]);
+    		}
+    		//System.out.println("Values found: " + values[0]);
+    		
+    		
+    		this.bookingValue[index] = values[0];
+        	this.bookingName[index] = values[1];
+        	this.bookingDesc[index] = values[2];
+        	this.bookingContact[index] = values[3];
+        	this.bookingImage[index] = values[4];
+    	}
+    	
     }
     
     public String getDescription(int index) {
@@ -186,8 +200,10 @@ public class ApData {
     	
     	// Split up the string
     	
-    	String[] splitStr = value.split(",");
+    	String[] splitStr = value.split(", ");
     	
+    	
+    	System.out.println("Checking length: " + splitStr.length);
     	// Save data on the other strings
     	if (splitStr.length > 1) saveSplitData(index, splitStr);
     	
