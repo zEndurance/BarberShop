@@ -59,9 +59,22 @@ public class AccountTabController implements Initializable {
 		String password = tfEmployeePassword.getText();
 		
 		// SQL database query
+		
+		///////////// QM CONNECTION
+		
+		/*
 		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
 		String dbUsername = "mm335";
 		String dbPassword = "NpgigVp28He0g";
+		
+		*/
+		
+		///////////// EVERYWHERE ELSE CONNECTION
+		
+		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
+		String dbUsername = "sql2199713";
+		String dbPassword = "nW7*wP8!";
+		
 		System.out.println("Connecting database...");
 		
 		

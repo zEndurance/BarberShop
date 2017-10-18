@@ -90,9 +90,18 @@ public class AppointTabController implements Initializable {
 		cT17.setCellValueFactory(new PropertyValueFactory<ApData, String>("T17"));
 
 		// Mysql reconnect
+		
+		/*
 		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
 		String username = "mm335";
 		String password = "NpgigVp28He0g";
+		*/
+		
+		///////////////////////////////////////////////////////////////////// EVERYWHERE ELSE CONNECTION
+				
+		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
+		String username = "sql2199713";
+		String password = "nW7*wP8!";
 		
 		
 		

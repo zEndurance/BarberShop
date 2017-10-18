@@ -44,11 +44,27 @@ public class SignInController {
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
 		// CONNECTION TO MYSQL HERE
+		
+		
+		///////////////////////////////////////////////////////////////////// QM CONNECTION
+		/* 
 		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
 		String dbUsername = "mm335";
 		String dbPassword = "NpgigVp28He0g";
 
 		System.out.println("Connecting database...");
+        */
+		
+		/////////////////////////////////////////////////////////////////////
+		
+		///////////////////////////////////////////////////////////////////// EVERYWHERE ELSE CONNECTION
+		
+		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
+		String dbUsername = "sql2199713";
+		String dbPassword = "nW7*wP8!";
+		
+		System.out.println("Connecting database...");
+		
 
 		try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
 			System.out.println("Database connected!");
