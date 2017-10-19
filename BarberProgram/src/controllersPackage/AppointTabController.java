@@ -15,15 +15,17 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.ApData;
@@ -62,6 +64,7 @@ public class AppointTabController implements Initializable {
 	// Collects ApData objects as each MySQL row
 	public ObservableList<ApData> data = FXCollections.observableArrayList();
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -80,7 +83,6 @@ public class AppointTabController implements Initializable {
 		cT16.setCellValueFactory(new PropertyValueFactory<ApData, String>("T16"));
 		cT17.setCellValueFactory(new PropertyValueFactory<ApData, String>("T17"));
 
-		
 		// MySQL Connection
 		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
 		String username = "sql2199713";
@@ -91,10 +93,9 @@ public class AppointTabController implements Initializable {
 			Statement myStmt = connection.createStatement();
 
 			System.out.println("Current logged in ID: " + Main.currentID);
-			
+
 			// Execute a statement
-			ResultSet myRs = myStmt.executeQuery(
-					"SELECT * FROM appointments WHERE userID ='" + Main.currentID + "'");
+			ResultSet myRs = myStmt.executeQuery("SELECT * FROM appointments WHERE userID ='" + Main.currentID + "'");
 
 			// Grab the whole row data from the above statement
 			ResultSetMetaData rsmd = myRs.getMetaData();
@@ -104,23 +105,23 @@ public class AppointTabController implements Initializable {
 				System.out.println("Column names: " + rsmd.getColumnName(i));
 			}
 
-			// While we have row data 
+			// While we have row data
 			while (myRs.next()) {
 
-				// Grab the data from the table 
-				String ID 		= myRs.getString("ID");
-				String userID 	= myRs.getString("userID");
-				String day 		= myRs.getString("Day");
-				String date	 	= myRs.getString("Date");
-				String t9 		= myRs.getString("t9");
-				String t10 		= myRs.getString("t10");
-				String t11 		= myRs.getString("t11");
-				String t12 		= myRs.getString("t12");
-				String t13 		= myRs.getString("t13");
-				String t14 		= myRs.getString("t14");
-				String t15 		= myRs.getString("t15");
-				String t16 		= myRs.getString("t16");
-				String t17 		= myRs.getString("t17");
+				// Grab the data from the table
+				String ID = myRs.getString("ID");
+				String userID = myRs.getString("userID");
+				String day = myRs.getString("Day");
+				String date = myRs.getString("Date");
+				String t9 = myRs.getString("t9");
+				String t10 = myRs.getString("t10");
+				String t11 = myRs.getString("t11");
+				String t12 = myRs.getString("t12");
+				String t13 = myRs.getString("t13");
+				String t14 = myRs.getString("t14");
+				String t15 = myRs.getString("t15");
+				String t16 = myRs.getString("t16");
+				String t17 = myRs.getString("t17");
 
 				// Put the string data from the table into separate objects
 				data.add(new ApData(ID, userID, day, date, t9, t10, t11, t12, t13, t14, t15, t16, t17));
@@ -146,67 +147,94 @@ public class AppointTabController implements Initializable {
 
 		// Set the data for the table
 		appointTable.setItems(data);
-		
+
+		// Loop through each column and row
+		for (@SuppressWarnings("rawtypes")
+		TableColumn tc : appointTable.getColumns()) {
+
+			if (tc.getId().startsWith("cT")) {
+				// Colour the cell based off what it has stored inside it
+				tc.setCellFactory(column -> {
+					return new TableCell<ApData, String>() {
+						protected void updateItem(String item, boolean empty) {
+							super.updateItem(item, empty);
+
+							// Set the text value as what it was before
+							setText(item);
+
+							System.out.println("ITEM EQUAL TO: " + item);
+
+							if (item == null || empty) {
+								setText(null);
+								setStyle("");
+							} else {
+								if (item.equals("Available")) {
+									setStyle("-fx-background-color: B1E6FC");
+								} else if (item.equals("Booked")) {
+									setStyle("-fx-background-color: B1FCBC");
+								} else if (item.equals("-------------")) {
+									setStyle("-fx-background-color: FCF2B1");
+								} else {
+									setStyle("");
+								}
+							}
+						}
+					};
+				});
+			}
+		}
+
 		// END
 		System.out.println("// END of AppointTab Initialize");
 	}
 
-	
 	@FXML
 	private void handleClickTableView(MouseEvent click) {
 		// Grab the person data
 		ApData person = appointTable.getSelectionModel().getSelectedItem();
-		
+
 		// Grab the column index to find values
 		@SuppressWarnings("rawtypes")
 		TablePosition tp = appointTable.getFocusModel().getFocusedCell();
-		
+
 		// Grab values after Day and Date
-		if(tp.getColumn() >= 2 && !person.getDescription(tp.getColumn() - 2).equals("")) {
+		if (tp.getColumn() >= 2 && !person.getDescription(tp.getColumn() - 2).equals("")) {
 
 			// Gets data from the column selected based off index
-			// If we clicked on the first available booking it would be the 2nd index in the table
-			// But this 9am booking starts from 0 in the array stored in the ApData object person
+			// If we clicked on the first available booking it would be the 2nd
+			// index in the table
+			// But this 9am booking starts from 0 in the array stored in the
+			// ApData object person
 			String name = person.getName(tp.getColumn() - 2);
 			String desc = person.getDescription(tp.getColumn() - 2);
 			String date = person.getDate();
-			
-			// Converting the time value we receive, since the value of 9am starts from index 0
-			// We add 9 and then convert the rest by adding :00 string and then adding 1 to 9 because
+
+			// Converting the time value we receive, since the value of 9am
+			// starts from index 0
+			// We add 9 and then convert the rest by adding :00 string and then
+			// adding 1 to 9 because
 			// its 9:00-10:00
 			int nTime = (tp.getColumn() - 2) + 9;
-			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime+1) + ":00";
+			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime + 1) + ":00";
 			String contact = person.getContactInfo(tp.getColumn() - 2);
-			String image =  person.getImage(tp.getColumn() - 2);
-			
-			
-			// Open new window
-	        try {
-	        	FXMLLoader loader = new FXMLLoader(
-	        		    getClass().getResource(
-	        		      "/fxmlPackage/infoMiniTab.fxml"
-	        		    )
-	        		  );
+			String image = person.getImage(tp.getColumn() - 2);
 
-	        		  Stage stage = new Stage(StageStyle.DECORATED);
-	        		  stage.setTitle("Client Information");
-	        		  stage.setScene(
-	        		    new Scene(
-	        		      (Pane) loader.load()
-	        		    )
-	        		  );
-	        		  
-	        		  InfoMiniTabController controller = 
-	        				    loader.<InfoMiniTabController>getController();
-	        				  controller.initData(name, desc, date, time, contact, image);
-	            
-	            
-	            stage.show();
-	        }
-	        catch (IOException e) {
-	            e.printStackTrace();
-	        }
-		}	
+			// Open new window
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
+
+				Stage stage = new Stage(StageStyle.DECORATED);
+				stage.setTitle("Client Information");
+				stage.setScene(new Scene((Pane) loader.load()));
+
+				InfoMiniTabController controller = loader.<InfoMiniTabController> getController();
+				controller.initData(name, desc, date, time, contact, image);
+
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		// END handleClickTableView
 	}
 	// END

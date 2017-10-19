@@ -26,6 +26,8 @@ public class ApData {
     public String[] bookingContact = {"", "", "", "", "", "", "", "", ""};
     public String[] bookingImage = {"", "", "", "", "", "", "", "", ""};
     
+    public String[] times = {"", "", "", "", "", "", "", "", ""};
+    
     
     public ApData(String ID, String userID, String day, String date,
     		String t9, String t10, String t11, String t12, String t13, String t14, String t15, String t16, String t17) {
@@ -45,6 +47,22 @@ public class ApData {
         this.t15 = new SimpleStringProperty(t15);
         this.t16 = new SimpleStringProperty(t16);
         this.t17 = new SimpleStringProperty(t17);
+        
+        // Add them to an array
+        times[0] = t9;
+        times[1] = t10;
+        times[2] = t11;
+        times[3] = t12;
+        times[4] = t13;
+        times[5] = t14;
+        times[6] = t15;
+        times[7] = t16;
+        times[8] = t17;
+        
+    }
+    
+    public String getTX(int index){
+    	return times[index];
     }
  
     public String getID() {
