@@ -218,7 +218,11 @@ public class AppointTabController implements Initializable {
 			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime + 1) + ":00";
 			String contact = person.getContactInfo(tp.getColumn() - 2);
 			String image = person.getImage(tp.getColumn() - 2);
-
+			
+			
+			double price = person.getBookingPrice(tp.getColumn() - 2);
+			System.out.println("DATA FOUND FOR PRICE: " + price);
+			
 			// Open new window
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
@@ -228,7 +232,7 @@ public class AppointTabController implements Initializable {
 				stage.setScene(new Scene((Pane) loader.load()));
 
 				InfoMiniTabController controller = loader.<InfoMiniTabController> getController();
-				controller.initData(name, desc, date, time, contact, image);
+				controller.initData(name, desc, date, time, contact, image, price);
 
 				stage.show();
 			} catch (IOException e) {

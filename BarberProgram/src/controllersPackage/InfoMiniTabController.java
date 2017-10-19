@@ -23,6 +23,7 @@ public class InfoMiniTabController implements Initializable {
 	@FXML private Label labelTime;
 	@FXML private Label labelName;
 	@FXML private Label labelContact;
+	@FXML private Label labelPrice;
 	
 	@FXML private ImageView imageView;
 	
@@ -34,13 +35,14 @@ public class InfoMiniTabController implements Initializable {
 	}
 
 
-	public void initData(String name, String desc, String date, String time, String contact, String image) throws FileNotFoundException {
+	public void initData(String name, String desc, String date, String time, String contact, String image, double price) throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		labelName.setText("Client name: " + name);
 		textArea.setText("Client notes: " + desc);
 		labelDate.setText("Date: " + date);
 		labelTime.setText("Time: " + time);
 		labelContact.setText("Contact Info: " + contact);
+		labelPrice.setText("Price: £" + Double.toString(price));
 		
 		// add an image
 		if(!image.equals("-1")) {

@@ -18,7 +18,7 @@ Accounts page
 	
 
 Appointments page
-	needs to have colours based on the cell data
+	needs to have colours based on the cell data - done
 		green=completed
 		red=incomplete
 		orange=during

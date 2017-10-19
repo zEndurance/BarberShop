@@ -25,6 +25,8 @@ public class ApData {
     public String[] bookingDesc = {"", "", "", "", "", "", "", "", ""};
     public String[] bookingContact = {"", "", "", "", "", "", "", "", ""};
     public String[] bookingImage = {"", "", "", "", "", "", "", "", ""};
+    public String[] bookingPrice = {"", "", "", "", "", "", "", "", ""};
+    
     
     public String[] times = {"", "", "", "", "", "", "", "", ""};
     
@@ -61,6 +63,9 @@ public class ApData {
         
     }
     
+    public double getBookingPrice(int index){
+    	return Double.parseDouble(bookingPrice[index]);
+    }
     
     public String getBookingValue(int index){
     	return bookingValue[index];
@@ -206,6 +211,7 @@ public class ApData {
         	this.bookingDesc[index] = values[2];
         	this.bookingContact[index] = values[3];
         	this.bookingImage[index] = values[4];
+        	this.bookingPrice[index] = values[5];
     	}
     	
     }
