@@ -3,6 +3,7 @@ package controllersPackage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -42,7 +43,10 @@ public class InfoMiniTabController implements Initializable {
 		labelDate.setText("Date: " + date);
 		labelTime.setText("Time: " + time);
 		labelContact.setText("Contact Info: " + contact);
-		labelPrice.setText("Price: £" + Double.toString(price));
+		
+		// Format this double
+		NumberFormat currency=NumberFormat.getCurrencyInstance();
+		labelPrice.setText("Price: " + currency.format(price));
 		
 		// add an image
 		if(!image.equals("-1")) {
