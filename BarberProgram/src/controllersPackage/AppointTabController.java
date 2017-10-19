@@ -8,6 +8,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -16,16 +22,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.ApData;
@@ -148,11 +151,22 @@ public class AppointTabController implements Initializable {
 		// Set the data for the table
 		appointTable.setItems(data);
 
+
+		ArrayList<String> dates = new ArrayList<String>();
+		int index = 0;
+		
 		// Loop through each column and row
 		for (@SuppressWarnings("rawtypes")
 		TableColumn tc : appointTable.getColumns()) {
 
-			if (tc.getId().startsWith("cT")) {
+			//System.out.println("Date is equal to: " + day);
+			if(tc.getId().startsWith("2017")){
+				dates.add(tc.getId());
+			}
+			
+			
+			// Find columns beginning with cT
+			//if (tc.getId().startsWith("cT")) {
 				// Colour the cell based off what it has stored inside it
 				tc.setCellFactory(column -> {
 					return new TableCell<ApData, String>() {
@@ -161,17 +175,58 @@ public class AppointTabController implements Initializable {
 
 							// Set the text value as what it was before
 							setText(item);
-
+							
 							System.out.println("ITEM EQUAL TO: " + item);
 
+							ApData currentRowdata = (ApData) getTableRow().getItem();
+							
 							if (item == null || empty) {
 								setText(null);
 								setStyle("");
 							} else {
 								if (item.equals("Available")) {
-									setStyle("-fx-background-color: B1E6FC");
+									
+try {
+										
+										System.out.println("DATE CHECKING: " + currentRowdata.getDate() + " DATE NOW: " + new Date().toString());
+										if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).after(new Date())) {
+											setStyle("-fx-background-color: B1E6FC");
+										}else if(new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).equals(new Date())){
+											System.out.println("SAME DATE FOUND!");
+										}else if(new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).before(new Date())){
+											setText("Expired");
+											setStyle("-fx-background-color: FCB1B1");
+										}
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									
+									
+									
 								} else if (item.equals("Booked")) {
-									setStyle("-fx-background-color: B1FCBC");
+									
+									try {
+										
+										System.out.println("DATE CHECKING: " + currentRowdata.getDate() + " DATE NOW: " + new Date().toString());
+										if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).after(new Date())) {
+											setStyle("-fx-background-color: B1FCBC");
+										}else{
+											setText("Completed");
+											setStyle("-fx-background-color: #FF46FF");
+										}
+									} catch (ParseException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									
+									
+									
+									System.out.println("THIS BOOKING IS ON: " + currentRowdata.getDate());
+									
+									
+									
+									
 								} else if (item.equals("-------------")) {
 									setStyle("-fx-background-color: FCF2B1");
 								} else {
@@ -181,7 +236,7 @@ public class AppointTabController implements Initializable {
 						}
 					};
 				});
-			}
+			//}
 		}
 
 		// END
