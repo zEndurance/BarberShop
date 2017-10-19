@@ -69,12 +69,29 @@ public class SummaryTabController implements Initializable {
 	@FXML private Label lblCustomers;
 	@FXML private Label lblHours;
 	@FXML private Label lblMoney;
+	@FXML private Label lbldayBest;
+	@FXML private Label lblAverageHour;
+	@FXML private Label lblExpensiveCut;
 	
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		int  amountCustomers = 0;
+		int loop = 0;
 		int  amountHours = 0;
-
+		double  amountMoney = 0;
+		double mostDaily = 0;
+		String dayBest = "";
+		String mostExpensive = "";
+		
+		//daily earnings for the bar chart 
+		double monEarn = 0;
+		double TueEarn = 0;
+		double WedEarn = 0;
+		double ThurEarn = 0;
+		double FriEarn = 0;
+		double SatEarn = 0;
+		double sunEarn = 0;
+		Double[] earnings = {monEarn, TueEarn, WedEarn, ThurEarn, FriEarn, SatEarn, sunEarn};
 		
 		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
 		String username = "sql2199713";
@@ -87,8 +104,11 @@ public class SummaryTabController implements Initializable {
 			// Execute a statement
 			ResultSet myRs = myStmt.executeQuery(
 					"SELECT * FROM appointments WHERE userID ='" + Main.currentID + "'");
+			
 			while (myRs.next()) {
 				// Grab the data from the table 
+				double dayMoneyTotal = 0;
+				double mostSpent = 0;
 				String ID 		= myRs.getString("ID");
 				String userID 	= myRs.getString("userID");
 				String day 		= myRs.getString("Day");
@@ -103,28 +123,63 @@ public class SummaryTabController implements Initializable {
 				String t16 		= myRs.getString("t16");
 				String t17 		= myRs.getString("t17");
 				String[] variables = {t9, t10, t11, t12, t13, t14, t15, t16, t17};
+				
+				//get earnings for the bar chart
+				for(int i=0; i<variables.length ; i++) {
+					String[] splitStr = variables[i].split(", ");
+					if(splitStr.length > 1) {
+						//working out daily earnings
+						if(splitStr[1].length() > 2) {
+							earnings[loop] = Double.parseDouble(splitStr[5]);
+						}
+					}
+				}
+				loop ++; //increments from 0 for x amount of loops
+				
+				//check if the row contains data
 				for(int i=0; i<variables.length ; i++) {
 					String[] splitStr =  variables[i].split(", ");
 					if(splitStr.length > 1) {
 						if(splitStr[1].length() > 2) {
-							amountCustomers ++;
-							amountHours ++;
+							amountCustomers ++; // overall customers
+							amountHours ++; // overall hours
+							amountMoney += Double.parseDouble(splitStr[5]); // overall money
+							dayMoneyTotal += Double.parseDouble(splitStr[5]); // daily money
 						}
 					}
 				}
-				// Put the string data from the table into separate objects
-				data.add(new ApData(ID, userID, day, date, t9, t10, t11, t12, t13, t14, t15, t16, t17));
-				}
-			System.out.println("amount of customers" + amountCustomers);
+				//check for certain row data
+				for(int j=0; j<variables.length; j++) {
+					String[] splitStr =  variables[j].split(", ");
+						if(splitStr.length > 1)
+							if(Double.parseDouble(splitStr[5]) > mostSpent) { 
+								//searches for the most expensive type of cut that has been appointed.
+								mostSpent = Double.parseDouble(splitStr[5]);
+								mostExpensive = splitStr[2];
+							}
+						//searches for the day with most money earned
+						if(dayMoneyTotal>mostDaily) {
+							mostDaily =  amountMoney;
+							dayBest = day;
+						}
+				} // end of for loop
+			} // end of while loop
+			
+			//debugging for daily earnings array
+			for(int i=0; i<earnings.length ; i++) {
+				System.out.println(earnings[i]);
+			}
 			
 			//Initializing labels 
-			double  amountMoney = amountHours * 12.20;
 			DecimalFormat df = new DecimalFormat("####0.00");
+			lbldayBest.setText(dayBest);
+			
 			lblMoney.setText("£" + df.format(amountMoney));
 			lblCustomers.setText(Integer.toString(amountCustomers));
 			lblHours.setText(Integer.toString(amountHours));
-
-					
+			double average = amountMoney / amountHours;
+			lblAverageHour.setText("£" + df.format(average));
+			lblExpensiveCut.setText(mostExpensive);
 		}catch (SQLException e) {
 			System.out.println("ERROR IN SQL");
 			e.printStackTrace();

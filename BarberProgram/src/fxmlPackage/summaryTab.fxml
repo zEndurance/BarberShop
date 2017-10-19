@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.SummaryTabController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.SummaryTabController">
 	
 	<children>
 		<StackedBarChart layoutX="670.0" layoutY="342.0" prefHeight="194.0" prefWidth="225.0">
@@ -18,15 +18,15 @@
 				<NumberAxis side="LEFT" />
 			</yAxis>
 		</StackedBarChart>
-		<Label layoutX="49.0" layoutY="100.0" prefHeight="25.0" prefWidth="162.0" text="Label" />
+		<Label layoutX="49.0" layoutY="125.0" prefHeight="25.0" prefWidth="162.0" text="Best Week Day(money): " />
 		<Label layoutX="602.0" layoutY="44.0" prefHeight="42.0" prefWidth="220.0" text="To Improve">
 			<font>
 				<Font size="27.0" />
 			</font>
 		</Label>
-		<Label layoutX="596.0" layoutY="100.0" prefHeight="25.0" prefWidth="166.0" text="Label" />
-		<Label layoutX="49.0" layoutY="140.0" text="Label" />
-		<Label layoutX="49.0" layoutY="180.0" text="Label" />
+		<Label layoutX="596.0" layoutY="100.0" prefHeight="25.0" prefWidth="166.0" text="Most Frequent Cut: " />
+		<Label layoutX="49.0" layoutY="165.0" text="Most frequent customer: " />
+		<Label layoutX="49.0" layoutY="205.0" text="Most expensive customer:" />
 		<Label layoutX="731.0" layoutY="310.0" text="Daily Earnings">
 			<font>
 				<Font size="22.0" />
@@ -40,14 +40,26 @@
 		<Label layoutX="49.0" layoutY="310.0" text="Amount of Customers: " />
 		<Label layoutX="49.0" layoutY="350.0" text="Amount of hours:" />
 		<Label layoutX="49.0" layoutY="390.0" text="Amount of money: " />
-		<Label layoutX="49.0" layoutY="430.0" text="Label" />
+		<Label layoutX="49.0" layoutY="430.0" text="Average an hour:" />
       <Label fx:id="lblCustomers" layoutX="190.0" layoutY="310.0" prefHeight="17.0" prefWidth="85.0" />
       <Label fx:id="lblHours" layoutX="188.0" layoutY="350.0" prefHeight="17.0" prefWidth="85.0" />
-      <Label fx:id="lblMoney" layoutX="188.0" layoutY="390.0" prefHeight="17.0" prefWidth="85.0" text="Label" />
+      <Label fx:id="lblMoney" layoutX="188.0" layoutY="390.0" prefHeight="17.0" prefWidth="85.0" />
+      <Label fx:id="lblAverageHour" layoutX="188.0" layoutY="431.0" />
       <Label layoutX="41.0" layoutY="36.0" text="Summary">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
+      <Label layoutX="49.0" layoutY="88.0" prefHeight="25.0" prefWidth="162.0" text="Rankings">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbldayBest" layoutX="219.0" layoutY="129.0" text="Label" />
+      <Label layoutX="219.0" layoutY="165.0" text="Label" />
+      <Label layoutX="219.0" layoutY="205.0" text="Label" />
+      <Label layoutX="772.0" layoutY="104.0"/>
+      <Label layoutX="596.0" layoutY="138.0" prefHeight="25.0" prefWidth="166.0" text="Most Expensive Cut: " />
+      <Label fx:id ="lblExpensiveCut" layoutX="772.0" layoutY="142.0" />
 	</children>
 </AnchorPane>
