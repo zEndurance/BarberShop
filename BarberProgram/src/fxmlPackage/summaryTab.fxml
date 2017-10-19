@@ -32,7 +32,7 @@
 				<Font size="22.0" />
 			</font>
 		</Label>
-		<Label layoutX="42.0" layoutY="236.0" text="About Customers">
+		<Label layoutX="42.0" layoutY="236.0" text="Customers">
 			<font>
 				<Font size="34.0" />
 			</font>
@@ -41,9 +41,9 @@
 		<Label layoutX="49.0" layoutY="350.0" text="Amount of hours:" />
 		<Label layoutX="49.0" layoutY="390.0" text="Amount of money: " />
 		<Label layoutX="49.0" layoutY="430.0" text="Label" />
-      <Label layoutX="190.0" layoutY="310.0" prefHeight="17.0" prefWidth="85.0" text="Label" />
-      <Label layoutX="188.0" layoutY="350.0" prefHeight="17.0" prefWidth="85.0" text="Label" />
-      <Label layoutX="188.0" layoutY="390.0" prefHeight="17.0" prefWidth="85.0" text="Label" />
+      <Label fx:id="lblCustomers" layoutX="190.0" layoutY="310.0" prefHeight="17.0" prefWidth="85.0" />
+      <Label fx:id="lblHours" layoutX="188.0" layoutY="350.0" prefHeight="17.0" prefWidth="85.0" />
+      <Label fx:id="lblMoney" layoutX="188.0" layoutY="390.0" prefHeight="17.0" prefWidth="85.0" text="Label" />
       <Label layoutX="41.0" layoutY="36.0" text="Summary">
          <font>
             <Font size="34.0" />
