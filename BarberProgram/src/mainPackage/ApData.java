@@ -61,6 +61,11 @@ public class ApData {
         
     }
     
+    
+    public String getBookingValue(int index){
+    	return bookingValue[index];
+    }
+    
     public String getTX(int index){
     	return times[index];
     }

@@ -198,7 +198,7 @@ public class AppointTabController implements Initializable {
 		TablePosition tp = appointTable.getFocusModel().getFocusedCell();
 
 		// Grab values after Day and Date
-		if (tp.getColumn() >= 2 && !person.getDescription(tp.getColumn() - 2).equals("")) {
+		if (tp.getColumn() >= 2 && person.getBookingValue(tp.getColumn() - 2).equals("1")) {
 
 			// Gets data from the column selected based off index
 			// If we clicked on the first available booking it would be the 2nd
