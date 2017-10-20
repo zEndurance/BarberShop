@@ -25,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import mainPackage.Main;
+import mainPackage.MySQL;
 
 public class AccountTabController implements Initializable {
 	
@@ -72,20 +73,21 @@ public class AccountTabController implements Initializable {
 		
 		///////////// EVERYWHERE ELSE CONNECTION
 		
+		/*
 		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
 		String dbUsername = "sql2199713";
-		String dbPassword = "nW7*wP8!";
+		String dbPassword = "nW7*wP8!";*/
 		
 		System.out.println("Connecting database...");
 		
-		
+		System.out.println("232323");
 		String sql = "UPDATE login SET Password='"+password+"' WHERE ID='" + tfEmployeeID.getText()+"'";
 
 		System.out.println("SQL: " + sql);
 		
 		
 
-		try (Connection connection = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
 			//Statement myStmt = connection.createStatement();
 
 			//System.out.println("SQL: " + sql);
