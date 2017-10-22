@@ -14,6 +14,6 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="44.0" layoutX="24.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="271.0" />
       <Label layoutX="98.0" layoutY="25.0" text="Today's Appointments" />
       <WebView fx:id="webView" layoutX="302.0" layoutY="14.0" prefHeight="486.0" prefWidth="630.0" />
-      <DatePicker layoutX="24.0" layoutY="56.0" prefHeight="17.0" prefWidth="271.0" />
+      <DatePicker fx:id="datePicker" onAction="#handleDateButtonAction" layoutX="24.0" layoutY="56.0" prefHeight="17.0" prefWidth="271.0" />
    </children>
 </AnchorPane>
