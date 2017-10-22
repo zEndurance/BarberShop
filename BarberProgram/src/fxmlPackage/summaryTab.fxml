@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="945.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.SummaryTabController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="909.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.SummaryTabController">
 	
 	<children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="44.0" layoutX="592.0" layoutY="273.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="271.0" />
@@ -18,14 +18,6 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="44.0" layoutX="20.0" layoutY="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="271.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="44.0" layoutX="16.0" layoutY="273.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="271.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="44.0" layoutX="584.0" layoutY="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="271.0" />
-		<StackedBarChart layoutX="595.0" layoutY="318.0" prefHeight="194.0" prefWidth="225.0">
-			<xAxis>
-				<CategoryAxis label="m" prefHeight="22.0" prefWidth="73.0" />
-			</xAxis>
-			<yAxis>
-				<NumberAxis side="LEFT" />
-			</yAxis>
-		</StackedBarChart>
 		<Label layoutX="597.0" layoutY="23.0" prefHeight="42.0" prefWidth="220.0" text="To Improve">
 			<font>
 				<Font size="27.0" />
@@ -108,5 +100,13 @@
             </AnchorPane>
         </items>
       </SplitPane>
+      <BarChart fx:id = "barChart" layoutX="576.0" layoutY="324.0" prefHeight="243.0" prefWidth="271.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
 	</children>
 </AnchorPane>

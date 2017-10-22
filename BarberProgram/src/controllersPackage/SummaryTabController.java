@@ -73,7 +73,11 @@ public class SummaryTabController implements Initializable {
 	@FXML private Label lblAverageHour;
 	@FXML private Label lblExpensiveCut;
 	
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	@FXML private BarChart<String, Double> barChart;
+	@FXML private CategoryAxis x;
+	@FXML private NumberAxis y;
+	
+	public void initialize(URL arg0, ResourceBundle arg1) {		
 		// TODO Auto-generated method stub
 		int  amountCustomers = 0;
 		int loop = 0;
@@ -91,6 +95,7 @@ public class SummaryTabController implements Initializable {
 		double FriEarn = 0;
 		double SatEarn = 0;
 		double sunEarn = 0;
+		String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 		Double[] earnings = {monEarn, TueEarn, WedEarn, ThurEarn, FriEarn, SatEarn, sunEarn};
 		
 		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
@@ -148,6 +153,7 @@ public class SummaryTabController implements Initializable {
 						}
 					}
 				}
+				
 				//check for certain row data
 				for(int j=0; j<variables.length; j++) {
 					String[] splitStr =  variables[j].split(", ");
@@ -165,11 +171,14 @@ public class SummaryTabController implements Initializable {
 				} // end of for loop
 			} // end of while loop
 			
+			XYChart.Series<String, Double> barData = new XYChart.Series<>(); // arraylist of data for the chart
 			//debugging for daily earnings array
 			for(int i=0; i<earnings.length ; i++) {
+				barData.getData().add(new XYChart.Data<>(days[i], earnings[i])); // add earnings to the bar chart
 				System.out.println(earnings[i]);
 			}
-			
+			barChart.getData().add(barData);
+
 			//Initializing labels 
 			DecimalFormat df = new DecimalFormat("####0.00");
 			lbldayBest.setText(dayBest);
@@ -180,10 +189,12 @@ public class SummaryTabController implements Initializable {
 			double average = amountMoney / amountHours;
 			lblAverageHour.setText("£" + df.format(average));
 			lblExpensiveCut.setText(mostExpensive);
+			
+			
 		}catch (SQLException e) {
 			System.out.println("ERROR IN SQL");
 			e.printStackTrace();
 		}
-
+		
 	}
 }
