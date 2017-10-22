@@ -135,14 +135,14 @@ public class TodaysTabController implements Initializable {
 				
 				
 				
-				
+				System.out.println("COMBINED STR LENGTH: ------------ > " + combinedStr.length);
 				
 				for(int i=0; i<times.size(); i++){
 					String[] split = times.get(i).split(", ");
 					
 					if(split.length >= 3 && split[0].equals("1")){
 						System.out.println("Split: " + split[1]);
-						clientObservableList.addAll(new TodayData(split[1], TodayData.STATUS.NOTSHOWED));
+						clientObservableList.addAll(new TodayData(split[1], TodayData.STATUS.NOTSHOWED, Integer.toString(i)));
 					}
 					
 					

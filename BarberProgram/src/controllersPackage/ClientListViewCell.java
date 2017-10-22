@@ -18,6 +18,9 @@ public class ClientListViewCell extends ListCell<TodayData>  {
     private Label label1;
 	
 	@FXML
+	private Label labelTime;
+	
+	@FXML
 	private ChoiceBox cBox;
 
     //@FXML private Label label2;
@@ -51,6 +54,7 @@ public class ClientListViewCell extends ListCell<TodayData>  {
 
             }
 
+            labelTime.setText(String.valueOf(student.getTime()));
             label1.setText(String.valueOf(student.getName()));
             //label2.setText(student.getName());
 
