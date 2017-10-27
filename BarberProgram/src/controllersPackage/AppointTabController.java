@@ -70,7 +70,7 @@ public class AppointTabController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		// GRAB DATA FROM SQL
+		// Grab data from SQLs
 		cDay.setCellValueFactory(new PropertyValueFactory<ApData, String>("Day"));
 		cDate.setCellValueFactory(new PropertyValueFactory<ApData, String>("Date"));
 
@@ -86,7 +86,8 @@ public class AppointTabController implements Initializable {
 		cT17.setCellValueFactory(new PropertyValueFactory<ApData, String>("T17"));
 
 		// MySQL Connection
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME,
+				MySQL.DATABASE_PASSWORD)) {
 
 			// Create a statement
 			Statement myStmt = connection.createStatement();
@@ -157,8 +158,6 @@ public class AppointTabController implements Initializable {
 				dates.add(tc.getId());
 			}
 
-			// Find columns beginning with cT
-			// if (tc.getId().startsWith("cT")) {
 			// Colour the cell based off what it has stored inside it
 			tc.setCellFactory(column -> {
 				return new TableCell<ApData, String>() {
@@ -246,7 +245,7 @@ public class AppointTabController implements Initializable {
 
 			// Gets data from the column selected based off index
 			// If we clicked on the first available booking it would be the 2nd
-			// index in the table
+			// Index in the table
 			// But this 9am booking starts from 0 in the array stored in the
 			// ApData object person
 			String name = person.getName(tp.getColumn() - 2);
@@ -254,10 +253,10 @@ public class AppointTabController implements Initializable {
 			String date = person.getDate();
 
 			// Converting the time value we receive, since the value of 9am
-			// starts from index 0
+			// Starts from index 0
 			// We add 9 and then convert the rest by adding :00 string and then
-			// adding 1 to 9 because
-			// its 9:00-10:00
+			// Adding 1 to 9 because
+			// Its 9:00-10:00
 			int nTime = (tp.getColumn() - 2) + 9;
 			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime + 1) + ":00";
 			String contact = person.getContactInfo(tp.getColumn() - 2);

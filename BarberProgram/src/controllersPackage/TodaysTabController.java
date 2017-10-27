@@ -122,14 +122,15 @@ public class TodaysTabController implements Initializable {
 				System.out.println("COMBINED STR LENGTH: ------------ > " + combinedStr.length);
 
 				for (int i = 0; i < times.size(); i++) {
+					// Splits the appointments string data
 					String[] split = times.get(i).split(", ");
-
+					// Only get data if theres a booking
 					if (split.length >= 3 && split[0].equals("1")) {
 						System.out.println("Split: " + split[1]);
 						clientObservableList.addAll(new TodayData(split[1], Status.NOTSHOWED, Integer.toString(i)));
 					}
 				}
-
+				
 				listView.setItems(clientObservableList);
 				listView.setCellFactory(studentListView -> new ClientListViewCell());
 			}
@@ -148,9 +149,10 @@ public class TodaysTabController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// Gets the value of the current date and sets it to the todaysTab date
 		datePicker.setValue(NOW_LOCAL_DATE());
 		loadsDatesData();
-		// WebView view = new WebView();
+		// Sets the right side of the page to a web browser
 		WebEngine engine = webView.getEngine();
 		engine.load("http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/#");
 	}

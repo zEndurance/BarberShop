@@ -16,16 +16,12 @@ import mainPackage.TodayData;
 public class ClientListViewCell extends ListCell<TodayData>  {
 	@FXML
     private Label label1;
-	
 	@FXML
 	private Label labelTime;
-	
 	@FXML
 	private ChoiceBox<String> cBox;
-
     @FXML
     private GridPane gridPane;
-
     private FXMLLoader mLLoader;
 
     @Override
@@ -37,17 +33,15 @@ public class ClientListViewCell extends ListCell<TodayData>  {
             setText(null);
             setGraphic(null);
         } else {
-        	// Custom load fxml
+        	// Custom load FXML
             if (mLLoader == null) {
                 mLLoader = new FXMLLoader(getClass().getResource("/fxmlPackage/listViewItem.fxml"));
                 mLLoader.setController(this);
-
                 try {
                     mLLoader.load();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
             
             // Values of labels/javafx items
@@ -57,8 +51,9 @@ public class ClientListViewCell extends ListCell<TodayData>  {
             ObservableList<String> data = FXCollections.observableArrayList();
             
             data.addAll(Status.CHECKIN.toString(), Status.WAITING.toString(), Status.NOTSHOWED.toString(), Status.CANCELLED.toString(), Status.ARRIVED.toString());
-
-            cBox.setItems(data); // Inserting data into the ChoiceBox
+            
+            // Inserting data into the ChoiceBox
+            cBox.setItems(data);
             
             setText(null);
             setGraphic(gridPane);

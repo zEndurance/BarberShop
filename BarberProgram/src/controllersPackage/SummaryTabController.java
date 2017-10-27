@@ -22,7 +22,7 @@ public class SummaryTabController implements Initializable {
 	// Collects ApData objects as each MySQL row
 	public ObservableList<ApData> data = FXCollections.observableArrayList();
 
-	// called by the FXML loader after the labels declared above are injected:
+	// Called by the FXML loader after the labels declared above are injected:
 	@FXML
 	private Label lblCustomers;
 	@FXML
@@ -91,19 +91,19 @@ public class SummaryTabController implements Initializable {
 				String t17 = myRs.getString("t17");
 				String[] variables = { t9, t10, t11, t12, t13, t14, t15, t16, t17 };
 
-				// get earnings for the bar chart
+				// Get earnings for the bar chart
 				for (int i = 0; i < variables.length; i++) {
 					String[] splitStr = variables[i].split(", ");
 					if (splitStr.length > 1) {
-						// working out daily earnings
+						// Working out daily earnings
 						if (splitStr[1].length() > 2) {
 							earnings[loop] = Double.parseDouble(splitStr[5]);
 						}
 					}
 				}
-				loop++; // increments from 0 for x amount of loops
+				loop++; // Increments from 0 for x amount of loops
 
-				// check if the row contains data
+				// Check if the row contains data
 				for (int i = 0; i < variables.length; i++) {
 					String[] splitStr = variables[i].split(", ");
 					if (splitStr.length > 1) {
@@ -116,25 +116,25 @@ public class SummaryTabController implements Initializable {
 					}
 				}
 
-				// check for certain row data
+				// Check for certain row data
 				for (int j = 0; j < variables.length; j++) {
 					String[] splitStr = variables[j].split(", ");
 					if (splitStr.length > 1)
 						if (Double.parseDouble(splitStr[5]) > mostSpent) {
-							// searches for the most expensive type of cut that has been appointed.
+							// Searches for the most expensive type of cut that has been appointed.
 							mostSpent = Double.parseDouble(splitStr[5]);
 							mostExpensive = splitStr[2];
 						}
-					// searches for the day with most money earned
+					// Searches for the day with most money earned
 					if (dayMoneyTotal > mostDaily) {
 						mostDaily = amountMoney;
 						dayBest = day;
 					}
-				} // end of for loop
-			} // end of while loop
+				} // End of for loop
+			} // End of while loop
 
 			XYChart.Series<String, Double> barData = new XYChart.Series<>(); // arraylist of data for the chart
-			// debugging for daily earnings array
+			// Debugging for daily earnings array
 			for (int i = 0; i < earnings.length; i++) {
 				barData.getData().add(new XYChart.Data<>(days[i], earnings[i])); // add earnings to the bar chart
 				System.out.println(earnings[i]);

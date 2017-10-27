@@ -21,9 +21,8 @@ public class MainProgramController implements Initializable {
 
     @FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
-
+    	// Logout Alert Window
     	Alert alert = new Alert(AlertType.NONE);
-    	//alert.setTitle("Confirmation");
     	alert.setContentText("Are you sure you want to logout?");
     	ButtonType buttonTypeOne = new ButtonType("Yes");
     	ButtonType buttonTypeTwo = new ButtonType("No");
@@ -46,8 +45,7 @@ public class MainProgramController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
+		// TODO - MySQL grabbing all user data should happen here and not each time a tab opens
 	}
 
 }

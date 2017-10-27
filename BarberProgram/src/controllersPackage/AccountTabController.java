@@ -64,10 +64,8 @@ public class AccountTabController implements Initializable {
 			
 			// Create an alert window saying we did it!
 			Alert alert = new Alert(AlertType.NONE);
-	    	//alert.setTitle("Confirmation");
 	    	alert.setContentText("Your password has been changed!");
 	    	ButtonType buttonTypeOne = new ButtonType("Ok");
-	    	
 	    	alert.getButtonTypes().setAll(buttonTypeOne);
 	  
 	    	Optional<ButtonType> result = alert.showAndWait();

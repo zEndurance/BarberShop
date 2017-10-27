@@ -23,27 +23,22 @@ import mainPackage.MySQL;
 public class SignInController {
 	@FXML
 	private Text actiontarget;
-
 	@FXML
 	private PasswordField passwordField;
-
 	@FXML
 	private TextField userField;
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
-		// CONNECTION TO MYSQL HERE
-		System.out.println("Connecting database...");
-
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME,
-				MySQL.DATABASE_PASSWORD)) {
+		// Connection to MySql here
+		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
 			System.out.println("Database connected!");
 			Statement myStmt = connection.createStatement();
 			ResultSet myRs = myStmt.executeQuery("SELECT * FROM login");
 			while (myRs.next()) {
 
-				// CHECK FOR MYSQL DETAILS ARE CORRECT
+				// Checking for MySQL details are correct
 				int id = myRs.getInt(1);
 				String username = myRs.getString("Username");
 				String password = myRs.getString("Password");
@@ -66,7 +61,7 @@ public class SignInController {
 					Main.currentECNum = ecNum;
 					Main.currentMobile = mobile;
 
-					// CHANGE SCENES
+					// Change Scenes
 					Parent blah = FXMLLoader.load(getClass().getResource("/fxmlPackage/mainProgram.fxml"));
 					Scene scene = new Scene(blah);
 					Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

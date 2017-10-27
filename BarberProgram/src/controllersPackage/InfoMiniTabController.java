@@ -17,27 +17,23 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class InfoMiniTabController implements Initializable {
+	
 	@FXML private Button btnOK;
 	@FXML private TextArea textArea;
-	
 	@FXML private Label labelDate;
 	@FXML private Label labelTime;
 	@FXML private Label labelName;
 	@FXML private Label labelContact;
 	@FXML private Label labelPrice;
-	
 	@FXML private ImageView imageView;
 	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 	
 	}
 
-
 	public void initData(String name, String desc, String date, String time, String contact, String image, double price) throws FileNotFoundException {
-		// TODO Auto-generated method stub
 		labelName.setText("Client name: " + name);
 		textArea.setText("Client notes: " + desc);
 		labelDate.setText("Date: " + date);
@@ -48,29 +44,18 @@ public class InfoMiniTabController implements Initializable {
 		NumberFormat currency=NumberFormat.getCurrencyInstance();
 		labelPrice.setText("Price: " + currency.format(price));
 		
-		// add an image
+		// Add an image
 		if(!image.equals("-1")) {
-			
 			System.out.println("Creating image.. at->http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/w3images/" + image);
-	        
-	        
 	        Image imageA = new Image("http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/w3images/" + image);
 			imageView.setImage(imageA);
-	        
-	        
-	        
-	        
 		}
-		
-		
 	}
 	
 	
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
-		
 		System.out.println("Close this window");
-		
 		Stage stage = (Stage) btnOK.getScene().getWindow();
 	    stage.close();
 	}
