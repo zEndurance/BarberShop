@@ -151,92 +151,89 @@ public class AppointTabController implements Initializable {
 		// Set the data for the table
 		appointTable.setItems(data);
 
-
 		ArrayList<String> dates = new ArrayList<String>();
 		int index = 0;
-		
+
 		// Loop through each column and row
 		for (@SuppressWarnings("rawtypes")
 		TableColumn tc : appointTable.getColumns()) {
 
-			//System.out.println("Date is equal to: " + day);
-			if(tc.getId().startsWith("2017")){
+			// System.out.println("Date is equal to: " + day);
+			if (tc.getId().startsWith("2017")) {
 				dates.add(tc.getId());
 			}
-			
-			
+
 			// Find columns beginning with cT
-			//if (tc.getId().startsWith("cT")) {
-				// Colour the cell based off what it has stored inside it
-				tc.setCellFactory(column -> {
-					return new TableCell<ApData, String>() {
-						protected void updateItem(String item, boolean empty) {
-							super.updateItem(item, empty);
+			// if (tc.getId().startsWith("cT")) {
+			// Colour the cell based off what it has stored inside it
+			tc.setCellFactory(column -> {
+				return new TableCell<ApData, String>() {
+					protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
 
-							// Set the text value as what it was before
-							setText(item);
-							
-							System.out.println("ITEM EQUAL TO: " + item);
+						// Set the text value as what it was before
+						setText(item);
 
-							ApData currentRowdata = (ApData) getTableRow().getItem();
-							
-							if (item == null || empty) {
-								setText(null);
-								setStyle("");
-							} else {
-								if (item.equals("Available")) {
-									
-try {
-										
-										System.out.println("DATE CHECKING: " + currentRowdata.getDate() + " DATE NOW: " + new Date().toString());
-										if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).after(new Date())) {
-											setStyle("-fx-background-color: B1E6FC");
-										}else if(new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).equals(new Date())){
-											System.out.println("SAME DATE FOUND!");
-										}else if(new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).before(new Date())){
-											setText("Expired");
-											setStyle("-fx-background-color: FCB1B1");
-										}
-									} catch (ParseException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+						System.out.println("ITEM EQUAL TO: " + item);
+
+						ApData currentRowdata = (ApData) getTableRow().getItem();
+
+						if (item == null || empty) {
+							setText(null);
+							setStyle("");
+						} else {
+							if (item.equals("Available")) {
+
+								try {
+
+									System.out.println("DATE CHECKING: " + currentRowdata.getDate() + " DATE NOW: "
+											+ new Date().toString());
+									if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate())
+											.after(new Date())) {
+										setStyle("-fx-background-color: B1E6FC");
+									} else if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate())
+											.equals(new Date())) {
+										System.out.println("SAME DATE FOUND!");
+									} else if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate())
+											.before(new Date())) {
+										setText("Expired");
+										setStyle("-fx-background-color: FCB1B1");
 									}
-									
-									
-									
-								} else if (item.equals("Booked")) {
-									
-									try {
-										
-										System.out.println("DATE CHECKING: " + currentRowdata.getDate() + " DATE NOW: " + new Date().toString());
-										if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate()).after(new Date())) {
-											setStyle("-fx-background-color: B1FCBC");
-										}else{
-											setText("Completed");
-											setStyle("-fx-background-color: #FF46FF");
-										}
-									} catch (ParseException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-									
-									
-									
-									System.out.println("THIS BOOKING IS ON: " + currentRowdata.getDate());
-									
-									
-									
-									
-								} else if (item.equals("-------------")) {
-									setStyle("-fx-background-color: FCF2B1");
-								} else {
-									setStyle("");
+								} catch (ParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
+
+							} else if (item.equals("Booked")) {
+
+								try {
+
+									System.out.println("DATE CHECKING: " + currentRowdata.getDate() + " DATE NOW: "
+											+ new Date().toString());
+									if (new SimpleDateFormat("yyyy-MM-dd").parse(currentRowdata.getDate())
+											.after(new Date())) {
+										setStyle("-fx-background-color: B1FCBC");
+									} else {
+										setText("Completed");
+										setStyle("-fx-background-color: #FF46FF");
+									}
+								} catch (ParseException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+								System.out.println("THIS BOOKING IS ON: " + currentRowdata.getDate());
+
+							} else if (item.equals("-------------")) {
+								setStyle("-fx-background-color: FCF2B1");
+							} else {
+								setStyle("");
 							}
 						}
-					};
-				});
-			//}
+					}
+				};
+			});
+			// }
 		}
 
 		// END
@@ -273,11 +270,10 @@ try {
 			String time = Integer.toString(nTime) + ":00-" + Integer.toString(nTime + 1) + ":00";
 			String contact = person.getContactInfo(tp.getColumn() - 2);
 			String image = person.getImage(tp.getColumn() - 2);
-			
-			
+
 			double price = person.getBookingPrice(tp.getColumn() - 2);
 			System.out.println("DATA FOUND FOR PRICE: " + price);
-			
+
 			// Open new window
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
@@ -286,7 +282,7 @@ try {
 				stage.setTitle("Client Information");
 				stage.setScene(new Scene((Pane) loader.load()));
 
-				InfoMiniTabController controller = loader.<InfoMiniTabController> getController();
+				InfoMiniTabController controller = loader.<InfoMiniTabController>getController();
 				controller.initData(name, desc, date, time, contact, image, price);
 
 				stage.show();
