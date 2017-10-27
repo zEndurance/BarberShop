@@ -1,5 +1,6 @@
 package controllersPackage;
 
+/* Import java, javafx, mainPackage */
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -11,11 +12,8 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +31,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.ApData;
 import mainPackage.Main;
+import mainPackage.MySQL;
 
 public class AppointTabController implements Initializable {
 
@@ -87,10 +86,7 @@ public class AppointTabController implements Initializable {
 		cT17.setCellValueFactory(new PropertyValueFactory<ApData, String>("T17"));
 
 		// MySQL Connection
-		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
-		String username = "sql2199713";
-		String password = "nW7*wP8!";
-		try (Connection connection = DriverManager.getConnection(url, username, password)) {
+		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
 
 			// Create a statement
 			Statement myStmt = connection.createStatement();
@@ -152,8 +148,6 @@ public class AppointTabController implements Initializable {
 		appointTable.setItems(data);
 
 		ArrayList<String> dates = new ArrayList<String>();
-		int index = 0;
-
 		// Loop through each column and row
 		for (@SuppressWarnings("rawtypes")
 		TableColumn tc : appointTable.getColumns()) {
@@ -200,7 +194,6 @@ public class AppointTabController implements Initializable {
 										setStyle("-fx-background-color: FCB1B1");
 									}
 								} catch (ParseException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 
@@ -218,7 +211,6 @@ public class AppointTabController implements Initializable {
 										setStyle("-fx-background-color: #FF46FF");
 									}
 								} catch (ParseException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 

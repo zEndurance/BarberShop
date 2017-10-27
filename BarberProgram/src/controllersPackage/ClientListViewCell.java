@@ -1,7 +1,8 @@
 package controllersPackage;
 
+/* Import java, enumPackage, javafx, mainPackage */
 import java.io.IOException;
-
+import enumPackage.Status;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import mainPackage.TodayData;
-import mainPackage.TodayData.STATUS;
 
 public class ClientListViewCell extends ListCell<TodayData>  {
 	@FXML
@@ -21,11 +21,7 @@ public class ClientListViewCell extends ListCell<TodayData>  {
 	private Label labelTime;
 	
 	@FXML
-	private ChoiceBox cBox;
-
-    //@FXML private Label label2;
-
-   // @FXML private FontAwesomeIconView fxIconGender;
+	private ChoiceBox<String> cBox;
 
     @FXML
     private GridPane gridPane;
@@ -35,13 +31,13 @@ public class ClientListViewCell extends ListCell<TodayData>  {
     @Override
     protected void updateItem(TodayData student, boolean empty) {
         super.updateItem(student, empty);
-
+        
+        // Empty entry 
         if(empty || student == null) {
-
             setText(null);
             setGraphic(null);
-
         } else {
+        	// Custom load fxml
             if (mLLoader == null) {
                 mLLoader = new FXMLLoader(getClass().getResource("/fxmlPackage/listViewItem.fxml"));
                 mLLoader.setController(this);
@@ -53,27 +49,17 @@ public class ClientListViewCell extends ListCell<TodayData>  {
                 }
 
             }
-
+            
+            // Values of labels/javafx items
             labelTime.setText(String.valueOf(student.getTime()));
             label1.setText(String.valueOf(student.getName()));
-            //label2.setText(student.getName());
-
+            
             ObservableList<String> data = FXCollections.observableArrayList();
             
-            data.addAll("Checked In", "Waiting", "Not Showed", "Canceled");
+            data.addAll(Status.CHECKIN.toString(), Status.WAITING.toString(), Status.NOTSHOWED.toString(), Status.CANCELLED.toString(), Status.ARRIVED.toString());
 
             cBox.setItems(data); // Inserting data into the ChoiceBox
             
-            //cBox.setItems(value);
-            /*
-            if(student.getGender().equals(Student.GENDER.MALE)) {
-                fxIconGender.setIcon(FontAwesomeIcon.MARS);
-            } else if(student.getGender().equals(Student.GENDER.FEMALE)) {
-                fxIconGender.setIcon(FontAwesomeIcon.VENUS);
-            } else {
-                fxIconGender.setIcon(FontAwesomeIcon.GENDERLESS);
-            }*/
-
             setText(null);
             setGraphic(gridPane);
         }

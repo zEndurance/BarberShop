@@ -1,7 +1,6 @@
 package controllersPackage;
 
-import java.io.IOException;
-
+/* Import javafx, java, mainPackage */
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,14 +11,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mainPackage.Main;
-import mainPackage.MySQL;
-
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import mainPackage.Main;
+import mainPackage.MySQL;
 
 public class SignInController {
 	@FXML
@@ -30,49 +29,22 @@ public class SignInController {
 
 	@FXML
 	private TextField userField;
-	
-	
-	// These values are for the current logged in user
-	
-	
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
 		// CONNECTION TO MYSQL HERE
-		
-		
-		///////////////////////////////////////////////////////////////////// QM CONNECTION
-		/* 
-		String url = "jdbc:mysql://dbprojects.eecs.qmul.ac.uk/mm335";
-		String dbUsername = "mm335";
-		String dbPassword = "NpgigVp28He0g";
-
 		System.out.println("Connecting database...");
-        */
-		
-		/////////////////////////////////////////////////////////////////////
-		
-		///////////////////////////////////////////////////////////////////// EVERYWHERE ELSE CONNECTION
-		
-		/*
-		String url = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql2199713";
-		String dbUsername = "sql2199713";
-		String dbPassword = "nW7*wP8!";
-		*/
-		
-		System.out.println("Connecting database...");
-		
 
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME,
+				MySQL.DATABASE_PASSWORD)) {
 			System.out.println("Database connected!");
 			Statement myStmt = connection.createStatement();
 			ResultSet myRs = myStmt.executeQuery("SELECT * FROM login");
 			while (myRs.next()) {
+
 				// CHECK FOR MYSQL DETAILS ARE CORRECT
-				
 				int id = myRs.getInt(1);
-				
 				String username = myRs.getString("Username");
 				String password = myRs.getString("Password");
 				String email = myRs.getString("Email");
@@ -80,10 +52,8 @@ public class SignInController {
 				String ecName = myRs.getString("ECName");
 				String ecNum = myRs.getString("ECNum");
 				String mobile = myRs.getString("Mobile");
-				
 
 				// Check for details
-
 				if (passwordField.getText().equals(password) && userField.getText().equals(username)) {
 
 					// Store values of the 'now' user
@@ -95,9 +65,7 @@ public class SignInController {
 					Main.currentECName = ecName;
 					Main.currentECNum = ecNum;
 					Main.currentMobile = mobile;
-					
-					
-					
+
 					// CHANGE SCENES
 					Parent blah = FXMLLoader.load(getClass().getResource("/fxmlPackage/mainProgram.fxml"));
 					Scene scene = new Scene(blah);
