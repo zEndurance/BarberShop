@@ -46,7 +46,7 @@ public class AccountTabController implements Initializable {
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 		
-		// Grab new password
+		// Grab new details
 		int id = Integer.parseInt(tfEmployeeID.getText());
 		String password = tfEmployeePassword.getText();
 		
