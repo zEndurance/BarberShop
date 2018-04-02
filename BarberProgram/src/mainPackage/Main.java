@@ -7,10 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
     
 	// Values for current user
 	public static int currentID = -1;
+	
 	public static String currentUser = "";
 	public static String currentPass = "";
 	public static String currentEmail = "";
