@@ -6,7 +6,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import mainPackage.Connection;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class SignInController {
 	@FXML
@@ -18,6 +28,49 @@ public class SignInController {
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
+		
+		
+		System.out.println("trying to connect to a php script...");
+		
+		String email = userField.getText().toString();
+		String password = passwordField.getText().toString();
+		
+		System.out.println("We entered the values to send: " + email + ":" + password);
+		
+		String data = "http://" + Connection.getInstance().URL_LOGIN + "?email=" + email + "&password=" + password;
+
+		// send these values to the php script
+		System.out.println("Connection: " + data);
+		
+		try {
+			URL url = new URL(data);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			//connection.connect();
+			
+			
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+			
+			// Read the JSON output here
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+
+			while((inputLine = in.readLine()) != null)
+			{
+				System.out.println(inputLine);
+			}
+
+			in.close();
+			
+	    } catch (MalformedURLException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+		
+		
+		
+		
 
 		/*
 		// Connection to MySql here
