@@ -2,12 +2,6 @@ package controllersPackage;
 
 /* Import java, javafx, mainPackage */
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,8 +9,6 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.chart.*;
 import mainPackage.ApData;
-import mainPackage.Main;
-import mainPackage.MySQL;
 
 public class SummaryTabController implements Initializable {
 	// Collects ApData objects as each MySQL row
@@ -63,8 +55,9 @@ public class SummaryTabController implements Initializable {
 		String[] days = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 		Double[] earnings = { monEarn, TueEarn, WedEarn, ThurEarn, FriEarn, SatEarn, sunEarn };
 
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME,
-				MySQL.DATABASE_PASSWORD)) {
+		/*
+		try (Connection connection = DriverManager.getConnection(Connection.DATABASE_URL, Connection.DATABASE_USERNAME,
+				Connection.DATABASE_PASSWORD)) {
 
 			// Create a statement
 			Statement myStmt = connection.createStatement();
@@ -156,6 +149,7 @@ public class SummaryTabController implements Initializable {
 			System.out.println("ERROR IN SQL");
 			e.printStackTrace();
 		}
+		*/
 
 	}
 }

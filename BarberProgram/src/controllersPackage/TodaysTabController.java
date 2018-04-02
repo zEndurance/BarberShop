@@ -3,17 +3,9 @@ package controllersPackage;
 /* Import java, javafx, mainPackage, enumPackage */
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -25,10 +17,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import mainPackage.Main;
-import mainPackage.MySQL;
 import mainPackage.TodayData;
-import enumPackage.Status;
 
 public class TodaysTabController implements Initializable {
 	@FXML
@@ -64,10 +53,11 @@ public class TodaysTabController implements Initializable {
 
 		System.out.println("useable date: " + newDate);
 
+		/*
 		// MySQL query here
 		System.out.println("Connecting database...");
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME,
-				MySQL.DATABASE_PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(Connection.DATABASE_URL, Connection.DATABASE_USERNAME,
+				Connection.DATABASE_PASSWORD)) {
 			// Select row based off date
 			Statement myStmt = connection.createStatement();
 
@@ -138,6 +128,7 @@ public class TodaysTabController implements Initializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public static final LocalDate NOW_LOCAL_DATE() {

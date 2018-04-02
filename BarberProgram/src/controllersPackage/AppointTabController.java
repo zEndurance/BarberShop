@@ -3,16 +3,6 @@ package controllersPackage;
 /* Import java, javafx, mainPackage */
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -30,8 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.ApData;
-import mainPackage.Main;
-import mainPackage.MySQL;
 
 public class AppointTabController implements Initializable {
 
@@ -85,9 +72,10 @@ public class AppointTabController implements Initializable {
 		cT16.setCellValueFactory(new PropertyValueFactory<ApData, String>("T16"));
 		cT17.setCellValueFactory(new PropertyValueFactory<ApData, String>("T17"));
 
+		/*
 		// MySQL Connection
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME,
-				MySQL.DATABASE_PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(Connection.DATABASE_URL, Connection.DATABASE_USERNAME,
+				Connection.DATABASE_PASSWORD)) {
 
 			// Create a statement
 			Statement myStmt = connection.createStatement();
@@ -226,6 +214,7 @@ public class AppointTabController implements Initializable {
 			});
 			// }
 		}
+		*/
 
 		// END
 		System.out.println("// END of AppointTab Initialize");

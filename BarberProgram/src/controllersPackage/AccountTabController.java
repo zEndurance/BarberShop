@@ -3,21 +3,12 @@ package controllersPackage;
 /* Imports java, com, javafx, mainPackage */
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import com.mysql.jdbc.PreparedStatement;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import mainPackage.Main;
-import mainPackage.MySQL;
 
 public class AccountTabController implements Initializable {
 	
@@ -33,6 +24,8 @@ public class AccountTabController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		/*
 		// Set values for this logged in user
 		tfEmployeeID.setText(Integer.toString(Main.currentID));
 		tfEmployeeName.setText(Main.currentName);
@@ -41,6 +34,7 @@ public class AccountTabController implements Initializable {
 		tfECNum.setText(Main.currentECNum);
 		tfEmployeeEmail.setText(Main.currentEmail);
 		tfEmployeePassword.setText(Main.currentPass);
+		*/
 	}
 	
 	@FXML
@@ -50,8 +44,10 @@ public class AccountTabController implements Initializable {
 		int id = Integer.parseInt(tfEmployeeID.getText());
 		String password = tfEmployeePassword.getText();
 		
+		
+		/*
 		// SQL database query
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(Connection.DATABASE_URL, Connection.DATABASE_USERNAME, Connection.DATABASE_PASSWORD)) {
 
 			// Create the java MYSQL update prepared statement
 			String query = "update login set Password = ? where ID = ?";
@@ -75,6 +71,7 @@ public class AccountTabController implements Initializable {
 		} catch (SQLException e) {
 			throw new IllegalStateException("Cannot connect the database!", e);
 		}
+		*/
 	}
 }
 

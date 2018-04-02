@@ -10,16 +10,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     
-	// Values for current user
-	public static int currentID = -1;
-	
-	public static String currentUser = "";
-	public static String currentPass = "";
-	public static String currentEmail = "";
-	public static String currentName = "";
-	public static String currentMobile = "";
-	public static String currentECName = "";
-	public static String currentECNum = "";
+
 	
     public static void main(String[] args) {
         Application.launch(Main.class, args);

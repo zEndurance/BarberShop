@@ -3,22 +3,10 @@ package controllersPackage;
 /* Import javafx, java, mainPackage */
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import mainPackage.Main;
-import mainPackage.MySQL;
 
 public class SignInController {
 	@FXML
@@ -31,8 +19,9 @@ public class SignInController {
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
+		/*
 		// Connection to MySql here
-		try (Connection connection = DriverManager.getConnection(MySQL.DATABASE_URL, MySQL.DATABASE_USERNAME, MySQL.DATABASE_PASSWORD)) {
+		try (Connection connection = DriverManager.getConnection(Connection.DATABASE_URL, Connection.DATABASE_USERNAME, Connection.DATABASE_PASSWORD)) {
 			System.out.println("Database connected!");
 			Statement myStmt = connection.createStatement();
 			ResultSet myRs = myStmt.executeQuery("SELECT * FROM login");
@@ -77,7 +66,10 @@ public class SignInController {
 			}
 		} catch (SQLException e) {
 			throw new IllegalStateException("Cannot connect the database!", e);
-		}
+		}*/
+		
+		
+		
 
 	}
 
