@@ -15,6 +15,7 @@ public class Connection {
 	/* URL locations to send our program data to */
 	public final String URL_LOGIN  = "http://localhost/barbershop/login.php";
 	public final String URL_SIGNUP = "http://localhost/barbershop/signup.php";
+	public final String URL_BUSINESS_HOURS = "http://localhost/barbershop/business_hours.php";
  	
 	public static void connect(){
 		// Connection code here

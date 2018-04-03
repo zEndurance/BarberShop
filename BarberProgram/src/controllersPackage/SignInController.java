@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,13 +25,22 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mainPackage.Connection;
 
-public class SignInController {
+public class SignInController implements Initializable {
 	@FXML
 	private Text actiontarget;
 	@FXML
 	private PasswordField passwordField;
 	@FXML
 	private TextField userField;
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO - MySQL grabbing all user data should happen here and not each time a tab opens
+		
+		// DEBUG 
+		userField.setText("raj@barbershop.com");
+		passwordField.setText("raj");
+	}
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
