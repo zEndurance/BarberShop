@@ -1,10 +1,18 @@
 package controllersPackage;
 
+import java.io.BufferedReader;
 /* Import java, javafx */
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +25,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import mainPackage.Connection;
+import mainPackage.User;
  
 public class MainProgramController implements Initializable {
 	
@@ -47,6 +57,11 @@ public class MainProgramController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO - MySQL grabbing all user data should happen here and not each time a tab opens
+		
+		
+		
 	}
+	
+	
 
 }

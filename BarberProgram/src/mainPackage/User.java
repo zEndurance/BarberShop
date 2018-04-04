@@ -19,14 +19,22 @@ public class User {
 	}
 
 	// Values for current user
-	public int currentID = 1;
-
-	public String currentUser = "";
-	public String currentPass = "";
-	public String currentEmail = "";
-	public String currentName = "";
-	public String currentMobile = "";
-	public String currentECName = "";
-	public String currentECNum = "";
+	public String id = "";
+	public String email = "";
+	public String password = "";
+	public String created;
+	public String type;
+	
+	
+	// User Profile
+	public String first_name;
+	public String middle_name;
+	public String last_name;
+	public String age;
+	public String home_telephone;
+	public String mobile;
+	public String emergency_name;
+	public String emergency_number;
+	public String profile_picture;
 
 }
