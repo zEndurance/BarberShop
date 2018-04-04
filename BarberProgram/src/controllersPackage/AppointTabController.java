@@ -271,6 +271,7 @@ public class AppointTabController implements Initializable {
 							final int finalIdx = ii;
 							TableColumn<ObservableList<String>, String> column = new TableColumn<>(columns.get(ii));
 							column.setSortable(false);
+							column.setResizable(false);
 
 							// Set the text of the cell
 							column.setCellValueFactory(

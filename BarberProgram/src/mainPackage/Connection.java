@@ -13,15 +13,9 @@ public class Connection {
 	private Connection(){};
 	
 	/* URL locations to send our program data to */
-	public final String URL_LOGIN  = "http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/scripts/login.php";
-	public final String URL_SIGNUP = "http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/scripts/signup.php";
-	public final String URL_BUSINESS_HOURS = "http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/scripts/business_hours.php";
- 	
-	public static void connect(){
-		// Connection code here
-	}
-	
-	public static void query(String query){
-		// Query codes here
-	}
+	public final String URL = "http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/scripts/";
+	public final String URL_LOGIN  = URL + "login.php";
+	public final String URL_SIGNUP = URL + "signup.php";
+	public final String URL_BUSINESS_HOURS = URL + "business_hours.php";
+	public final String URL_GET_PROFILE = URL + "get_profile.php";
 }

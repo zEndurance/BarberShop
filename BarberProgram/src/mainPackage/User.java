@@ -19,7 +19,7 @@ public class User {
 	}
 
 	// Values for current user
-	public int currentID = -1;
+	public int currentID = 1;
 
 	public String currentUser = "";
 	public String currentPass = "";
