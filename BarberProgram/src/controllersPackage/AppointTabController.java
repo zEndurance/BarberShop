@@ -4,13 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-/* Import java, javafx, mainPackage */
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -18,12 +22,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -36,24 +34,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import mainPackage.ApData;
+
 import mainPackage.Booking;
 import mainPackage.BookingRow;
 import mainPackage.BusinessHours;
@@ -61,41 +49,34 @@ import mainPackage.Connection;
 import mainPackage.User;
 
 public class AppointTabController implements Initializable {
-	
-	
+
+	// Constants
 	private final String BOOKING_FILE = "bookings.csv";
+	private final String BOOKING_COLOURS = "tablecolours.csv";
 
 	// FXML Table GUI
 	@FXML
 	private TableView<ObservableList<String>> appointTable;
-	String headers[] = null;
-	String items[] = null;
+	@FXML
+	private DatePicker appointDate;
 
 	// Table data
+	String headers[] = null;
+	String items[] = null;
 	List<String> columns = new ArrayList<String>();
 	List<String> rows = new ArrayList<String>();
 	ObservableList<ObservableList<String>> csvData = FXCollections.observableArrayList();
-
 	private ArrayList<Booking> selectedBookings = new ArrayList<Booking>();
 	private ArrayList<String> closedDays = new ArrayList<String>();
-
 	// Custom row colour names
-	private ArrayList<String> tableNames = new ArrayList<String>(); // =
-																	// {"Open",
-																	// "Booked",
-																	// "Closed"};
-	private ArrayList<String> tableColours = new ArrayList<String>(); // =
-																		// {"lightgreen",
-																		// "lightblue",
-																		// "lightcoral"};
-
-	@FXML
-	private DatePicker appointDate;
+	private ArrayList<String> tableNames = new ArrayList<String>();
+	private ArrayList<String> tableColours = new ArrayList<String>();
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		// Show the week number in the calendar
 		appointDate.setShowWeekNumbers(true);
 
 		// Set the value of the appointDate (GUI) to the current date
@@ -104,6 +85,7 @@ public class AppointTabController implements Initializable {
 		// Read table colours
 		loadCellColours();
 
+		// Load in data for clicking on dates on the datepicker
 		loadsDatesData();
 
 		try {
@@ -133,17 +115,14 @@ public class AppointTabController implements Initializable {
 				} else if (query_response.equals("SUCCESS_HOURS")) {
 
 					BusinessHours[] rgBHours = new BusinessHours[7];
-
+					
 					// Workout the business hours of a week
 					for (int i = 0; i < 7; i++) {
 						JSONObject animal = json.getJSONObject(Integer.toString(i));
-
 						int day = animal.getInt("DayOfWeek");
 						String open = animal.getString("OpenTime");
 						String close = animal.getString("CloseTime");
-
 						rgBHours[i] = new BusinessHours(day, open, close);
-
 						System.out.println("On " + getDay(day) + " the opening hours are " + open
 								+ " and closing hours are " + close);
 					}
@@ -151,17 +130,11 @@ public class AppointTabController implements Initializable {
 					// Now calculate the earliest opening hour and the latest
 					// closing hour so we can see how many columns
 					// we need to make
-
 					String startTime = "23:30:00";
 					String closeTime = "00:00:00";
-
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 					Date start = simpleDateFormat.parse(startTime);
 					Date end = simpleDateFormat.parse(closeTime);
-
-					int previousOpening = 23;
-					int previousClosing = 0;
-					boolean addHour = false;
 					for (int i = 0; i < 7; i++) {
 
 						BusinessHours b = rgBHours[i];
@@ -191,12 +164,16 @@ public class AppointTabController implements Initializable {
 					System.out.println("Earliest we start the business week is: : " + simpleDateFormat.format(start));
 					System.out.println("Latest we start the business week is: : " + simpleDateFormat.format(end));
 
+					// TODO - 30minute intervals (should be set elsewhere)
 					int interval = 30;
-
 					long cols = ((Math.abs((start.getTime() - end.getTime())) / 1000) / 60) / interval;
-
 					System.out.println("We're gunna need this much intervals: " + cols);
-
+					
+					// TODO - Create the column headers based of the JSON (for customizing)
+					for(int i=0; i<cols; i++){
+						//columns.add();
+					}
+					
 					buildTable(BOOKING_FILE);
 				} else {
 
@@ -204,7 +181,6 @@ public class AppointTabController implements Initializable {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (MalformedURLException e) {
@@ -219,6 +195,7 @@ public class AppointTabController implements Initializable {
 
 	@FXML
 	protected void handleDateButtonAction(ActionEvent event) throws IOException {
+		// Figure out what dates data we need to load so that we can select the bookings of the week
 		loadsDatesData();
 
 		// Update the current table data
@@ -232,14 +209,13 @@ public class AppointTabController implements Initializable {
 		appointTable.getColumns().clear();
 		appointTable.getItems().clear();
 
-		
 		// reload the table
 		buildTable(BOOKING_FILE);
 	}
 
 	private void loadCellColours() {
 		// Read the csv file
-		File f = new File("tablecolours.csv");
+		File f = new File(BOOKING_COLOURS);
 		if (f.exists() && !f.isDirectory()) {
 			try (FileReader fin = new FileReader(f); BufferedReader in = new BufferedReader(fin);) {
 				String l;
@@ -279,10 +255,8 @@ public class AppointTabController implements Initializable {
 		now.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() - 1);
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
 		String[] days = new String[7];
-		int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; // add 2 if
-																	// your week
-																	// start on
-																	// monday
+		int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; 
+		// add 2 if your week start on monday
 		now.add(Calendar.DAY_OF_MONTH, delta);
 		for (int i = 0; i < 7; i++) {
 			days[i] = format.format(now.getTime());
@@ -501,34 +475,6 @@ public class AppointTabController implements Initializable {
 		} else {
 			System.out.println("File Not Found");
 		}
-	}
-
-	private void createTable(long cols, Date start) {
-		// Create the table columns, workout how many 30min intervals is between
-		// previousOpening and previousClosing
-		TableColumn[] columns = new TableColumn[(int) cols + 2];
-		columns[0] = new TableColumn("             "); // Empty column
-
-		int hour = start.getHours();
-		int mins = start.getMinutes();
-
-		boolean change = true;
-		for (int i = 1; i < columns.length; i++) {
-			columns[i] = new TableColumn(hour + ":" + mins + "0");
-
-			columns[i].setCellValueFactory(new PropertyValueFactory<BookingRow, String>("values"));
-
-			if (mins == 3) {
-				mins = 0;
-				hour++;
-			} else {
-				mins += 3;
-			}
-		}
-
-		System.out.println("Column length: " + columns.length);
-		appointTable.getColumns().addAll(columns);
-		// Load in all the appointment data!
 	}
 
 	private String getDay(int day) {
