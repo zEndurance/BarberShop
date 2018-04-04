@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.MainProgramController">
+<AnchorPane id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.MainProgramController">
    <children>
       <TabPane prefHeight="600.0" prefWidth="944.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
@@ -51,6 +51,6 @@
           
         </tabs>
       </TabPane>
-      <Button layoutX="860.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="14.0" prefWidth="65.0" text="Logout" />
+      <Button layoutX="860.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="25.0" prefWidth="70.0" text="Logout" />
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package mainPackage;
 
 
+import controllersPackage.MainProgramController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,16 +13,17 @@ public class Main extends Application {
     
 
 	
+	
     public static void main(String[] args) {
         Application.launch(Main.class, args);
     }
     
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmlPackage/loginPage.fxml"));
+    public void start(Stage appStage) throws Exception {
+    	Parent root = FXMLLoader.load(getClass().getResource("/fxmlPackage/loginPage.fxml"));
         
-        stage.setTitle("Barber Shop Login");
-        stage.setScene(new Scene(root, 944, 600));
-        stage.show();
+        appStage.setTitle("Barber Shop Login");
+        appStage.setScene(new Scene(root, 944, 600));
+		appStage.show();
     }
 }
