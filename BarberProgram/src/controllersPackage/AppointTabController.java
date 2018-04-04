@@ -7,10 +7,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -19,12 +22,14 @@ import org.json.JSONObject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -42,40 +47,40 @@ public class AppointTabController implements Initializable {
 	// FXML Table GUI
 	@FXML
 	TableView<ApData> appointTable;
+	
+	@FXML
+	private DatePicker appointDate;
+	
+	public static final LocalDate NOW_LOCAL_DATE() {
+		String date = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
+	}
+	
+	private void loadsDatesData(){
+		LocalDate date = appointDate.getValue();
+		System.err.println("Selected date: " + date);
 
-	/*
-	 * // Columns
-	 * 
-	 * @FXML TableColumn<ApData, String> cDay;
-	 * 
-	 * @FXML TableColumn<ApData, String> cDate;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT9;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT10;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT11;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT12;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT13;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT14;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT15;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT16;
-	 * 
-	 * @FXML TableColumn<ApData, String> cT17;
-	 * 
-	 * // Collects ApData objects as each MySQL row public
-	 * ObservableList<ApData> data = FXCollections.observableArrayList();
-	 * 
-	 */
+		// Construct a new string
+		String newDate = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
 
+		System.out.println("useable date: " + newDate);
+	}
+	
+	@FXML
+	protected void handleDateButtonAction(ActionEvent event) throws IOException {
+		loadsDatesData();
+		
+		// Update the current table data
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		appointDate.setValue(NOW_LOCAL_DATE());
+		loadsDatesData();
 
 		try {
 			URL url = new URL(Connection.getInstance().URL_BUSINESS_HOURS);
@@ -129,6 +134,7 @@ public class AppointTabController implements Initializable {
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 					Date start = simpleDateFormat.parse(startTime);
 					Date end = simpleDateFormat.parse(closeTime);
+					
 					
 					int previousOpening = 23;
 					int previousClosing = 0;
@@ -190,6 +196,10 @@ public class AppointTabController implements Initializable {
 			        appointTable.getColumns().addAll(columns);
 			 
 
+			        
+			        // Load in all the appointment data!
+			        
+			        
 			        
 			        
 				} else {

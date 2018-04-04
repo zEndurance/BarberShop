@@ -15,7 +15,8 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
    	</TableView>
-      <DatePicker layoutX="22.0" layoutY="14.0" />
+   	
+    <DatePicker fx:id="appointDate" onAction="#handleDateButtonAction" layoutX="22.0" layoutY="14.0" />
    </children>
 	
 </AnchorPane>

@@ -39,7 +39,7 @@ public class SignInController implements Initializable {
 		
 		// DEBUG 
 		userField.setText("raj@barbershop.com");
-		passwordField.setText("raj");
+		passwordField.setText("barber");
 	}
 
 	@FXML
