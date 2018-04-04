@@ -37,6 +37,40 @@ public class Booking {
 		}
 	}
 	
+	/**
+     * Copy constructor
+     */
+    public Booking(Booking source) {
+        id = source.id;
+        
+        date = source.date;
+        
+        startTime = source.startTime;
+        
+        endTime = source.endTime;
+    }
+    
+    @SuppressWarnings("deprecation")
+	public String getDay(){
+    	String[] days = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    	return days[date.getDay()];
+    }
+	
+	public String getDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yy");
+		return sdf.format(date);
+	}
+
+	public String getStartTime() {
+		SimpleDateFormat hh = new SimpleDateFormat("HH:mm");
+		return hh.format(startTime);
+	}
+
+	public String getEndTime() {
+		SimpleDateFormat hh = new SimpleDateFormat("HH:mm");
+		return hh.format(endTime);
+	}
+	
 	@Override
 	public String toString(){
 		

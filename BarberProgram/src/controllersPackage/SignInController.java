@@ -100,6 +100,8 @@ public class SignInController implements Initializable {
 					User.getInstance().id = obj.getString("id");
 					User.getInstance().created = obj.getString("created");
 					User.getInstance().type = obj.getString("type");
+					User.getInstance().email = email;
+					User.getInstance().password = password;
 					
 					// Get profile data too
 					loadProfileData();

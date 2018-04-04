@@ -7,6 +7,7 @@ import java.io.FileReader;
 /* Import java, javafx, mainPackage */
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.json.JSONException;
@@ -51,11 +54,16 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.ApData;
+import mainPackage.Booking;
 import mainPackage.BookingRow;
 import mainPackage.BusinessHours;
 import mainPackage.Connection;
+import mainPackage.User;
 
 public class AppointTabController implements Initializable {
+	
+	
+	private final String BOOKING_FILE = "bookings.csv";
 
 	// FXML Table GUI
 	@FXML
@@ -67,6 +75,9 @@ public class AppointTabController implements Initializable {
 	List<String> columns = new ArrayList<String>();
 	List<String> rows = new ArrayList<String>();
 	ObservableList<ObservableList<String>> csvData = FXCollections.observableArrayList();
+
+	private ArrayList<Booking> selectedBookings = new ArrayList<Booking>();
+	private ArrayList<String> closedDays = new ArrayList<String>();
 
 	// Custom row colour names
 	private ArrayList<String> tableNames = new ArrayList<String>(); // =
@@ -84,7 +95,6 @@ public class AppointTabController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 
 		appointDate.setShowWeekNumbers(true);
 
@@ -174,6 +184,7 @@ public class AppointTabController implements Initializable {
 
 						} else {
 							System.out.println("It must be closed today on a " + b.getDay());
+							closedDays.add(b.getDay());
 						}
 					}
 
@@ -186,7 +197,7 @@ public class AppointTabController implements Initializable {
 
 					System.out.println("We're gunna need this much intervals: " + cols);
 
-					buildTable();
+					buildTable(BOOKING_FILE);
 				} else {
 
 				}
@@ -209,7 +220,21 @@ public class AppointTabController implements Initializable {
 	@FXML
 	protected void handleDateButtonAction(ActionEvent event) throws IOException {
 		loadsDatesData();
+
 		// Update the current table data
+		// Change the csvData file itself...
+		changeCSV();
+
+		// Clear everything before rebuilding the table
+		csvData.clear();
+		columns.clear();
+		rows.clear();
+		appointTable.getColumns().clear();
+		appointTable.getItems().clear();
+
+		
+		// reload the table
+		buildTable(BOOKING_FILE);
 	}
 
 	private void loadCellColours() {
@@ -245,33 +270,159 @@ public class AppointTabController implements Initializable {
 	private void loadsDatesData() {
 		// Get the week number of a date selected
 		LocalDate date = appointDate.getValue();
-		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
+		WeekFields weekFields = WeekFields.of(Locale.getDefault());
 		int weekNumber = date.get(weekFields.weekOfWeekBasedYear());
 		System.out.println("Selected week is: " + weekNumber);
-		
+
 		// Get the days of the week
 		Calendar now = Calendar.getInstance();
-		now.set(date.getYear(), date.getMonthValue()-1, date.getDayOfMonth());
-	    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-	    String[] days = new String[7];
-	    int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; //add 2 if your week start on monday
-	    now.add(Calendar.DAY_OF_MONTH, delta );
-	    for (int i = 0; i < 7; i++)
-	    {
-	        days[i] = format.format(now.getTime());
-	        now.add(Calendar.DAY_OF_MONTH, 1);
-	    }
-	    System.out.println(Arrays.toString(days));
-	    
-	    
-	    // Now select from Booking Data values between the dates above
-	    
+		now.set(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() - 1);
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+		String[] days = new String[7];
+		int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; // add 2 if
+																	// your week
+																	// start on
+																	// monday
+		now.add(Calendar.DAY_OF_MONTH, delta);
+		for (int i = 0; i < 7; i++) {
+			days[i] = format.format(now.getTime());
+			now.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		System.out.println(Arrays.toString(days));
+
+		// Clear selected bookings
+		selectedBookings.clear();
+
+		// Now select from Booking Data values between the dates above
+		for (int i = 0; i < User.getInstance().bookings.size(); i++) {
+
+			// TODO - think about scalability issues here !!!
+			// O(n^2) seems bad?
+			for (int z = 0; z < days.length; z++) {
+				// Check if any of these bookings from User match the current
+				// dates shown
+				if (User.getInstance().bookings.get(i).getDate().equals(days[z])) {
+					System.out.println("This is a matching week!");
+
+					// Save this into 'Selected Bookings ArrayList'
+					selectedBookings.add(new Booking(User.getInstance().bookings.get(i)));
+				}
+			}
+
+			System.err.println(User.getInstance().bookings.get(i).getDate());
+		}
+
+		// Now Loop through the Table Cells and check the days we have bookings
+		// on and the timelaps
+		for (int i = 0; i < selectedBookings.size(); i++) {
+			System.err.println("Selected bookings: " + selectedBookings.get(i).getDay() + " starting "
+					+ selectedBookings.get(i).getStartTime());
+		}
+
+		// Top row of the csvData are the headers...
 	}
 
-	private void buildTable() {
+	/*
+	 * Helper method to return which column index this time should be in
+	 */
+	private int getColumnValue(String startTime) {
+		for (int i = 0; i < columns.size(); i++) {
+			System.out.println("Column->" + columns.get(i) + " ===? " + startTime);
+			if (columns.get(i).equals(startTime)) {
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	/*
+	 * Rebuilds the CSV file so that we can rebuild the table data
+	 */
+	private void changeCSV() {
+		// If we have data to change
+		if (columns.size() > 0) {
+			String[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+			Map<String, String[]> aMap = new HashMap<String, String[]>();
+			String[][] emptyRow = new String[days.length][columns.size() - 1];
+
+			// Decide what the String array values are on each row
+			for (int i = 0; i < emptyRow.length; i++) {
+				for (int z = 0; z < columns.size() - 1; z++) {
+					emptyRow[i][z] = "Open";
+				}
+			}
+
+			// Loop through each selectedBooking
+			for (int p = 0; p < selectedBookings.size(); p++) {
+				for (int d = 0; d < days.length; d++) {
+					// For this day
+					if (selectedBookings.get(p).getDay().equals(days[d])) {
+						int foundTime = getColumnValue(selectedBookings.get(p).getStartTime());
+						// Update the row of that day
+						emptyRow[d][foundTime] = "Booked";
+					}
+				}
+			}
+
+			// Update the rows that are closed
+			for (int i = 0; i < days.length; i++) {
+				// Loop through closed days
+				for (int p = 0; p < closedDays.size(); p++) {
+					if (days[i].equals(closedDays.get(p))) {
+						for (int x = 0; x < columns.size() - 1; x++) {
+							emptyRow[i][x] = "Closed";
+						}
+					}
+				}
+			}
+
+			// Place each row into a hashMap
+			// E.g. "Monday" -> { "Open", "Booked", ... };
+			for (int i = 0; i < days.length; i++) {
+				aMap.put(days[i], emptyRow[i]);
+			}
+
+			// Write a new file based off our headers!
+			PrintWriter pw;
+			try {
+				pw = new PrintWriter(new File(BOOKING_FILE));
+				StringBuilder sb = new StringBuilder();
+
+				for (int i = 0; i < columns.size() - 1; i++) {
+					sb.append(columns.get(i));
+					sb.append(',');
+				}
+				sb.append(columns.get(columns.size() - 1));
+				sb.append('\n');
+
+				// ------ ROW DATA ------
+				// Write the days
+				for (int i = 0; i < days.length; i++) {
+					sb.append(days[i]);
+					sb.append(',');
+
+					String[] rowData = aMap.get(days[i]);
+					// Loop through the columns
+					for (int x = 1; x < columns.size() - 1; x++) {
+						sb.append(rowData[x - 1]);
+						sb.append(',');
+					}
+					sb.append(rowData[rowData.length - 1]);
+					sb.append('\n');
+				}
+
+				pw.write(sb.toString());
+				pw.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void buildTable(String filename) {
 
 		// Read the csv file containing the headers and data of the table
-		File f = new File("table.csv");
+		File f = new File(filename);
 
 		if (f.exists() && !f.isDirectory()) {
 
@@ -289,11 +440,13 @@ public class AppointTabController implements Initializable {
 							columns.add(w);
 						}
 
+						System.out.println("Column size is now: " + columns.size());
+
 						for (int ii = 0; ii < columns.size(); ii++) {
 							final int finalIdx = ii;
 							TableColumn<ObservableList<String>, String> column = new TableColumn<>(columns.get(ii));
 							column.setSortable(false);
-							column.setResizable(false);
+							// column.setResizable(false);
 
 							// Set the text of the cell
 							column.setCellValueFactory(
