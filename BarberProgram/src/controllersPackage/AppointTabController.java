@@ -11,14 +11,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -81,6 +84,9 @@ public class AppointTabController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+
+		appointDate.setShowWeekNumbers(true);
 
 		// Set the value of the appointDate (GUI) to the current date
 		appointDate.setValue(NOW_LOCAL_DATE());
@@ -237,13 +243,29 @@ public class AppointTabController implements Initializable {
 	}
 
 	private void loadsDatesData() {
+		// Get the week number of a date selected
 		LocalDate date = appointDate.getValue();
-		System.err.println("Selected date: " + date);
-
-		// Construct a new string
-		String newDate = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
-
-		System.out.println("useable date: " + newDate);
+		WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
+		int weekNumber = date.get(weekFields.weekOfWeekBasedYear());
+		System.out.println("Selected week is: " + weekNumber);
+		
+		// Get the days of the week
+		Calendar now = Calendar.getInstance();
+		now.set(date.getYear(), date.getMonthValue()-1, date.getDayOfMonth());
+	    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	    String[] days = new String[7];
+	    int delta = -now.get(GregorianCalendar.DAY_OF_WEEK) + 2; //add 2 if your week start on monday
+	    now.add(Calendar.DAY_OF_MONTH, delta );
+	    for (int i = 0; i < 7; i++)
+	    {
+	        days[i] = format.format(now.getTime());
+	        now.add(Calendar.DAY_OF_MONTH, 1);
+	    }
+	    System.out.println(Arrays.toString(days));
+	    
+	    
+	    // Now select from Booking Data values between the dates above
+	    
 	}
 
 	private void buildTable() {

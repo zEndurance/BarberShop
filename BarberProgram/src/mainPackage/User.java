@@ -1,5 +1,7 @@
 package mainPackage;
 
+import java.util.ArrayList;
+
 /*
  * Singleton class of the current logged in User
  */
@@ -17,6 +19,12 @@ public class User {
 	public static User getInstance() {
 		return singleton;
 	}
+	
+	public void flushBookings(){
+		bookings.clear();
+	}
+	
+	public ArrayList<Booking> bookings = new ArrayList<Booking>();
 
 	// Values for current user
 	public String id = "";

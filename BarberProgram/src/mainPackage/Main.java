@@ -1,6 +1,8 @@
 package mainPackage;
 
 
+import java.util.Locale;
+
 import controllersPackage.MainProgramController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +17,9 @@ public class Main extends Application {
 	
 	
     public static void main(String[] args) {
+    	
+    	Locale.setDefault(Locale.UK);
+    	
         Application.launch(Main.class, args);
     }
     

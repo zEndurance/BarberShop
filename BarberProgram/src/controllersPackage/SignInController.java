@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +26,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import mainPackage.Booking;
 import mainPackage.Connection;
 import mainPackage.User;
 
@@ -99,6 +103,9 @@ public class SignInController implements Initializable {
 					
 					// Get profile data too
 					loadProfileData();
+					
+					// Get his booking data also
+					loadBookingData();
 
 					// Go to next stage
 					login(event);
@@ -106,6 +113,76 @@ public class SignInController implements Initializable {
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");
 					actiontarget.setText("Enter in both fields!");
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadBookingData(){
+		String data = Connection.getInstance().URL_GET_BOOKINGS + "?id=" + User.getInstance().id;
+		
+		
+		// send these values to the php script
+		System.out.println("Connecting to page ----------> " + data);
+
+		try {
+			URL url = new URL(data);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+			// Read the JSON output here
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// Try reading it in JSON format
+			try {
+				JSONObject json = new JSONObject(response.toString());
+				System.out.println(json.getString("query_result"));
+
+				String query_response = json.getString("query_result");
+
+				if (query_response.equals("FAILED_BOOKINGS")) {
+					// Give a response to the user that its incorrect
+					System.out.println("Incorrect email or password entered!");
+				} else if (query_response.equals("SUCCESSFUL_BOOKINGS")) {
+
+					// Read up the JSON values
+					List<String> list = new ArrayList<String>();
+					JSONArray array = json.getJSONArray("bookings");
+					
+					// Clear bookings
+				    User.getInstance().flushBookings();
+					
+					for(int i = 0 ; i < array.length() ; i++){
+					    // Now add bookings
+					    User.getInstance().bookings.add(
+					    		new Booking(array.getJSONObject(i).getString("id"),
+					    				array.getJSONObject(i).getString("date"),
+					    				array.getJSONObject(i).getString("start_time"),
+					    				array.getJSONObject(i).getString("end_time")
+					    				));
+					}
+					
+					for(int z=0; z<User.getInstance().bookings.size(); z++){
+				    	System.out.println("Booking: " + User.getInstance().bookings.get(z).toString());
+				    }
+					
+					
+				} else {
+					System.out.println("Not enough arguments were entered.. try filling both fields");
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
