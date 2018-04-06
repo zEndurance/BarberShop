@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -14,9 +21,46 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.ServicesTabController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controllersPackage.ServicesTabController">
 	<children>
-	
+		<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc"
+			height="45.0" layoutX="10.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE"
+			strokeWidth="0.0" width="261.0" />
+
+
+
+		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0"
+			prefWidth="944.0">
+			<children>
+				<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc"
+					height="153.0" layoutX="43.0" layoutY="300.0" stroke="BLACK"
+					strokeType="INSIDE" strokeWidth="0.0" width="405.0" />
+				<ChoiceBox layoutX="75.0" layoutY="366.0" prefWidth="150.0" />
+				<Label layoutX="52.0" layoutY="309.0" text="Add Service"
+					textAlignment="CENTER" underline="true" />
+				<Label layoutX="130.0" layoutY="338.0" prefHeight="17.0"
+					prefWidth="41.0" text="Service" textAlignment="CENTER" />
+				<Label layoutX="310.0" layoutY="338.0" text="Price"
+					textAlignment="CENTER" />
+				<TextField layoutX="249.0" layoutY="366.0" />
+				<Button layoutX="324.0" layoutY="405.0" mnemonicParsing="false"
+					text="Add Service" />
+				<Label layoutX="14.0" layoutY="8.0" prefHeight="25.0"
+					prefWidth="252.0" text="Services">
+					<font>
+						<Font size="24.0" />
+					</font>
+				</Label>
+				<TableView layoutX="43.0" layoutY="64.0" prefHeight="200.0"
+					prefWidth="405.0">
+					<columns>
+						<TableColumn prefWidth="75.0" text="ID" />
+						<TableColumn prefWidth="75.0" text="Service" />
+						<TableColumn prefWidth="75.0" text="Price" />
+					</columns>
+				</TableView>
+			</children>
+		</AnchorPane>
 	</children>
 </AnchorPane>

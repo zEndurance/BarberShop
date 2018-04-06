@@ -19,4 +19,5 @@ public class Connection {
 	public final String URL_BUSINESS_HOURS = URL + "business_hours.php";
 	public final String URL_GET_PROFILE = URL + "get_profile.php";
 	public final String URL_GET_BOOKINGS = URL + "get_bookings.php";
+	public final String URL_GET_SERVICES = URL + "get_barbers_services_json.php";
 }
