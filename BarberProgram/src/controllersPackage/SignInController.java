@@ -380,7 +380,7 @@ public class SignInController implements Initializable {
 					int len = json.getInt("amount");
 					
 					// Flush Users current service data
-					User.getInstance().flushServices();
+					User.getInstance().allServicesNames.clear();
 					
 					// Loop through each array element
 					for(int i=0; i<len; i++){
