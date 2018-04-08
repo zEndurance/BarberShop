@@ -22,21 +22,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import mainPackage.Connection;
 import mainPackage.Service;
 import mainPackage.User;
@@ -83,87 +78,90 @@ public class ServicesTabController implements Initializable {
 		ObservableList<String> list = FXCollections.observableArrayList(cities);
 		serviceChoiceBox.setItems(list);
 	}
-	
-	private void createDialog(String msg, int btnAmount, String[] btnNames, Callable[] func){
+
+	/**
+	 * Creates a GUI dialog
+	 * 
+	 * @param msg
+	 *            the message we want to display
+	 * @param rgNames
+	 *            the names of the buttons to display
+	 * @param rgFunc
+	 *            the functions each button calls
+	 */
+	private void createDialog(String msg, String[] rgNames, Callable[] rgFunc) {
 		// Logout Alert Window
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setContentText(msg);
-		
-		ButtonType[] btns = new ButtonType[btnAmount];
-		Callable[] functions = new Callable[btnAmount];
-		
+
+		int len = rgNames.length;
+		ButtonType[] btns = new ButtonType[len];
+
 		// used to check if we passed any functions to this dialog
-		boolean nofunc = false;
-		
-		if(func != null){
-			for(int i=0; i<btnAmount; i++){
-				functions[i] = func[i];	
-			}
-		}else{
-			// Set the flag to false;
-			nofunc = true;
-		}
-		
-		for(int i=0; i<btnAmount; i++){
-			btns[i] = new ButtonType(btnNames[i]);
+		boolean nofunc = (rgFunc == null) ? true : false;
+
+		// Setup button names
+		for (int i = 0; i < len; i++) {
+			btns[i] = new ButtonType(rgNames[i]);
 		}
 
 		alert.getButtonTypes().setAll(btns);
-
 		Optional<ButtonType> result = alert.showAndWait();
 
-		
-		for(int i=0; i<btnAmount; i++){
+		// Loop through the buttons, and check if we placed a function call on
+		// them
+		for (int i = 0; i < len; i++) {
 			if (result.get() == btns[i]) {
-				if(!nofunc){
+				if (!nofunc && rgFunc[i] != null) {
 					try {
-						func[i].call();
+						rgFunc[i].call();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-			}else{
-				
 			}
 		}
-		
 	}
 
 	@FXML
 	protected void handleRemoveService(ActionEvent event) throws IOException {
 
 		Service selectedItems = serviceTable.getSelectionModel().getSelectedItems().get(0);
-		
-		if(selectedItems == null){
-			createDialog("Select something first", 1, new String[]{"Ok"}, null);
-		}else{
-			// Logout Alert Window
-			Alert alert = new Alert(AlertType.NONE);
-			alert.setContentText("Are you sure you want to delete this service?");
-			ButtonType buttonTypeOne = new ButtonType("Yes");
-			ButtonType buttonTypeTwo = new ButtonType("No");
-			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
-			Optional<ButtonType> result = alert.showAndWait();
 
-			if (result.get() == buttonTypeOne) {
-				// ReMake sure something is selected
-				try {
-					selectedItems = serviceTable.getSelectionModel().getSelectedItems().get(0);
-					String removeService = selectedItems.toString();
-					System.out.println(removeService);
+		if (selectedItems == null) {
+			createDialog("Select something first", new String[] { "Ok" }, null);
+		} else {
 
-					// Send this value to a php script
-					if (deleteService(selectedItems.getId())) {
-						// Remove from Users services Array
-						removeFromUsers(selectedItems);
-						// After we get confirmation from the script, remove from
-						// GUI
-						updateGUI();
+			// Create the functions that will be called on the two buttons in
+			// this dialog we're gunna create
+			Callable<Void>[] functions = new Callable[2];
+
+			// Only create a function for the 'yes' button as no will cancel
+			functions[0] = new Callable<Void>() {
+				public Void call() {
+					try {
+						Service selectedItems = serviceTable.getSelectionModel().getSelectedItems().get(0);
+						String removeService = selectedItems.toString();
+						System.out.println(removeService);
+
+						// Send this value to a php script
+						if (deleteService(selectedItems.getId())) {
+							// Remove from Users services Array
+							removeFromUsers(selectedItems);
+							// After we get confirmation from the script, remove
+							// from
+							// GUI
+							updateGUI();
+						}
+					} catch (NullPointerException e) {
+						System.err.println("Select something first.");
 					}
-				} catch (NullPointerException e) {
-					System.err.println("Select something first.");
+					return null;
 				}
-			}
+			};
+
+			// Create the dialog with the passed function calls
+			createDialog("Are you sure you want to delete this service?", new String[] { "Yes", "No" }, functions);
 		}
 	}
 
@@ -265,7 +263,7 @@ public class ServicesTabController implements Initializable {
 		// Validate that data was selected/entered (service name, price)
 		if (serviceChoiceBox.getValue() == null || tfPrice.getText().equals("")) {
 			valid = false;
-			createDialog("Either service or price is not entered!", 1, new String[]{"Ok"}, null);
+			createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
 		} else {
 			// Both have been filled
 
@@ -273,7 +271,7 @@ public class ServicesTabController implements Initializable {
 			for (int i = 0; i < User.getInstance().services.size(); i++) {
 				if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
 					System.out.println("This service already exists! ");
-					createDialog("This service already exists!", 1, new String[]{"Ok"}, null);
+					createDialog("This service already exists!", new String[] { "Ok" }, null);
 					return;
 				}
 			}
@@ -282,7 +280,7 @@ public class ServicesTabController implements Initializable {
 			try {
 				double price = Double.parseDouble(tfPrice.getText());
 			} catch (NumberFormatException e) {
-				createDialog("Incorrect price entered!", 1, new String[]{"Ok"}, null);
+				createDialog("Incorrect price entered!", new String[] { "Ok" }, null);
 				return;
 			}
 		}
