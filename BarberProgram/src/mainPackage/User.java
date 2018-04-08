@@ -1,6 +1,7 @@
 package mainPackage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Singleton class of the current logged in User
@@ -19,20 +20,13 @@ public class User {
 	public static User getInstance() {
 		return singleton;
 	}
-	
-	public void flushBookings(){
-		bookings.clear();
-	}
-	
-	public ArrayList<Booking> bookings = new ArrayList<Booking>();
 
-	// Values for current user
+	// Values for current logged in user
 	public String id = "";
 	public String email = "";
 	public String password = "";
 	public String created;
 	public String type;
-	
 	
 	// User Profile
 	public String first_name;
@@ -44,5 +38,16 @@ public class User {
 	public String emergency_name;
 	public String emergency_number;
 	public String profile_picture;
-
+	
+	// Data holding bookings and services
+	public List<Booking> bookings = new ArrayList<Booking>();
+	public List<Service> services = new ArrayList<Service>();
+	
+	public void flushBookings(){
+		bookings.clear();
+	}
+	
+	public void flushServices() {
+		services.clear();
+	}
 }

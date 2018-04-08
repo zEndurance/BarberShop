@@ -89,7 +89,7 @@ public class AppointTabController implements Initializable {
 		loadsDatesData();
 
 		try {
-			URL url = new URL(Connection.getInstance().URL_BUSINESS_HOURS);
+			URL url = new URL(Connection.URL_BUSINESS_HOURS);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0");

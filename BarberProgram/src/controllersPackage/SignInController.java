@@ -28,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import mainPackage.Booking;
 import mainPackage.Connection;
+import mainPackage.Service;
 import mainPackage.User;
 
 public class SignInController implements Initializable {
@@ -57,7 +58,7 @@ public class SignInController implements Initializable {
 
 		System.out.println("We entered the values to send: " + email + ":" + password);
 
-		String data = Connection.getInstance().URL_LOGIN + "?email=" + email + "&password=" + password;
+		String data = Connection.URL_LOGIN + "?email=" + email + "&password=" + password;
 
 		// send these values to the php script
 		System.out.println("Connection: " + data);
@@ -108,6 +109,9 @@ public class SignInController implements Initializable {
 					
 					// Get his booking data also
 					loadBookingData();
+					
+					// Get his service data
+					loadServicesData();
 
 					// Go to next stage
 					login(event);
@@ -127,7 +131,7 @@ public class SignInController implements Initializable {
 	}
 	
 	private void loadBookingData(){
-		String data = Connection.getInstance().URL_GET_BOOKINGS + "?id=" + User.getInstance().id;
+		String data = Connection.URL_GET_BOOKINGS + "?id=" + User.getInstance().id;
 		
 		
 		// send these values to the php script
@@ -198,7 +202,7 @@ public class SignInController implements Initializable {
 	
 	private void loadProfileData(){
 		// Get values from URL/JSON
-		String data = Connection.getInstance().URL_GET_PROFILE + "?id=" + User.getInstance().id;
+		String data = Connection.URL_GET_PROFILE + "?id=" + User.getInstance().id;
 		
 		// send these values to the php script
 		System.out.println("Connecting to page ----------> " + data);
@@ -262,6 +266,77 @@ public class SignInController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private void loadServicesData(){
+		String data = Connection.URL_GET_SERVICES + "?id=" + User.getInstance().id;
+		
+		// send these values to the php script
+		System.out.println("Connecting to page ----------> " + data);
+
+		try {
+			URL url = new URL(data);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+			// Read the JSON output here
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// Try reading it in JSON format
+			try {
+				JSONObject json = new JSONObject(response.toString());
+				System.out.println(json.getString("query_result"));
+
+				String query_response = json.getString("query_result");
+
+				if (query_response.equals("FAILED_SERVICE")) {
+					// Give a response to the user that its incorrect
+					System.out.println("Incorrect email or password entered!");
+				} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
+
+					// Read up the JSON values
+					List<String> list = new ArrayList<String>();
+					
+					// Get the amount of objects
+					int len = json.getInt("amount");
+					
+					// Flush Users current service data
+					User.getInstance().flushServices();
+					
+					// Loop through each array element
+					for(int i=0; i<len; i++){
+						JSONObject obj = json.getJSONObject(Integer.toString(i));
+						
+						// Create the service objects of this User
+						String[] vals = new String[3];
+						vals[0] = obj.getString("id");
+						vals[1] = obj.getString("service");
+						vals[2] = obj.getString("price");
+						
+						// Add this to the Users services array
+						User.getInstance().services.add(new Service(vals));
+					}
+				} else {
+					System.out.println("Not enough arguments were entered.. try filling both fields");
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	private void login(ActionEvent event) throws IOException{
 		Parent parent = FXMLLoader.load(getClass().getResource("/fxmlPackage/mainProgram.fxml"));

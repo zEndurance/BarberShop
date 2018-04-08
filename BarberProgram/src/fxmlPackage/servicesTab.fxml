@@ -36,7 +36,8 @@
 				<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc"
 					height="153.0" layoutX="43.0" layoutY="300.0" stroke="BLACK"
 					strokeType="INSIDE" strokeWidth="0.0" width="405.0" />
-				<ChoiceBox layoutX="75.0" layoutY="366.0" prefWidth="150.0" />
+				<ChoiceBox id="serviceChoiceBox" layoutX="75.0" layoutY="366.0"
+					prefWidth="150.0" />
 				<Label layoutX="52.0" layoutY="309.0" text="Add Service"
 					textAlignment="CENTER" underline="true" />
 				<Label layoutX="130.0" layoutY="338.0" prefHeight="17.0"
@@ -52,12 +53,12 @@
 						<Font size="24.0" />
 					</font>
 				</Label>
-				<TableView layoutX="43.0" layoutY="64.0" prefHeight="200.0"
-					prefWidth="405.0">
+				<TableView fx:id="serviceTable" layoutX="43.0" layoutY="64.0"
+					prefHeight="200.0" prefWidth="405.0">
 					<columns>
-						<TableColumn prefWidth="75.0" text="ID" />
-						<TableColumn prefWidth="75.0" text="Service" />
-						<TableColumn prefWidth="75.0" text="Price" />
+						<TableColumn prefWidth="75.0" text="ID" fx:id="serviceID"/>
+						<TableColumn prefWidth="75.0" text="Service" fx:id="serviceName"/>
+						<TableColumn prefWidth="75.0" text="Price" fx:id="servicePrice"/>
 					</columns>
 				</TableView>
 			</children>
