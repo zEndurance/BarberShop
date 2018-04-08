@@ -20,6 +20,9 @@ public class User {
 	public static User getInstance() {
 		return singleton;
 	}
+	
+	// TODO - Should be set in the settings somewhere
+	public String shop_id = "1";
 
 	// Values for current logged in user
 	public String id = "";
@@ -44,10 +47,10 @@ public class User {
 	public List<Service> services = new ArrayList<Service>();
 	
 	
-	public List<String> allServices = new ArrayList<String>();
+	public List<String> allServicesNames = new ArrayList<String>();
 	
 	public List<String> getServices(){
-		return allServices;
+		return allServicesNames;
 	}
 	
 	public void flushBookings(){

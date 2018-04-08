@@ -386,7 +386,10 @@ public class SignInController implements Initializable {
 					for(int i=0; i<len; i++){
 						JSONObject obj = json.getJSONObject(Integer.toString(i));
 						// Add this to the Users services array
-						User.getInstance().allServices.add(obj.getString("name"));
+						User.getInstance().allServicesNames.add(obj.getString("name"));
+						
+						// Save this to an object also
+						
 					}
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");
