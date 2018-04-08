@@ -1,10 +1,15 @@
 package controllersPackage;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +26,8 @@ public class ServicesTabController implements Initializable {
 	private TableColumn<Service, String> serviceName;
 	@FXML
 	private TableColumn<Service, String> servicePrice;
+	@FXML
+	private ChoiceBox<String> serviceChoiceBox;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -37,5 +44,9 @@ public class ServicesTabController implements Initializable {
 
 			serviceTable.getItems().setAll(User.getInstance().services);
 		}
+		
+		List<String> cities = User.getInstance().getServices();
+		ObservableList<String> list = FXCollections.observableArrayList(cities);
+		serviceChoiceBox.setItems(list);
 	}
 }

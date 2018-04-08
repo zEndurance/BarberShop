@@ -12,4 +12,5 @@ public class Connection {
 	public static final String URL_GET_PROFILE = URL + "get_profile.php";
 	public static final String URL_GET_BOOKINGS = URL + "get_bookings.php";
 	public static final String URL_GET_SERVICES = URL + "get_barbers_services_json.php";
+	public static final String URL_GET_ALL_SERVICES = URL + "get_all_services.php";
 }

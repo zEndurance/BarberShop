@@ -43,6 +43,13 @@ public class User {
 	public List<Booking> bookings = new ArrayList<Booking>();
 	public List<Service> services = new ArrayList<Service>();
 	
+	
+	public List<String> allServices = new ArrayList<String>();
+	
+	public List<String> getServices(){
+		return allServices;
+	}
+	
 	public void flushBookings(){
 		bookings.clear();
 	}

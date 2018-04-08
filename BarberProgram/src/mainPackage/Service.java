@@ -1,5 +1,9 @@
 package mainPackage;
 
+/**
+ * Object representation of each MySQL service this current user provides
+ * @author Raj
+ */
 public class Service {
 
 	private int id;

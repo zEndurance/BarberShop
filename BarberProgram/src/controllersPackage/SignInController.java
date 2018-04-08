@@ -110,6 +110,9 @@ public class SignInController implements Initializable {
 					// Get his booking data also
 					loadBookingData();
 					
+					// Get all services available from the boss
+					loadAllServicesData();
+					
 					// Get his service data
 					loadServicesData();
 
@@ -267,7 +270,6 @@ public class SignInController implements Initializable {
 		}
 	}
 	
-	
 	private void loadServicesData(){
 		String data = Connection.URL_GET_SERVICES + "?id=" + User.getInstance().id;
 		
@@ -337,6 +339,68 @@ public class SignInController implements Initializable {
 		}
 	}
 
+	private void loadAllServicesData(){
+		String data = Connection.URL_GET_ALL_SERVICES;
+		
+		// send these values to the php script
+		System.out.println("Connecting to page ----------> " + data);
+
+		try {
+			URL url = new URL(data);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+			// Read the JSON output here
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			// Try reading it in JSON format
+			try {
+				JSONObject json = new JSONObject(response.toString());
+				System.out.println(json.getString("query_result"));
+
+				String query_response = json.getString("query_result");
+
+				if (query_response.equals("FAILED_SERVICE")) {
+					// Give a response to the user that its incorrect
+					System.out.println("Incorrect email or password entered!");
+				} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
+
+					// Read up the JSON values
+					List<String> list = new ArrayList<String>();
+					
+					// Get the amount of objects
+					int len = json.getInt("amount");
+					
+					// Flush Users current service data
+					User.getInstance().flushServices();
+					
+					// Loop through each array element
+					for(int i=0; i<len; i++){
+						JSONObject obj = json.getJSONObject(Integer.toString(i));
+						// Add this to the Users services array
+						User.getInstance().allServices.add(obj.getString("name"));
+					}
+				} else {
+					System.out.println("Not enough arguments were entered.. try filling both fields");
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	private void login(ActionEvent event) throws IOException{
 		Parent parent = FXMLLoader.load(getClass().getResource("/fxmlPackage/mainProgram.fxml"));
