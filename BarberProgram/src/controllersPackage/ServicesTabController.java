@@ -3,10 +3,12 @@ package controllersPackage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -19,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -28,6 +31,10 @@ import mainPackage.Connection;
 import mainPackage.Service;
 import mainPackage.User;
 
+/**
+ * Controller for the services tabbed page
+ * @author Raj
+ */
 public class ServicesTabController implements Initializable {
 
 	@FXML
@@ -42,6 +49,8 @@ public class ServicesTabController implements Initializable {
 	private ChoiceBox<String> serviceChoiceBox;
 	@FXML
 	private TextField tfPrice;
+	@FXML
+	private Button btnRemoveService;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -49,13 +58,13 @@ public class ServicesTabController implements Initializable {
 		// Load up the table with the current users services
 		int len = User.getInstance().services.size();
 
+		// Connect each column with a service and its value
+		serviceID.setCellValueFactory(new PropertyValueFactory<Service, String>("Id"));
+		serviceName.setCellValueFactory(new PropertyValueFactory<Service, String>("Service"));
+		servicePrice.setCellValueFactory(new PropertyValueFactory<Service, String>("Price"));
+
 		// We can do something with the table now since we have services!
 		if (len > 0) {
-
-			serviceID.setCellValueFactory(new PropertyValueFactory<Service, String>("Id"));
-			serviceName.setCellValueFactory(new PropertyValueFactory<Service, String>("Service"));
-			servicePrice.setCellValueFactory(new PropertyValueFactory<Service, String>("Price"));
-
 			serviceTable.getItems().setAll(User.getInstance().services);
 		}
 
@@ -64,6 +73,117 @@ public class ServicesTabController implements Initializable {
 		serviceChoiceBox.setItems(list);
 	}
 
+	@FXML
+	protected void handleRemoveService(ActionEvent event) throws IOException {
+
+		// Make sure something is selected
+		try {
+			Service selectedItems = serviceTable.getSelectionModel().getSelectedItems().get(0);
+			String removeService = selectedItems.toString();
+			System.out.println(removeService);
+
+			// Send this value to a php script
+			if (deleteService(selectedItems.getId())) {
+				// Remove from Users services Array
+				removeFromUsers(selectedItems);
+				// After we get confirmation from the script, remove from GUI
+				updateGUI();
+			}
+		} catch (NullPointerException e) {
+			System.err.println("Select something first.");
+		}
+	}
+
+	/**
+	 * Removes a selected service from the table view from the current User
+	 * services arraylist
+	 * 
+	 * @param selectedItems
+	 *            the Service to remove
+	 */
+	private void removeFromUsers(Service selectedItems) {
+		// If we find a match, remove it from the List
+		for (int i = 0; i < User.getInstance().services.size(); i++) {
+			if (User.getInstance().services.get(i).getService().equals(selectedItems.getService())) {
+				// Remove this from the users
+				User.getInstance().services.remove(i);
+			}
+		}
+	}
+
+	/**
+	 * Updates/refreshes the GUI of any changes
+	 */
+	private void updateGUI() {
+		serviceTable.getItems().clear();
+		serviceTable.getItems().addAll(User.getInstance().services);
+	}
+
+	/**
+	 * Deletes a service from the MySQL database
+	 * 
+	 * @param id
+	 *            the id of the service we want to delete
+	 * @return true if a successful delete occured
+	 */
+	private boolean deleteService(int id) {
+
+		boolean deleted = false;
+		String data = Connection.URL_DELETE_SERVICE;
+
+		try {
+			URL calledUrl = new URL(data);
+			URLConnection phpConnection = calledUrl.openConnection();
+
+			HttpURLConnection httpBasedConnection = (HttpURLConnection) phpConnection;
+			httpBasedConnection.setRequestMethod("POST");
+			httpBasedConnection.setDoOutput(true);
+			StringBuffer paramsBuilder = new StringBuffer();
+			paramsBuilder.append("id=" + id);
+
+			PrintWriter requestWriter = new PrintWriter(httpBasedConnection.getOutputStream(), true);
+			requestWriter.print(paramsBuilder.toString());
+			requestWriter.close();
+
+			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
+
+			String receivedLine;
+			StringBuffer responseAppender = new StringBuffer();
+
+			while ((receivedLine = responseReader.readLine()) != null) {
+				responseAppender.append(receivedLine);
+				responseAppender.append("\n");
+			}
+			responseReader.close();
+			String result = responseAppender.toString();
+			System.out.println(result);
+
+			// Read it in JSON
+			try {
+				JSONObject json = new JSONObject(result);
+				System.out.println(json.getString("query_result"));
+				String query_response = json.getString("query_result");
+
+				if (query_response.equals("FAILED_DELETE_SERVICE")) {
+					deleted = false;
+				} else if (query_response.equals("SUCCESSFUL_DELETE_SERVICE")) {
+					System.out.println("We can successfully delete this from the table!!!");
+					deleted = true;
+				} else {
+					System.out.println("Not enough arguments were entered.. try filling both fields");
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return deleted;
+	}
+	
 	@FXML
 	protected void handleSubmitService(ActionEvent event) throws IOException {
 
@@ -110,8 +230,7 @@ public class ServicesTabController implements Initializable {
 				// Validate that we can enter this into the table
 				User.getInstance().services.add(new Service(args));
 
-				serviceTable.getItems().clear();
-				serviceTable.getItems().addAll(User.getInstance().services);
+				updateGUI();
 			} else {
 				// TODO - Display error message to the user that we couldn't
 				// insert onto the database
@@ -129,8 +248,7 @@ public class ServicesTabController implements Initializable {
 	 *            the name of the service
 	 * @param price
 	 *            the price of the service with decimals
-	 * @return 
-	 * 			  the last service id entered onto the database
+	 * @return the last service id entered onto the database
 	 */
 	private String insertService(String service, String price) {
 		// Assume we couldn't insert this
