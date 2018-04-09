@@ -17,6 +17,9 @@ public class Connection {
 	// DB INSERTS
 	public static final String URL_INSERT_SERVICE = URL + "insert_barbers_services_json.php";
 	
+	// DB UPDATES
+	public static final String URL_UPDATE_ACCOUNT = URL + "update_account.php";
+	
 	// DB DELETES
 	public static final String URL_DELETE_SERVICE = URL + "delete_barbers_services_json.php";
 }

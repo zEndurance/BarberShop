@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -14,124 +22,69 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.AccountTabController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.AccountTabController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="45.0" layoutX="10.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="261.0" />
       
          
          
          	<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="944.0">
-                        <children>
-                           <VBox prefHeight="514.0" prefWidth="925.0" spacing="10.0" AnchorPane.bottomAnchor="86.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="0.0">
-                              <children>
-                                 <Label prefHeight="38.0" prefWidth="261.0" text="Employee Information">
-                                    <font>
-                                       <Font size="26.0" />
-                                    </font>
-                                 </Label>
-                                 <GridPane prefHeight="256.0" prefWidth="800.0" vgap="20.0">
-                                   <columnConstraints>
-                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="457.0" minWidth="10.0" prefWidth="210.0" />
-                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="714.0" minWidth="10.0" prefWidth="700.0" />
-                                   </columnConstraints>
-                                   <rowConstraints>
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                   </rowConstraints>
-                                    <children>
-                                       <Label text="Employee ID:">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Employee Name:" GridPane.rowIndex="1">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Employee Phone Number:" GridPane.rowIndex="2">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Emergency Contact Name:" GridPane.rowIndex="3">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Emergency Contact Number:" GridPane.rowIndex="4">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Employee Email Address:" GridPane.rowIndex="5">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Employee Password:" GridPane.rowIndex="6">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <Label text="Change Password:" GridPane.rowIndex="7">
-                                          <font>
-                                             <Font size="15.0" />
-                                          </font>
-                                       </Label>
-                                       <TextField fx:id="tfEmployeeID" editable="false" prefHeight="31.0" prefWidth="637.0" GridPane.columnIndex="1" />
-                                       <TextField fx:id="tfEmployeeName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       <TextField fx:id="tfMobile" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                       <TextField fx:id="tfECName" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                       <TextField fx:id="tfECNum" prefHeight="31.0" prefWidth="630.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                       <TextField fx:id="tfEmployeeEmail" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                       <TextField fx:id="tfEmployeePassword" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <TextField fx:id="tfEmployeePassword1" editable="true" prefHeight="25.0" prefWidth="694.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Button mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="29.0" prefWidth="121.0" text="Update Details" GridPane.columnIndex="1" GridPane.rowIndex="8">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </Button>
-                        <Label prefHeight="30.0" prefWidth="164.0" text="Employee profile picture:" GridPane.rowIndex="9" />
-                                    </children>
-                                 </GridPane>
-                  <GridPane prefHeight="182.0" prefWidth="905.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="359.0" minWidth="10.0" prefWidth="155.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.0" minWidth="10.0" prefWidth="215.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints />
-                        <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="118.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="241.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <TextArea prefHeight="107.0" prefWidth="214.0" text="&#10;&#10;Upload and preview &#10;a profile picture here:" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <ImageView fitHeight="160.0" fitWidth="184.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button mnemonicParsing="false" prefHeight="15.0" prefWidth="114.0" text="Upload Picture" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-                           <font>
-                              <Font size="13.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </GridPane>
-                              </children>
-                              <padding>
-                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                              </padding>
-                           </VBox>
-                        </children>
+         <children>
+            <Label layoutX="14.0" layoutY="5.0" prefHeight="45.0" prefWidth="228.0" text="Account Information">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="222.0" fitWidth="301.0" layoutX="37.0" layoutY="78.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../../../../../../Pictures/WhatsApp%20Zip%202018-03-30%20at%2000.26.06/WhatsApp%20Image%202018-03-29%20at%2021.01.10%20(2).jpeg" />
+               </image>
+               <effect>
+                  <InnerShadow />
+               </effect>
+            </ImageView>
+            <Button layoutX="255.0" layoutY="309.0" mnemonicParsing="false" onAction="#handleUpdatePicture" prefHeight="25.0" prefWidth="83.0" text="Edit Picture" />
+            <Label layoutX="393.0" layoutY="68.0" text="First name:" />
+            <TextField fx:id="tfFirstName" layoutX="464.0" layoutY="64.0" prefHeight="25.0" prefWidth="440.0" />
+            <TextField fx:id="tfMiddleName" layoutX="464.0" layoutY="95.0" prefHeight="25.0" prefWidth="440.0" />
+            <Label layoutX="378.0" layoutY="99.0" text="Middle name:" />
+            <Label layoutX="394.0" layoutY="130.0" text="Last name:" />
+            <TextField fx:id="tfLastName" layoutX="464.0" layoutY="126.0" prefHeight="25.0" prefWidth="440.0" />
+            <TextField fx:id="tfEmail" layoutX="466.0" layoutY="420.0" prefHeight="25.0" prefWidth="440.0" />
+            <Label layoutX="422.0" layoutY="424.0" prefHeight="17.0" prefWidth="34.0" text="Email:" textAlignment="RIGHT" />
+            <Label layoutX="401.0" layoutY="457.0" prefHeight="17.0" prefWidth="57.0" text="Password:" textAlignment="RIGHT" />
+            <TextField fx:id="tfPassword" layoutX="468.0" layoutY="453.0" prefHeight="25.0" prefWidth="434.0" />
+            <TextField fx:id="tfAge" layoutX="464.0" layoutY="156.0" prefHeight="25.0" prefWidth="92.0" />
+            <Label layoutX="429.0" layoutY="160.0" text="Age:" />
+            <TextField fx:id="tfHomeTel" layoutX="464.0" layoutY="188.0" prefHeight="25.0" prefWidth="175.0" />
+            <Label layoutX="394.0" layoutY="192.0" text="Home Tel:" />
+            <Label layoutX="659.0" layoutY="192.0" text="Mobile Tel:" />
+            <TextField fx:id="tfMobTel" layoutX="729.0" layoutY="188.0" prefHeight="25.0" prefWidth="175.0" />
+            <TextField fx:id="tfEmergencyName" layoutX="549.0" layoutY="269.0" prefHeight="25.0" prefWidth="355.0" />
+            <Label layoutX="394.0" layoutY="273.0" text="Emergency contact name:" />
+            <Label layoutX="450.0" layoutY="304.0" text="Emergency Tel:" />
+            <TextField fx:id="tfEmergencyTel" layoutX="549.0" layoutY="300.0" prefHeight="25.0" prefWidth="355.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="37.0" layoutX="377.0" layoutY="227.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="528.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="37.0" layoutX="377.0" layoutY="18.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="528.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="37.0" layoutX="376.0" layoutY="376.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="528.0" />
+            <Label layoutX="378.0" layoutY="14.0" prefHeight="45.0" prefWidth="228.0" text="Personal">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="378.0" layoutY="223.0" prefHeight="45.0" prefWidth="228.0" text="Emergency">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="377.0" layoutY="372.0" prefHeight="45.0" prefWidth="228.0" text="Account">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnUpdateAccount" layoutX="804.0" layoutY="491.0" mnemonicParsing="false" onAction="#handleUpdateAccount" text="Update Account" />
+            <Button fx:id="btnUpdateProfile" layoutX="808.0" layoutY="334.0" mnemonicParsing="false" onAction="#handleUpdateProfile" prefHeight="25.0" prefWidth="102.0" text="Update Profile" />
+         </children>
                      </AnchorPane>
    </children>
 </AnchorPane>
