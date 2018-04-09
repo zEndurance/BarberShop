@@ -35,7 +35,7 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <ImageView fitHeight="222.0" fitWidth="301.0" layoutX="37.0" layoutY="78.0" pickOnBounds="true">
+            <ImageView fx:id="ivAccount" fitHeight="222.0" fitWidth="301.0" layoutX="37.0" layoutY="78.0" pickOnBounds="true">
                <image>
                   <Image url="@../../../../../../Pictures/WhatsApp%20Zip%202018-03-30%20at%2000.26.06/WhatsApp%20Image%202018-03-29%20at%2021.01.10%20(2).jpeg" />
                </image>

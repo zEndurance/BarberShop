@@ -33,6 +33,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mainPackage.Connection;
+import mainPackage.GUI;
 import mainPackage.Service;
 import mainPackage.User;
 
@@ -79,49 +80,7 @@ public class ServicesTabController implements Initializable {
 		serviceChoiceBox.setItems(list);
 	}
 
-	/**
-	 * Creates a GUI dialog
-	 * 
-	 * @param msg
-	 *            the message we want to display
-	 * @param rgNames
-	 *            the names of the buttons to display
-	 * @param rgFunc
-	 *            the functions each button calls
-	 */
-	private void createDialog(String msg, String[] rgNames, Callable[] rgFunc) {
-		// Logout Alert Window
-		Alert alert = new Alert(AlertType.NONE);
-		alert.setContentText(msg);
-
-		int len = rgNames.length;
-		ButtonType[] btns = new ButtonType[len];
-
-		// used to check if we passed any functions to this dialog
-		boolean nofunc = (rgFunc == null) ? true : false;
-
-		// Setup button names
-		for (int i = 0; i < len; i++) {
-			btns[i] = new ButtonType(rgNames[i]);
-		}
-
-		alert.getButtonTypes().setAll(btns);
-		Optional<ButtonType> result = alert.showAndWait();
-
-		// Loop through the buttons, and check if we placed a function call on
-		// them
-		for (int i = 0; i < len; i++) {
-			if (result.get() == btns[i]) {
-				if (!nofunc && rgFunc[i] != null) {
-					try {
-						rgFunc[i].call();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	}
+	
 
 	@FXML
 	protected void handleRemoveService(ActionEvent event) throws IOException {
@@ -129,7 +88,7 @@ public class ServicesTabController implements Initializable {
 		Service selectedItems = serviceTable.getSelectionModel().getSelectedItems().get(0);
 
 		if (selectedItems == null) {
-			createDialog("Select something first", new String[] { "Ok" }, null);
+			GUI.createDialog("Select something first", new String[] { "Ok" }, null);
 		} else {
 
 			// Create the functions that will be called on the two buttons in
@@ -161,7 +120,7 @@ public class ServicesTabController implements Initializable {
 			};
 
 			// Create the dialog with the passed function calls
-			createDialog("Are you sure you want to delete this service?", new String[] { "Yes", "No" }, functions);
+			GUI.createDialog("Are you sure you want to delete this service?", new String[] { "Yes", "No" }, functions);
 		}
 	}
 
@@ -263,7 +222,7 @@ public class ServicesTabController implements Initializable {
 		// Validate that data was selected/entered (service name, price)
 		if (serviceChoiceBox.getValue() == null || tfPrice.getText().equals("")) {
 			valid = false;
-			createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
+			GUI.createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
 		} else {
 			// Both have been filled
 
@@ -271,7 +230,7 @@ public class ServicesTabController implements Initializable {
 			for (int i = 0; i < User.getInstance().services.size(); i++) {
 				if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
 					System.out.println("This service already exists! ");
-					createDialog("This service already exists!", new String[] { "Ok" }, null);
+					GUI.createDialog("This service already exists!", new String[] { "Ok" }, null);
 					return;
 				}
 			}
@@ -280,7 +239,7 @@ public class ServicesTabController implements Initializable {
 			try {
 				double price = Double.parseDouble(tfPrice.getText());
 			} catch (NumberFormatException e) {
-				createDialog("Incorrect price entered!", new String[] { "Ok" }, null);
+				GUI.createDialog("Incorrect price entered!", new String[] { "Ok" }, null);
 				return;
 			}
 		}

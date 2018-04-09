@@ -58,8 +58,6 @@ public class User {
 	// Data holding bookings and services
 	public List<Booking> bookings = new ArrayList<Booking>();
 	public List<Service> services = new ArrayList<Service>();
-	
-	
 	public List<String> allServicesNames = new ArrayList<String>();
 	
 	public List<String> getServices(){

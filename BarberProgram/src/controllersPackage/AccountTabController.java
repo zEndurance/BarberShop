@@ -1,27 +1,46 @@
 package controllersPackage;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 /* Imports java, com, javafx, mainPackage */
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
+
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import mainPackage.Connection;
+import mainPackage.GUI;
 import mainPackage.User;
+import sun.net.www.http.HttpClient;
 
 public class AccountTabController implements Initializable {
 	
@@ -37,6 +56,7 @@ public class AccountTabController implements Initializable {
 	
 	@FXML private TextField tfEmail;
 	@FXML private TextField tfPassword;
+	@FXML private ImageView ivAccount;
 	
 	
 	@Override
@@ -61,6 +81,8 @@ public class AccountTabController implements Initializable {
 				updateAccount(email, password);
 				updateGUI();
 			}
+		}else{
+			GUI.createDialog("You didn't change your password or email", new String[]{"Ok"}, null);
 		}
 
 		// return outcome
@@ -128,6 +150,7 @@ public class AccountTabController implements Initializable {
 					System.out.println("We can successfully delete this from the table!!!");
 					updated = true;
 					
+					GUI.createDialog("Account updated", new String[]{"Ok"}, null);
 					// Update the current user
 					User.getInstance().email = email;
 					User.getInstance().password = password;
@@ -149,13 +172,36 @@ public class AccountTabController implements Initializable {
 	
 	@FXML
 	protected void handleUpdatePicture(ActionEvent event) throws IOException {
-		// Open Dialog to find image
-		
-		// Upload Image to web server
-		
-		// Change Image in GUI
+		FileChooser fileChooser = new FileChooser();
+        
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
+        FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
+        fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+         
+        //Show open file dialog
+        File file = fileChooser.showOpenDialog(null);
+        
+        System.out.println("File chosen is: " + file.getAbsolutePath());
+        
+        try {
+            BufferedImage bufferedImage = ImageIO.read(file);
+            Image image = SwingFXUtils.toFXImage(bufferedImage, null);
+            ivAccount.setImage(image);
+            
+            
+            // Upload to the database and change its location into users profile picture
+            upload(file);
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 	}
 	
+	private void upload(File file){
+		
+	}
+
 	@FXML
 	protected void handleUpdateProfile(ActionEvent event) throws IOException {
 		
@@ -190,7 +236,10 @@ public class AccountTabController implements Initializable {
 				updateProfile(val);
 				updateGUI();
 			}
+		}else{
+			GUI.createDialog("You didn't change any profile/emergency data", new String[]{"Ok"}, null);
 		}
+
 
 		// return outcome
 		System.out.println("// End of Update Account");
@@ -259,6 +308,8 @@ public class AccountTabController implements Initializable {
 					usr.mobile = rgVals[5];
 					usr.emergency_name = rgVals[6];
 					usr.emergency_number = rgVals[7];
+					
+					GUI.createDialog("Profile updated", new String[]{"Ok"}, null);
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");
 				}
