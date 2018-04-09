@@ -159,10 +159,125 @@ public class AccountTabController implements Initializable {
 	@FXML
 	protected void handleUpdateProfile(ActionEvent event) throws IOException {
 		
+		String[] val = new String[8];
+		
+		val[0] = tfFirstName.getText().toString();
+		val[1] = tfMiddleName.getText().toString();
+		val[2] = tfLastName.getText().toString();
+		val[3] = tfAge.getText().toString();
+		val[4] = tfHomeTel.getText().toString();
+		val[5] = tfMobTel.getText().toString();
+		val[6] = tfEmergencyName.getText().toString();
+		val[7] = tfEmergencyTel.getText().toString();
+		
+		User usr = User.getInstance();
+		usr.fillProfileData();
+		
+		boolean changed = false;
+		for(int i=0; i<val.length; i++){
+			if(!val[i].equals(usr.profileData[i])){
+				changed = true;
+			}
+		}
+		
+		// Validate that changes were made
+		if(changed){
+			System.out.println("Change in profile was found!");
+			
+			// We can now perform a validation
+			if(validProfile(val)){
+				// Send to php script
+				updateProfile(val);
+				updateGUI();
+			}
+		}
+
+		// return outcome
+		System.out.println("// End of Update Account");
 	}
 	
-	
-	
+	private void updateProfile(String[] rgVals) {
+		boolean updated = false;
+		String data = Connection.URL_UPDATE_PROFILE;
+
+		try {
+			URL calledUrl = new URL(data);
+			URLConnection phpConnection = calledUrl.openConnection();
+
+			HttpURLConnection httpBasedConnection = (HttpURLConnection) phpConnection;
+			httpBasedConnection.setRequestMethod("POST");
+			httpBasedConnection.setDoOutput(true);
+			StringBuffer paramsBuilder = new StringBuffer();
+			paramsBuilder.append("id=" + User.getInstance().id);
+			paramsBuilder.append("&fName=" + rgVals[0]);
+			paramsBuilder.append("&mName=" + rgVals[1]);
+			paramsBuilder.append("&lName=" + rgVals[2]);
+			paramsBuilder.append("&age=" + rgVals[3]);
+			paramsBuilder.append("&tel=" + rgVals[4]);
+			paramsBuilder.append("&mob=" + rgVals[5]);
+			paramsBuilder.append("&eName=" + rgVals[6]);
+			paramsBuilder.append("&eTel=" + rgVals[7]);
+			
+
+			PrintWriter requestWriter = new PrintWriter(httpBasedConnection.getOutputStream(), true);
+			requestWriter.print(paramsBuilder.toString());
+			requestWriter.close();
+
+			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
+
+			String receivedLine;
+			StringBuffer responseAppender = new StringBuffer();
+
+			while ((receivedLine = responseReader.readLine()) != null) {
+				responseAppender.append(receivedLine);
+				responseAppender.append("\n");
+			}
+			responseReader.close();
+			String result = responseAppender.toString();
+			System.out.println(result);
+
+			// Read it in JSON
+			try {
+				JSONObject json = new JSONObject(result);
+				System.out.println(json.getString("query_result"));
+				String query_response = json.getString("query_result");
+
+				if (query_response.equals("FAILED_UPDATE_PROFILE")) {
+					updated = false;
+				} else if (query_response.equals("SUCCESSFUL_UPDATE_PROFILE")) {
+					System.out.println("We can successfully delete this from the table!!!");
+					updated = true;
+					
+					User usr = User.getInstance();
+					
+					// Update the current user
+					usr.first_name = rgVals[0];
+					usr.middle_name = rgVals[1];
+					usr.last_name = rgVals[2];
+					usr.age = rgVals[3];
+					usr.home_telephone = rgVals[4];
+					usr.mobile = rgVals[5];
+					usr.emergency_name = rgVals[6];
+					usr.emergency_number = rgVals[7];
+				} else {
+					System.out.println("Not enough arguments were entered.. try filling both fields");
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Updated?: " + updated);
+	}
+
+	private boolean validProfile(String[] rgVals) {
+		return true;
+	}
+
 	private void updateGUI(){
 		tfFirstName.setText(User.getInstance().first_name);
 		tfMiddleName.setText(User.getInstance().middle_name);

@@ -42,6 +42,19 @@ public class User {
 	public String emergency_number;
 	public String profile_picture;
 	
+	public String[] profileData = new String[8];
+	
+	public void fillProfileData(){
+		profileData[0] = first_name;
+		profileData[1] = middle_name;
+		profileData[2] = last_name;
+		profileData[3] = age;
+		profileData[4] = home_telephone;
+		profileData[5] = mobile;
+		profileData[6] = emergency_name;
+		profileData[7] = emergency_number;
+	}
+	
 	// Data holding bookings and services
 	public List<Booking> bookings = new ArrayList<Booking>();
 	public List<Service> services = new ArrayList<Service>();
