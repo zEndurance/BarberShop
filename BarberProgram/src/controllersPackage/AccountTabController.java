@@ -182,6 +182,9 @@ public class AccountTabController implements Initializable {
         //Show open file dialog
         File file = fileChooser.showOpenDialog(null);
         
+        // If we hit cancel, we didn't select any file
+        if(file == null) return;
+        
         System.out.println("File chosen is: " + file.getAbsolutePath());
         
         try {
@@ -195,6 +198,8 @@ public class AccountTabController implements Initializable {
             
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch(NullPointerException ex){
+        	ex.printStackTrace();
         }
 	}
 	

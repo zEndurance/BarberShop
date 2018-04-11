@@ -84,117 +84,20 @@ public class AppointTabController implements Initializable {
 
 		// Read table colours
 		loadCellColours();
+		
+		loadBookings();
 
-		// Load in data for clicking on dates on the datepicker
-		loadsDatesData();
-
-		try {
-			URL url = new URL(Connection.URL_BUSINESS_HOURS);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_business_hours"));
-				String query_response = json.getString("query_business_hours");
-
-				if (query_response.equals("FAILED_HOURS")) {
-
-				} else if (query_response.equals("SUCCESS_HOURS")) {
-
-					BusinessHours[] rgBHours = new BusinessHours[7];
-					
-					// Workout the business hours of a week
-					for (int i = 0; i < 7; i++) {
-						JSONObject animal = json.getJSONObject(Integer.toString(i));
-						int day = animal.getInt("DayOfWeek");
-						String open = animal.getString("OpenTime");
-						String close = animal.getString("CloseTime");
-						rgBHours[i] = new BusinessHours(day, open, close);
-						System.out.println("On " + getDay(day) + " the opening hours are " + open
-								+ " and closing hours are " + close);
-					}
-
-					// Now calculate the earliest opening hour and the latest
-					// closing hour so we can see how many columns
-					// we need to make
-					String startTime = "23:30:00";
-					String closeTime = "00:00:00";
-					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-					Date start = simpleDateFormat.parse(startTime);
-					Date end = simpleDateFormat.parse(closeTime);
-					for (int i = 0; i < 7; i++) {
-
-						BusinessHours b = rgBHours[i];
-
-						// firstly check if open and closing are the same, in
-						// which case we can just ignore
-						// assume same times means its a closed day
-						if (!b.getOpeningHours().equals(b.getClosingHours())) {
-
-							Date checkingOpenTime = simpleDateFormat.parse(b.getOpeningHours());
-							Date checkingCloseTime = simpleDateFormat.parse(b.getClosingHours());
-							// Compare dates
-							if (checkingOpenTime.before(start)) {
-								start = checkingOpenTime;
-							}
-
-							if (checkingCloseTime.after(end)) {
-								end = checkingCloseTime;
-							}
-
-						} else {
-							System.out.println("It must be closed today on a " + b.getDay());
-							closedDays.add(b.getDay());
-						}
-					}
-
-					System.out.println("Earliest we start the business week is: : " + simpleDateFormat.format(start));
-					System.out.println("Latest we start the business week is: : " + simpleDateFormat.format(end));
-
-					// TODO - 30minute intervals (should be set elsewhere)
-					int interval = 30;
-					long cols = ((Math.abs((start.getTime() - end.getTime())) / 1000) / 60) / interval;
-					System.out.println("We're gunna need this much intervals: " + cols);
-					
-					// TODO - Create the column headers based of the JSON (for customizing)
-					for(int i=0; i<cols; i++){
-						//columns.add();
-					}
-					
-					buildTable(BOOKING_FILE);
-				} else {
-
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		
 		// END
 		System.out.println("// END of AppointTab Initialize");
 	}
 
 	@FXML
 	protected void handleDateButtonAction(ActionEvent event) throws IOException {
+		loadBookings();
+	}
+
+	private void loadBookings(){
 		// Figure out what dates data we need to load so that we can select the bookings of the week
 		loadsDatesData();
 
@@ -212,7 +115,7 @@ public class AppointTabController implements Initializable {
 		// reload the table
 		buildTable(BOOKING_FILE);
 	}
-
+	
 	private void loadCellColours() {
 		// Read the csv file
 		File f = new File(BOOKING_COLOURS);

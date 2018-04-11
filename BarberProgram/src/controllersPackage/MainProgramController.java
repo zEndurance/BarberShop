@@ -42,6 +42,10 @@ public class MainProgramController implements Initializable {
   
     	Optional<ButtonType> result = alert.showAndWait();
     	if (result.get() == buttonTypeOne){
+    		
+    		// Reset the users data
+    		User.getInstance().logout();
+    		
     		Parent blah = FXMLLoader.load(getClass().getResource("/fxmlPackage/loginPage.fxml"));
     		Scene scene = new Scene(blah);
     		Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -57,11 +61,5 @@ public class MainProgramController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO - MySQL grabbing all user data should happen here and not each time a tab opens
-		
-		
-		
 	}
-	
-	
-
 }

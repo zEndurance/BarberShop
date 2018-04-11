@@ -71,4 +71,32 @@ public class User {
 	public void flushServices() {
 		services.clear();
 	}
+	
+	public void logout(){
+		// Destroy all logged in user data
+		flushBookings();
+		flushServices();
+		allServicesNames.clear();
+		
+		for(int i=0; i<profileData.length; i++){
+			profileData[i] = "";
+		}
+
+		id = "";
+		email = "";
+		password = "";
+		created = "";
+		type = "";
+		
+		// User Profile
+		first_name = "";
+		middle_name = "";
+		last_name = "";
+		age = "";
+		home_telephone = "";
+		mobile = "";
+		emergency_name = "";
+		emergency_number = "";
+		profile_picture = "";
+	}
 }
