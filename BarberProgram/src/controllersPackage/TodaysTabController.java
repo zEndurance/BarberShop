@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
+
+import enumPackage.Status;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +21,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import mainPackage.Booking;
 import mainPackage.TodayData;
+import mainPackage.User;
 
 public class TodaysTabController implements Initializable {
 	@FXML
@@ -44,91 +50,32 @@ public class TodaysTabController implements Initializable {
 	private void loadsDatesData() {
 		// Reset the list
 		clientObservableList.remove(0, clientObservableList.size());
-
-		LocalDate date = datePicker.getValue();
+		
+		// Format the picked date to a useable one so we can search for a booking
+		LocalDate localDate = datePicker.getValue();
+		Date date = java.sql.Date.valueOf(localDate);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		String newDate = sdf.format(date);
 		System.err.println("Selected date: " + date);
-
-		// Construct a new string
-		String newDate = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
-
 		System.out.println("useable date: " + newDate);
-
-		/*
-		// MySQL query here
-		System.out.println("Connecting database...");
-		try (Connection connection = DriverManager.getConnection(Connection.DATABASE_URL, Connection.DATABASE_USERNAME,
-				Connection.DATABASE_PASSWORD)) {
-			// Select row based off date
-			Statement myStmt = connection.createStatement();
-
-			System.out.println("Current logged in ID: " + Main.currentID);
-
-			// Execute a statement
-			ResultSet myRs = myStmt.executeQuery(
-					"SELECT * FROM appointments WHERE userID ='" + Main.currentID + "' AND Date='" + newDate + "'");
-			// Grab the whole row data from the above statement
-			ResultSetMetaData rsmd = myRs.getMetaData();
-
-			// Debug statements to find column names
-			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				System.out.println("Column names: " + rsmd.getColumnName(i));
+		
+		// Search through bookings and see if we find a match with the date picked
+		for(int i=0; i<User.getInstance().bookings.size(); i++){
+			System.out.println(User.getInstance().bookings.get(i).toString());
+			
+			Booking b = User.getInstance().bookings.get(i);
+			
+			// TODO - bookings need to be connected to a customer profile
+			
+			// We have a match, so add it to the clientObersableList
+			if(b.getDate().equals(newDate)){
+				clientObservableList.addAll(new TodayData(b.getStartTime(), Status.NOTSHOWED, Integer.toString(i)));
 			}
-
-			// While we have row data
-			while (myRs.next()) {
-				// Grab the data from the table
-				String ID = myRs.getString("ID");
-				String userID = myRs.getString("userID");
-				String day = myRs.getString("Day");
-				String date2 = myRs.getString("Date");
-				String t9 = myRs.getString("t9");
-				String t10 = myRs.getString("t10");
-				String t11 = myRs.getString("t11");
-				String t12 = myRs.getString("t12");
-				String t13 = myRs.getString("t13");
-				String t14 = myRs.getString("t14");
-				String t15 = myRs.getString("t15");
-				String t16 = myRs.getString("t16");
-				String t17 = myRs.getString("t17");
-				// Debugging statements
-				System.out.println("ID: " + ID);
-				System.out.println("Day: " + day);
-				System.out.println("date: " + date2);
-				System.out.println("t9: " + t9);
-				System.out.println("t10: " + t10);
-				System.out.println("t11: " + t11);
-				System.out.println("t12: " + t12);
-				System.out.println("t13: " + t13);
-				System.out.println("t14: " + t14);
-				System.out.println("t15: " + t15);
-				System.out.println("t16: " + t16);
-				System.out.println("t17: " + t17);
-
-				String[] combinedStr = { t9, t10, t11, t12, t13, t14, t15, t16, t17 };
-
-				ArrayList<String> times = new ArrayList<String>();
-				times.addAll(Arrays.asList(combinedStr));
-
-				System.out.println("COMBINED STR LENGTH: ------------ > " + combinedStr.length);
-
-				for (int i = 0; i < times.size(); i++) {
-					// Splits the appointments string data
-					String[] split = times.get(i).split(", ");
-					// Only get data if theres a booking
-					if (split.length >= 3 && split[0].equals("1")) {
-						System.out.println("Split: " + split[1]);
-						clientObservableList.addAll(new TodayData(split[1], Status.NOTSHOWED, Integer.toString(i)));
-					}
-				}
-				
-				listView.setItems(clientObservableList);
-				listView.setCellFactory(studentListView -> new ClientListViewCell());
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-		*/
+
+		// Update the listview of bookings
+		listView.setItems(clientObservableList);
+		listView.setCellFactory(studentListView -> new ClientListViewCell());
 	}
 
 	public static final LocalDate NOW_LOCAL_DATE() {
