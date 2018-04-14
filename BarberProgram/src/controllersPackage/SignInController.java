@@ -198,7 +198,7 @@ public class SignInController implements Initializable {
 						@Override
 						public int compare(Booking o1, Booking o2) {
 							try {
-					            return new SimpleDateFormat("HH:mm:ss").parse(o1.getStartTime()).compareTo(new SimpleDateFormat("HH:mm:ss").parse(o2.getStartTime()));
+					            return new SimpleDateFormat("HH:mm").parse(o1.getStartTime()).compareTo(new SimpleDateFormat("HH:mm").parse(o2.getStartTime()));
 					        } catch (ParseException e) {
 					            return 0;
 					        }
