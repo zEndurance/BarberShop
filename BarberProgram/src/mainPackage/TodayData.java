@@ -4,25 +4,24 @@ import enumPackage.Status;
 
 public class TodayData {
 	private String clientName;
-	private String time;
+	private String startTime;
+	private String endTime;
 	public Status status;
 
-	public TodayData(String _name, Status _status, String _time) {
+	public TodayData(String _name, Status _status, String _startTime, String _endTime) {
 		this.clientName = _name;
 		this.status = _status;
-
-		for (int i = 0; i < 9; i++) {
-
-			if (_time.equals(Integer.toString(i))) {
-				_time = Integer.toString(i + 9) + ":00-" + Integer.toString(i + 10) + ":00";
-			}
-		}
-
-		this.time = _time;
+		
+		this.startTime = _startTime;
+		this.endTime = _endTime;
 	}
 
-	public String getTime() {
-		return this.time;
+	public String getStartTime() {
+		return this.startTime;
+	}
+	
+	public String getEndTime(){
+		return this.endTime;
 	}
 
 	public String getName() {

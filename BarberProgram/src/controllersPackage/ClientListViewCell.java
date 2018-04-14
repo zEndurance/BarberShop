@@ -45,8 +45,8 @@ public class ClientListViewCell extends ListCell<TodayData>  {
             }
             
             // Values of labels/javafx items
-            labelTime.setText(String.valueOf(student.getTime()));
-            label1.setText(String.valueOf(student.getName()));
+            labelTime.setText(student.getStartTime() + "-" + student.getEndTime());
+            label1.setText(student.getName());
             
             ObservableList<String> data = FXCollections.observableArrayList();
             

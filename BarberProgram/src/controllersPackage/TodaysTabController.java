@@ -69,11 +69,11 @@ public class TodaysTabController implements Initializable {
 			
 			// We have a match, so add it to the clientObersableList
 			if(b.getDate().equals(newDate)){
-				clientObservableList.addAll(new TodayData(b.getStartTime(), Status.NOTSHOWED, Integer.toString(i)));
+				clientObservableList.addAll(new TodayData(b.getProfile().getName(), Status.NOTSHOWED, b.getStartTime(), b.getEndTime()));
 			}
 		}
 
-		// Update the listview of bookings
+		// Update the list view of bookings
 		listView.setItems(clientObservableList);
 		listView.setCellFactory(studentListView -> new ClientListViewCell());
 	}

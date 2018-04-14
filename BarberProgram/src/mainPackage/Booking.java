@@ -20,6 +20,9 @@ public class Booking {
 	private int shop_id;
 	private int user_id;
 	
+	// Connection to a persons booking
+	private Profile profile;
+	
 	public Booking(String id, String date, String startTime, String endTime){
 		
 		// Convert everything in here
@@ -35,6 +38,13 @@ public class Booking {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		
+		this.profile = new Profile(new String[]{"Raj"});
+	}
+	
+	public Profile getProfile(){
+		return this.profile;
 	}
 	
 	/**

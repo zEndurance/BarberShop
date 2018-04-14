@@ -6,7 +6,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -189,7 +193,19 @@ public class SignInController implements Initializable {
 				    	System.out.println("Booking: " + User.getInstance().bookings.get(z).toString());
 				    }
 					
-					
+					// Sort the bookings arraylist
+					Collections.sort(User.getInstance().bookings, new Comparator<Booking>() {
+						@Override
+						public int compare(Booking o1, Booking o2) {
+							try {
+					            return new SimpleDateFormat("HH:mm:ss").parse(o1.getStartTime()).compareTo(new SimpleDateFormat("HH:mm:ss").parse(o2.getStartTime()));
+					        } catch (ParseException e) {
+					            return 0;
+					        }
+					        }
+						}
+					);
+
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");
 				}
@@ -201,6 +217,9 @@ public class SignInController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
+		
 	}
 	
 	private void loadProfileData(){
