@@ -202,9 +202,8 @@ public class SignInController implements Initializable {
 					        } catch (ParseException e) {
 					            return 0;
 					        }
-					        }
-						}
-					);
+					    }
+					});
 
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");

@@ -4,17 +4,21 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class BookingRow {
 	
-	private final SimpleStringProperty[] values = new SimpleStringProperty[21];
+	private final String columnName;
 	
-	public BookingRow(String[] args){
-		
-		for(int i=0; i<args.length; i++){
-			values[i] = new SimpleStringProperty(args[i]);
-		}
+	private Booking data;
+	
+	public BookingRow(String columnName, Booking data){
+		this.columnName = columnName;
+		this.data = data;
 	}
 	
-	public String getValues(int index) {
-        return values[index].get();
+	public String getColumnName() {
+        return columnName.toString();
     }
+	
+	public Booking getBooking(){
+		return this.data;
+	}
 
 }

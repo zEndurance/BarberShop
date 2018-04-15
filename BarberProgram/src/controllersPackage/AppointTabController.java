@@ -34,14 +34,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import mainPackage.Booking;
 import mainPackage.BookingRow;
 import mainPackage.BusinessHours;
@@ -56,7 +61,7 @@ public class AppointTabController implements Initializable {
 
 	// FXML Table GUI
 	@FXML
-	private TableView<ObservableList<String>> appointTable;
+	private TableView<ObservableList<BookingRow>> appointTable;
 	@FXML
 	private DatePicker appointDate;
 
@@ -65,7 +70,7 @@ public class AppointTabController implements Initializable {
 	String items[] = null;
 	List<String> columns = new ArrayList<String>();
 	List<String> rows = new ArrayList<String>();
-	ObservableList<ObservableList<String>> csvData = FXCollections.observableArrayList();
+	ObservableList<ObservableList<BookingRow>> csvData = FXCollections.observableArrayList();
 	private ArrayList<Booking> selectedBookings = new ArrayList<Booking>();
 	private ArrayList<String> closedDays = new ArrayList<String>();
 	// Custom row colour names
@@ -430,7 +435,7 @@ public class AppointTabController implements Initializable {
 
 						for (int ii = 0; ii < columns.size(); ii++) {
 							final int finalIdx = ii;
-							TableColumn<ObservableList<String>, String> column = new TableColumn<>(columns.get(ii));
+							TableColumn<ObservableList<BookingRow>, BookingRow> column = new TableColumn<>(columns.get(ii));
 							column.setSortable(false);
 							// column.setResizable(false);
 
@@ -440,11 +445,11 @@ public class AppointTabController implements Initializable {
 
 							// Set the colour of the cell
 							column.setCellFactory(param -> {
-								return new TableCell<ObservableList<String>, String>() {
-									protected void updateItem(String item, boolean empty) {
+								return new TableCell<ObservableList<BookingRow>, BookingRow>() {
+									protected void updateItem(BookingRow item, boolean empty) {
 										super.updateItem(item, empty);
 
-										setText(empty ? "" : getItem().toString());
+										setText(empty ? "" : getItem().getColumnName());
 										setGraphic(null);
 
 										if (item == null || empty) {
@@ -454,7 +459,7 @@ public class AppointTabController implements Initializable {
 											// Setting the colours based of the
 											// csv file
 											for (int i = 0; i < tableNames.size(); i++) {
-												if (item.equals(tableNames.get(i))) {
+												if (item.getColumnName().equals(tableNames.get(i))) {
 													setStyle("-fx-background-color:" + tableColours.get(i));
 												}
 											}
@@ -467,12 +472,15 @@ public class AppointTabController implements Initializable {
 						}
 
 					} else {
-						ObservableList<String> row = FXCollections.observableArrayList();
+						ObservableList<BookingRow> row = FXCollections.observableArrayList();
 						row.clear();
 						items = l.split(",");
 						for (String item : items) {
-							System.out.println(item);
-							row.add(item);
+							//System.out.println(item);
+							
+							
+							
+							row.add(new BookingRow(item, null));
 						}
 						csvData.add(row);
 					}
@@ -497,6 +505,32 @@ public class AppointTabController implements Initializable {
 	@FXML
 	private void handleClickTableView(MouseEvent click) {
 
+		ObservableList<BookingRow> data =  appointTable.getSelectionModel().getSelectedItem();
+		TablePosition tp = appointTable.getFocusModel().getFocusedCell();
+		
+		
+		BookingRow selected = data.get(tp.getColumn());
+		
+		System.out.println(selected.getColumnName());
+		
+		try { 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
+			Stage stage = new Stage(StageStyle.DECORATED); stage.setTitle("Client Information"); 
+			stage.setScene(new Scene((Pane)loader.load()));
+			
+			InfoMiniTabController controller = loader.<InfoMiniTabController>getController(); 
+			
+			//controller.initData(name, desc, date, time, contact, image, price);
+			stage.show(); } 
+		catch (IOException e) { 
+			e.printStackTrace(); 
+		}
+		
+		
+		
+		
+		
+		
 		/*
 		 * // Grab the person data BookingRow person =
 		 * appointTable.getSelectionModel().getSelectedItem();
