@@ -89,4 +89,8 @@ public class Booking {
 		
 		return "ID: " + this.id + " date: " + sdf.format(date) + " start: " + hh.format(startTime) + " end: " + hh.format(endTime);
 	}
+
+	public String getPrice() {
+		return "50.0";
+	}
 }

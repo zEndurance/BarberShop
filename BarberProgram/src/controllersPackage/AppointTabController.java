@@ -475,12 +475,17 @@ public class AppointTabController implements Initializable {
 						ObservableList<BookingRow> row = FXCollections.observableArrayList();
 						row.clear();
 						items = l.split(",");
+						int index = 0;
 						for (String item : items) {
-							//System.out.println(item);
 							
-							
-							
-							row.add(new BookingRow(item, null));
+							if(item.equals("Booked")){
+								System.out.println("CREATING BOOKED ROW");
+								// TODO - terrible way of getting data
+								row.add(new BookingRow(item, User.getInstance().bookings.get(index)));
+								index++;
+							}else{
+								row.add(new BookingRow(item, null));
+							}
 						}
 						csvData.add(row);
 					}
@@ -513,18 +518,22 @@ public class AppointTabController implements Initializable {
 		
 		System.out.println(selected.getColumnName());
 		
-		try { 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
-			Stage stage = new Stage(StageStyle.DECORATED); stage.setTitle("Client Information"); 
-			stage.setScene(new Scene((Pane)loader.load()));
-			
-			InfoMiniTabController controller = loader.<InfoMiniTabController>getController(); 
-			
-			//controller.initData(name, desc, date, time, contact, image, price);
-			stage.show(); } 
-		catch (IOException e) { 
-			e.printStackTrace(); 
+		System.out.println(selected.getBooking());
+		
+		if(selected.getColumnName().equals("Booked")){
+			try { 
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
+				Stage stage = new Stage(StageStyle.DECORATED); stage.setTitle("Client Information"); 
+				stage.setScene(new Scene((Pane)loader.load()));
+				
+				InfoMiniTabController controller = loader.<InfoMiniTabController>getController(); 
+				controller.initData(selected);
+				stage.show(); } 
+			catch (IOException e) { 
+				e.printStackTrace(); 
+			}
 		}
+		
 		
 		
 		

@@ -15,6 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import mainPackage.BookingRow;
 
 public class InfoMiniTabController implements Initializable {
 	
@@ -33,23 +34,25 @@ public class InfoMiniTabController implements Initializable {
 	
 	}
 
-	public void initData(String name, String desc, String date, String time, String contact, String image, double price) throws FileNotFoundException {
-		labelName.setText("Client name: " + name);
-		textArea.setText("Client notes: " + desc);
-		labelDate.setText("Date: " + date);
-		labelTime.setText("Time: " + time);
-		labelContact.setText("Contact Info: " + contact);
+	public void initData(BookingRow data) throws FileNotFoundException {
+		labelName.setText("Client name: " + data.getBooking().getProfile().getName());
+		//textArea.setText("Client notes: " + desc);
+		labelDate.setText("Date: " + data.getBooking().getDate());
+		labelTime.setText("Time: " + data.getBooking().getStartTime());
+		labelContact.setText("Contact Info: " + data.getBooking().getProfile().getMobileNumber());
 		
 		// Format this double
-		NumberFormat currency=NumberFormat.getCurrencyInstance();
-		labelPrice.setText("Price: " + currency.format(price));
+		//NumberFormat currency=NumberFormat.getCurrencyInstance();
+		//labelPrice.setText("Price: " + currency.format(data.getBooking().getPrice()));
 		
+		/*
 		// Add an image
 		if(!image.equals("-1")) {
 			System.out.println("Creating image.. at->http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/w3images/" + image);
 	        Image imageA = new Image("http://webprojects.eecs.qmul.ac.uk/rk308/barbershop/w3images/" + image);
 			imageView.setImage(imageA);
 		}
+		*/
 	}
 	
 	
