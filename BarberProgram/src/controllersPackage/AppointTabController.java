@@ -71,7 +71,6 @@ public class AppointTabController implements Initializable {
 	
 	ObservableList<ObservableList<BookingCell>> csvData = FXCollections.observableArrayList();
 	
-	private ArrayList<Booking> selectedBookings = new ArrayList<Booking>();
 	private ArrayList<String> closedDays = new ArrayList<String>();
 	// Custom row colour names
 	private ArrayList<String> tableNames = new ArrayList<String>();
@@ -187,6 +186,13 @@ public class AppointTabController implements Initializable {
 				String text = "Open";
 				if(b != null) text = "Booked";
 				
+				// Check if its a closed day today
+				for(int p=0; p<closedDays.size(); p++){
+					if(day.equals(closedDays.get(p))){
+						text = "Closed";
+					}
+				}
+				
 				weekData.add(new BookingCell(time, date, day, text, true, b));
 				
 			}
@@ -258,22 +264,29 @@ public class AppointTabController implements Initializable {
 										
 										// Change the text/color of expired data
 										if(item.getText().equals("Open")) setText("-");
-										setStyle("-fx-background-color:grey");
 										
-									}else{
-										// Setting the colours based of the csv file
-										for (int i = 0; i < tableNames.size(); i++) {
-											if (item.getText().equals(tableNames.get(i))) {
-												setStyle("-fx-background-color:" + tableColours.get(i));
-											}
+										if(!item.getText().equals("Booked")){
+											setStyle("-fx-background-color:grey");
+										}else{
+											colourCells(item);
 										}
+									}else{
+										colourCells(item);
 									}
 								}
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-							
-							
+						}
+					}
+
+					private void colourCells(BookingCell item) {
+						// TODO Auto-generated method stub
+						// Setting the colours based of the csv file
+						for (int i = 0; i < tableNames.size(); i++) {
+							if (item.getText().equals(tableNames.get(i))) {
+								setStyle("-fx-background-color:" + tableColours.get(i));
+							}
 						}
 					}
 				};
