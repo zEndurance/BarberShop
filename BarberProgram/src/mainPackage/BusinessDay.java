@@ -1,13 +1,13 @@
 package mainPackage;
 
-public class BusinessHours {
+public class BusinessDay {
 
 	private String day;
 	private String openingHours;
 	private String closingHours;
 	
 	
-	public BusinessHours(int i, String open, String close){
+	public BusinessDay(int i, String open, String close){
 		// if validated
 		
 		// change values

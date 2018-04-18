@@ -8,11 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.chart.*;
-import mainPackage.ApData;
+//import mainPackage.ApData;
 
 public class SummaryTabController implements Initializable {
 	// Collects ApData objects as each MySQL row
-	public ObservableList<ApData> data = FXCollections.observableArrayList();
+	//public ObservableList<ApData> data = FXCollections.observableArrayList();
 
 	// Called by the FXML loader after the labels declared above are injected:
 	@FXML

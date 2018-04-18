@@ -42,14 +42,13 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mainPackage.Booking;
 import mainPackage.BookingRow;
-import mainPackage.BusinessHours;
+import mainPackage.BusinessDay;
 import mainPackage.Connection;
 import mainPackage.User;
 
@@ -80,7 +79,16 @@ public class AppointTabController implements Initializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		
+		// Build the table columns and headers from the json output
+		createTable();
+		
+		
+		
+		
 
+		/*
 		// Show the week number in the calendar
 		appointDate.setShowWeekNumbers(true);
 
@@ -93,10 +101,129 @@ public class AppointTabController implements Initializable {
 		loadCellColours();
 		
 		loadBookings();
+		*/
 
 		
 		// END
 		System.out.println("// END of AppointTab Initialize");
+	}
+
+	private void createTable() {
+		try {
+			URL url = new URL(Connection.URL_BUSINESS_HOURS);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			
+			// Parse our Column names
+			parseBusinessHoursColumnNames(response);
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void parseBusinessHoursColumnNames(StringBuffer response) {
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_business_hours"));
+			String query_response = json.getString("query_business_hours");
+
+			if (query_response.equals("FAILED_HOURS")) {
+				System.err.println("Couldn't retrieve business hours");
+			} else if (query_response.equals("SUCCESS_HOURS")) {
+
+				// 7 Days, Monday-Sunday
+				BusinessDay[] rgBHours = new BusinessDay[7];
+				
+				// Workout the business hours of a week
+				for (int i = 0; i < 7; i++) {
+					JSONObject animal = json.getJSONObject(Integer.toString(i));
+					int day = animal.getInt("DayOfWeek");
+					String open = animal.getString("OpenTime");
+					String close = animal.getString("CloseTime");
+					String interval = animal.getString("Interval");
+					
+					rgBHours[i] = new BusinessDay(day, open, close);
+					System.out.println("On " + getDay(day) + " the opening hours are " + open
+							+ " and closing hours are " + close);
+				}
+
+				// Now calculate the earliest opening hour and the latest
+				// closing hour so we can see how many columns
+				// we need to make
+				String startTime = "23:30:00";
+				String closeTime = "00:00:00";
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+				Date start = simpleDateFormat.parse(startTime);
+				Date end = simpleDateFormat.parse(closeTime);
+				for (int i = 0; i < 7; i++) {
+
+					BusinessDay b = rgBHours[i];
+
+					// firstly check if open and closing are the same, in
+					// which case we can just ignore
+					// assume same times means its a closed day
+					if (!b.getOpeningHours().equals(b.getClosingHours())) {
+
+						Date checkingOpenTime = simpleDateFormat.parse(b.getOpeningHours());
+						Date checkingCloseTime = simpleDateFormat.parse(b.getClosingHours());
+						// Compare dates
+						if (checkingOpenTime.before(start)) {
+							start = checkingOpenTime;
+						}
+
+						if (checkingCloseTime.after(end)) {
+							end = checkingCloseTime;
+						}
+
+					} else {
+						System.out.println("It must be closed today on a " + b.getDay());
+						closedDays.add(b.getDay());
+					}
+				}
+
+				System.out.println("Earliest we start the business week is: : " + simpleDateFormat.format(start));
+				System.out.println("Latest we start the business week is: : " + simpleDateFormat.format(end));
+				
+				System.out.println("Biggest interval found: " );
+				
+				// TODO GET INTERVAL from JSON
+				int interval = 30;
+				long cols = ((Math.abs((start.getTime() - end.getTime())) / 1000) / 60) / interval;
+				System.out.println("We're gunna need this much intervals: " + cols);
+				
+				// Empty first column
+				columns.add("");
+				for(int i=0; i<=cols; i++){
+					columns.add(simpleDateFormat.format(start));
+					start = addMinutesToDate(interval, start);
+				}
+				
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static Date addMinutesToDate(int minutes, Date beforeTime){
+	    final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
+
+	    long curTimeInMs = beforeTime.getTime();
+	    Date afterAddingMins = new Date(curTimeInMs + (minutes * ONE_MINUTE_IN_MILLIS));
+	    return afterAddingMins;
 	}
 
 	@FXML
@@ -182,7 +309,7 @@ public class AppointTabController implements Initializable {
 
 				} else if (query_response.equals("SUCCESS_HOURS")) {
 
-					BusinessHours[] rgBHours = new BusinessHours[7];
+					BusinessDay[] rgBHours = new BusinessDay[7];
 					
 					// Workout the business hours of a week
 					for (int i = 0; i < 7; i++) {
@@ -190,7 +317,9 @@ public class AppointTabController implements Initializable {
 						int day = animal.getInt("DayOfWeek");
 						String open = animal.getString("OpenTime");
 						String close = animal.getString("CloseTime");
-						rgBHours[i] = new BusinessHours(day, open, close);
+						String interval = animal.getString("Interval");
+						
+						rgBHours[i] = new BusinessDay(day, open, close);
 						System.out.println("On " + getDay(day) + " the opening hours are " + open
 								+ " and closing hours are " + close);
 					}
@@ -205,7 +334,7 @@ public class AppointTabController implements Initializable {
 					Date end = simpleDateFormat.parse(closeTime);
 					for (int i = 0; i < 7; i++) {
 
-						BusinessHours b = rgBHours[i];
+						BusinessDay b = rgBHours[i];
 
 						// firstly check if open and closing are the same, in
 						// which case we can just ignore
@@ -420,6 +549,8 @@ public class AppointTabController implements Initializable {
 			try (FileReader fin = new FileReader(f); BufferedReader in = new BufferedReader(fin);) {
 				String l;
 				int i = 0;
+				
+				int index = 0;
 
 				while ((l = in.readLine()) != null) {
 
@@ -475,7 +606,7 @@ public class AppointTabController implements Initializable {
 						ObservableList<BookingRow> row = FXCollections.observableArrayList();
 						row.clear();
 						items = l.split(",");
-						int index = 0;
+						
 						for (String item : items) {
 							
 							if(item.equals("Booked")){
