@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -174,7 +175,7 @@ public class AppointTabController implements Initializable {
 			List<BookingCell> weekData = new ArrayList<BookingCell>();
 
 			// First value in row is going to be Day
-			weekData.add(new BookingCell("00:00", date, day, day, null));
+			weekData.add(new BookingCell("00:00:00", date, day, day, false, null));
 			
 			// Next X values are times
 			for(int z=1; z<columns.size(); z++){
@@ -186,7 +187,7 @@ public class AppointTabController implements Initializable {
 				String text = "Open";
 				if(b != null) text = "Booked";
 				
-				weekData.add(new BookingCell(time, date, day, text, b));
+				weekData.add(new BookingCell(time, date, day, text, true, b));
 				
 			}
 			rowsData.add(weekData);
@@ -249,13 +250,30 @@ public class AppointTabController implements Initializable {
 							//System.out.println("ITEM IS EMPTY!!!!!!!!!!!!!!!!!!" + item + " ? " + empty);
 							setStyle("");
 						} else {
-							System.out.println("ITEM NOT EMPTY!!!!!!!!!!!!!!!!!!");
-							// Setting the colours based of the csv file
-							for (int i = 0; i < tableNames.size(); i++) {
-								if (item.getText().equals(tableNames.get(i))) {
-									setStyle("-fx-background-color:" + tableColours.get(i));
+							// If the date has expired, we choose a different colour!
+							try {
+								// Check that this is not a Day column
+								if(item.getUseable()){
+									if (new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse(item.getDate() + " " + item.getTime()).before(new Date())) {
+										
+										// Change the text/color of expired data
+										if(item.getText().equals("Open")) setText("-");
+										setStyle("-fx-background-color:grey");
+										
+									}else{
+										// Setting the colours based of the csv file
+										for (int i = 0; i < tableNames.size(); i++) {
+											if (item.getText().equals(tableNames.get(i))) {
+												setStyle("-fx-background-color:" + tableColours.get(i));
+											}
+										}
+									}
 								}
+							} catch (ParseException e) {
+								e.printStackTrace();
 							}
+							
+							
 						}
 					}
 				};
