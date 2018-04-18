@@ -15,7 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import mainPackage.BookingRow;
+import mainPackage.BookingCell;
 
 public class InfoMiniTabController implements Initializable {
 	
@@ -34,7 +34,7 @@ public class InfoMiniTabController implements Initializable {
 	
 	}
 
-	public void initData(BookingRow data) throws FileNotFoundException {
+	public void initData(BookingCell data) throws FileNotFoundException {
 		labelName.setText("Client name: " + data.getBooking().getProfile().getName());
 		//textArea.setText("Client notes: " + desc);
 		labelDate.setText("Date: " + data.getBooking().getDate());

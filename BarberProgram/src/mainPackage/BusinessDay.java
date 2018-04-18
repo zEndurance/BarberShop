@@ -5,9 +5,9 @@ public class BusinessDay {
 	private String day;
 	private String openingHours;
 	private String closingHours;
+	private String interval;
 	
-	
-	public BusinessDay(int i, String open, String close){
+	public BusinessDay(int i, String open, String close, String interval){
 		// if validated
 		
 		// change values
@@ -15,6 +15,11 @@ public class BusinessDay {
 		this.day = getDay(i);
 		this.openingHours = open;
 		this.closingHours = close;
+		this.interval = interval;
+	}
+	
+	public int getInterval(){
+		return Integer.parseInt(interval);
 	}
 	
 	public String getDay() {
