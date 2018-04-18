@@ -35,12 +35,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import mainPackage.Booking;
 import mainPackage.BookingCell;
 import mainPackage.BusinessDay;
@@ -262,14 +268,14 @@ public class AppointTabController implements Initializable {
 								if(item.getUseable()){
 									if (new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse(item.getDate() + " " + item.getTime()).before(new Date())) {
 										
-										// Change the text/color of expired data
-										if(item.getText().equals("Open")) setText("-");
 										
-										if(!item.getText().equals("Booked")){
+										if(item.getText().equals("Open")){
 											setStyle("-fx-background-color:grey");
+											setText("-");
 										}else{
 											colourCells(item);
 										}
+										
 									}else{
 										colourCells(item);
 									}
@@ -568,6 +574,24 @@ public class AppointTabController implements Initializable {
 	@FXML
 	private void handleClickTableView(MouseEvent click) {
 
+		ObservableList<BookingCell> data =  appointTable.getSelectionModel().getSelectedItem();
+		TablePosition<ObservableList<BookingCell>, BookingCell> tp = appointTable.getFocusModel().getFocusedCell();
+		BookingCell selected = data.get(tp.getColumn());
+		
+		if(selected.getText().equals("Booked")){
+			try { 
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlPackage/infoMiniTab.fxml"));
+				Stage stage = new Stage(StageStyle.DECORATED); stage.setTitle("Client Information"); 
+				stage.setScene(new Scene((Pane)loader.load()));
+				
+				InfoMiniTabController controller = loader.<InfoMiniTabController>getController(); 
+				controller.initData(selected);
+				stage.show(); } 
+			catch (IOException e) { 
+				e.printStackTrace(); 
+			}
+		}
+		
 	}
 	// END
 }
