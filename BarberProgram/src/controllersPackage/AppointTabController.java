@@ -549,7 +549,8 @@ public class AppointTabController implements Initializable {
 					    				array.getJSONObject(i).getString("date"),
 					    				array.getJSONObject(i).getString("start_time"),
 					    				array.getJSONObject(i).getString("end_time"),
-					    				array.getJSONObject(i).getString("person_id")
+					    				array.getJSONObject(i).getString("person_id"),
+					    				array.getJSONObject(i).getString("service_id")
 					    				));
 					}
 				} else {

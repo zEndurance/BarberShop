@@ -42,8 +42,8 @@ public class InfoMiniTabController implements Initializable {
 		labelContact.setText("Contact Info: " + data.getBooking().getProfile().getMobileNumber());
 		
 		// Format this double
-		//NumberFormat currency=NumberFormat.getCurrencyInstance();
-		//labelPrice.setText("Price: " + currency.format(data.getBooking().getPrice()));
+		//umberFormat currency=NumberFormat.getCurrencyInstance();
+		labelPrice.setText("Price: " + data.getBooking().getPrice());
 		
 		/*
 		// Add an image

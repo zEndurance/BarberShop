@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -43,6 +44,9 @@ import mainPackage.User;
  * @author Raj
  */
 public class ServicesTabController implements Initializable {
+	
+	// List of all known services this barber can even have
+	public static ArrayList<Service> myServices = new ArrayList<Service>();
 
 	@FXML
 	private TableView<Service> serviceTable;

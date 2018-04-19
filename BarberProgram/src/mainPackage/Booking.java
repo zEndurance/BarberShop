@@ -38,8 +38,9 @@ public class Booking {
 	
 	// Connection to a persons booking
 	private Profile profile;
+	private Service service;
 	
-	public Booking(String id, String date, String startTime, String endTime, String person_id){
+	public Booking(String id, String date, String startTime, String endTime, String person_id, String service_id){
 		
 		// Convert everything in here
 		this.id = Integer.parseInt(id);
@@ -132,8 +133,29 @@ public class Booking {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		}
+		
+		found = false;
+		// Link a service
+		for(int i=0; i<User.getInstance().services.size(); i++){
+			if(User.getInstance().services.get(i).getId() == Integer.parseInt(service_id)){
+				this.service = User.getInstance().services.get(i);
+				found = true;
+				break;
+			}
+		}
+		
+		if(!found){
+			try {
+				throw new Exception("Unable to find service!");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Service getService(){
+		return this.service;
 	}
 	
 	public Profile getProfile(){
@@ -151,6 +173,10 @@ public class Booking {
         startTime = source.startTime;
         
         endTime = source.endTime;
+        
+        profile = source.profile;
+        
+        service = source.service;
     }
     
     @SuppressWarnings("deprecation")
@@ -184,6 +210,6 @@ public class Booking {
 	}
 
 	public String getPrice() {
-		return "50.0";
+		return Double.toString(this.service.getPrice());
 	}
 }
