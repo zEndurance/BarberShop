@@ -69,7 +69,7 @@ public class TodaysTabController implements Initializable {
 			
 			// We have a match, so add it to the clientObersableList
 			if(b.getDate().equals(newDate)){
-				clientObservableList.addAll(new TodayData(b.getProfile().getName(), Status.NOTSHOWED, b.getStartTime(), b.getEndTime()));
+				clientObservableList.addAll(new TodayData(b.getProfile().getFirstName(), Status.NOTSHOWED, b.getStartTime(), b.getEndTime()));
 			}
 		}
 

@@ -15,6 +15,7 @@ public class Connection {
 	public static final String URL_GET_ALL_SERVICES = URL + "get_all_services.php";
 	
 	public static final String URL_GET_BOOKINGS_WEEK = URL + "get_bookings_week.php";
+	public static final String URL_GET_CUSTOMER = URL + "get_customer.php";
 	
 	// UPLOADS
 	public static final String URL_UPLOAD_IMAGE = URL + "upload_image.php";

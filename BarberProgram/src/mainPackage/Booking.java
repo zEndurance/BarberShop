@@ -1,11 +1,27 @@
 package mainPackage;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Booking {
+	
+	public static ArrayList<Profile> rgCustomers = new ArrayList<Profile>();
 	
 	private int id;
 
@@ -23,7 +39,7 @@ public class Booking {
 	// Connection to a persons booking
 	private Profile profile;
 	
-	public Booking(String id, String date, String startTime, String endTime){
+	public Booking(String id, String date, String startTime, String endTime, String person_id){
 		
 		// Convert everything in here
 		this.id = Integer.parseInt(id);
@@ -40,7 +56,84 @@ public class Booking {
 		}
 		
 		
-		this.profile = new Profile(new String[]{"Raj"});
+		boolean found = false;
+		// Try to find this persons ID 
+		for(int i=0; i<rgCustomers.size(); i++){
+			
+			if(person_id.equals(rgCustomers.get(i).getID())){
+				
+				System.out.println("FOUND A CUSTOMER MATCH!!!" + person_id + " @ " + rgCustomers.get(i).getID());
+				this.profile = rgCustomers.get(i);
+				found = true;
+				break;
+			}
+		}
+		
+		
+		if(!found){
+			// Open a URL connection and retrieve the data instead
+			String data = Connection.URL_GET_CUSTOMER + "?id=" + person_id;
+			
+			try {
+				URL url = new URL(data);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+				// Read the JSON output here
+				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+
+				StringBuffer response = new StringBuffer();
+				while ((inputLine = in.readLine()) != null) {
+					response.append(inputLine);
+				}
+				in.close();
+
+				// Try reading it in JSON format
+				try {
+					JSONObject json = new JSONObject(response.toString());
+					System.out.println(json.getString("query_result"));
+
+					String query_response = json.getString("query_result");
+
+					if (query_response.equals("FAILED_CUSTOMER")) {
+						
+					} else if (query_response.equals("SUCCESSFUL_CUSTOMER")) {
+
+						// Read up the JSON values
+						List<String> list = new ArrayList<String>();
+						JSONArray array = json.getJSONArray("customer");
+						
+						String[] values = new String[7];
+						
+						for(int i = 0 ; i < array.length() ; i++){
+						    // Now create the profile
+							values[0] = array.getJSONObject(i).getString("id");
+							values[1] = array.getJSONObject(i).getString("first_name");
+							values[2] = array.getJSONObject(i).getString("last_name");
+							values[3] = array.getJSONObject(i).getString("age");
+							values[4] = array.getJSONObject(i).getString("phone_number");
+							values[5] = array.getJSONObject(i).getString("profile_picture");
+							values[6] = array.getJSONObject(i).getString("account_id");
+						}
+						
+						Profile profile = new Profile(values);
+						rgCustomers.add(profile);
+						this.profile = profile;
+					} else {
+						System.out.println("Not enough arguments were entered.. try filling both fields");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
 	public Profile getProfile(){
