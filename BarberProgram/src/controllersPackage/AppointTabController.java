@@ -103,6 +103,8 @@ public class AppointTabController implements Initializable {
 		loadCellColours();
 		//loadData();
 		
+		load();
+		
 		// END
 		System.out.println("// END of AppointTab Initialize");
 	}
