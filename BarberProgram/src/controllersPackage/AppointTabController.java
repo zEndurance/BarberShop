@@ -457,6 +457,10 @@ public class AppointTabController implements Initializable {
 	@FXML
 	protected void handleDateButtonAction(ActionEvent event) throws IOException {
 		// Get the week number of a date selected
+		load();
+	}
+	
+	private void load(){
 		LocalDate date = appointDate.getValue();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String getDate = date.format(formatter);
