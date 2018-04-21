@@ -10,7 +10,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersPackage.AppointTabController">
    <children>
    		
-   	<TableView fx:id="appointTable" layoutY="51.0" onMouseClicked="#handleClickTableView" prefHeight="168.0" prefWidth="752.0" AnchorPane.bottomAnchor="181.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
+   	<TableView fx:id="appointTable" layoutY="51.0" onMouseClicked="#handleClickTableView" prefWidth="752.0" AnchorPane.bottomAnchor="205.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>

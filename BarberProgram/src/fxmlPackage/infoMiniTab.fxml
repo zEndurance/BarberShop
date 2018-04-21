@@ -31,6 +31,9 @@
             <Label fx:id="labelPrice" text="Price:" />
          </children>
       </VBox>
-      <Button layoutX="320.0" layoutY="21.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Remove" />
+      <Label layoutX="28.0" layoutY="179.0" text="Status" />
+      <ChoiceBox layoutX="70.0" layoutY="175.0" prefWidth="150.0" />
+      <Button fx:id="btnRemove" layoutX="320.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleRemoveButtonAction" prefHeight="25.0" prefWidth="64.0" text="Remove" />
+      <Button fx:id="btnEdit" layoutX="324.0" layoutY="56.0" mnemonicParsing="false" onAction="#handleEditButtonAction" prefHeight="25.0" prefWidth="57.0" text="Edit" />
    </children>
 </AnchorPane>

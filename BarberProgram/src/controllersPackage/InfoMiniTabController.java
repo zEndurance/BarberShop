@@ -68,4 +68,9 @@ public class InfoMiniTabController implements Initializable {
 	    stage.close();
 	}
 	
+	@FXML
+	protected void handleRemoveButtonAction(ActionEvent event) throws IOException {
+		System.out.println("Ask if they are sure about removing the appointment completely");
+	}
+	
 }

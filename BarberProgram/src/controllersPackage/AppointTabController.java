@@ -30,8 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sun.javafx.scene.control.skin.TableHeaderRow;
+
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -100,14 +104,21 @@ public class AppointTabController implements Initializable {
 		appointDate.setShowWeekNumbers(true);
 		appointDate.setValue(NOW_LOCAL_DATE());
 		
+	
+		
+		
 		loadCellColours();
 		//loadData();
 		
 		load();
 		
+		appointTable.setFixedCellSize(25);
+		appointTable.prefHeightProperty().bind(Bindings.size(appointTable.getItems()).multiply(appointTable.getFixedCellSize()).add(30));
+		
 		// END
 		System.out.println("// END of AppointTab Initialize");
 	}
+
 	
 	private void loadData(){
 		
