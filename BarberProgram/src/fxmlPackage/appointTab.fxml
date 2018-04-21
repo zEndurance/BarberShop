@@ -17,8 +17,6 @@
    	</TableView>
    	
     <DatePicker fx:id="appointDate" layoutX="22.0" layoutY="14.0" onAction="#handleDateButtonAction" />
-      <Label layoutX="22.0" layoutY="240.0" text="Appointment" />
-      <Button layoutX="32.0" layoutY="268.0" mnemonicParsing="false" text="Add" />
    </children>
 	
 </AnchorPane>

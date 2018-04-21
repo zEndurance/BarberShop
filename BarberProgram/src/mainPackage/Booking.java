@@ -75,6 +75,8 @@ public class Booking {
 			// Open a URL connection and retrieve the data instead
 			String data = Connection.URL_GET_CUSTOMER + "?id=" + person_id;
 			
+			System.out.println("Trying to find customer--->" + data);
+			
 			try {
 				URL url = new URL(data);
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -122,6 +124,8 @@ public class Booking {
 						Profile profile = new Profile(values);
 						rgCustomers.add(profile);
 						this.profile = profile;
+						
+						found = true;
 					} else {
 						System.out.println("Not enough arguments were entered.. try filling both fields");
 					}
@@ -132,6 +136,14 @@ public class Booking {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+		}
+		
+		if(!found){
+			try {
+				throw new Exception("Couldn't find a customer");
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
 		}
 		

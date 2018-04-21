@@ -138,7 +138,7 @@ public class ServicesTabController implements Initializable {
 	private void removeFromUsers(Service selectedItems) {
 		// If we find a match, remove it from the List
 		for (int i = 0; i < User.getInstance().services.size(); i++) {
-			if (User.getInstance().services.get(i).getService().equals(selectedItems.getService())) {
+			if (User.getInstance().services.get(i).getServiceName().equals(selectedItems.getServiceName())) {
 				// Remove this from the users
 				User.getInstance().services.remove(i);
 			}
@@ -232,7 +232,7 @@ public class ServicesTabController implements Initializable {
 
 			// Check if this service already exists in the table
 			for (int i = 0; i < User.getInstance().services.size(); i++) {
-				if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
+				if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getServiceName())) {
 					System.out.println("This service already exists! ");
 					GUI.createDialog("This service already exists!", new String[] { "Ok" }, null);
 					return;

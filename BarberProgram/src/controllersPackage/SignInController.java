@@ -111,14 +111,16 @@ public class SignInController implements Initializable {
 					// Get profile data too
 					loadProfileData();
 					
-					// Get his booking data also
-					loadBookingData();
+					
 					
 					// Get all services available from the boss
 					loadAllServicesData();
 					
 					// Get his service data
 					loadServicesData();
+					
+					// Get his booking data also
+					loadBookingData();
 
 					// Go to next stage
 					login(event);

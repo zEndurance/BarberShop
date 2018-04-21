@@ -26,6 +26,7 @@ public class InfoMiniTabController implements Initializable {
 	@FXML private Label labelName;
 	@FXML private Label labelContact;
 	@FXML private Label labelPrice;
+	@FXML private Label labelService;
 	@FXML private ImageView imageView;
 	
 	
@@ -41,9 +42,13 @@ public class InfoMiniTabController implements Initializable {
 		labelTime.setText("Time: " + data.getBooking().getStartTime());
 		labelContact.setText("Contact Info: " + data.getBooking().getProfile().getMobileNumber());
 		
+		labelService.setText("Service: " + data.getBooking().getService().getServiceName());
+		
 		// Format this double
-		//umberFormat currency=NumberFormat.getCurrencyInstance();
+		NumberFormat currency=NumberFormat.getCurrencyInstance();
 		labelPrice.setText("Price: " + data.getBooking().getPrice());
+		
+		
 		
 		/*
 		// Add an image
