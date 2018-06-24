@@ -35,7 +35,7 @@ import mainPackage.Connection;
 import mainPackage.Service;
 import mainPackage.User;
 
-public class SignInController implements Initializable {
+public class LoginController implements Initializable {
 	@FXML
 	private Text actiontarget;
 	@FXML
