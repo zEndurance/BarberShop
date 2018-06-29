@@ -52,8 +52,7 @@ import mainPackage.User;
 public class AppointTabController implements Initializable {
 
 	// Constants
-	private final String BOOKING_FILE = "bookings.csv";
-	private final String BOOKING_COLOURS = "tablecolours.csv";
+	private final String BOOKING_COLOURS = "src/colours.csv";
 
 	// FXML Table GUI
 	@FXML
