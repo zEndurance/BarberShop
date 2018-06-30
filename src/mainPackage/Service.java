@@ -28,11 +28,11 @@ public class Service {
 		return true;
 	}
 
-	public String getServiceName() {
+	public String getService() {
 		return service;
 	}
 
-	public void setServiceName(String service) {
+	public void setService(String service) {
 		this.service = service;
 	}
 

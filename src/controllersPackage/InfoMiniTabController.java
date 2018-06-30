@@ -42,7 +42,7 @@ public class InfoMiniTabController implements Initializable {
 		labelTime.setText("Time: " + data.getBooking().getStartTime());
 		labelContact.setText("Contact Info: " + data.getBooking().getProfile().getMobileNumber());
 		
-		labelService.setText("Service: " + data.getBooking().getService().getServiceName());
+		labelService.setText("Service: " + data.getBooking().getService().getService());
 		
 		// Format this double
 		NumberFormat currency=NumberFormat.getCurrencyInstance();
