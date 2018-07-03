@@ -71,11 +71,21 @@ public class InfoMiniTabController implements Initializable {
 	@FXML
 	protected void handleRemoveButtonAction(ActionEvent event) throws IOException {
 		System.out.println("Ask if they are sure about removing the appointment completely");
+		
+		// Ask to remove 
+		
+		// Trigger a php script that will remove it from the database (just like how we update passwords)
+		
+		// make sure we pass username and password too and confirm it is a legit remove otherwise the script could be ran from 3rd party
 	}
 	
 	@FXML
 	protected void handleEditButtonAction(ActionEvent event) throws IOException {
 		System.out.println("Ask about handle edits");
+		
+		// Open a new window that allows us to change booking name, time, service manually 
+		
+		// Then send all the changes to a script which updates the database
 	}
 	
 }
