@@ -73,4 +73,9 @@ public class InfoMiniTabController implements Initializable {
 		System.out.println("Ask if they are sure about removing the appointment completely");
 	}
 	
+	@FXML
+	protected void handleEditButtonAction(ActionEvent event) throws IOException {
+		System.out.println("Ask about handle edits");
+	}
+	
 }
