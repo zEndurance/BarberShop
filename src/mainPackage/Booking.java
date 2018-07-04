@@ -166,6 +166,10 @@ public class Booking {
 		}
 	}
 	
+	public int getID() {
+		return this.id;
+	}
+	
 	public Service getService(){
 		return this.service;
 	}

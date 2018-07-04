@@ -29,4 +29,5 @@ public class Connection {
 	
 	// DB DELETES
 	public static final String URL_DELETE_SERVICE = URL + "delete_barbers_services_json.php";
+	public static final String URL_DELETE_BOOKING = URL + "delete_booking.php";
 }
