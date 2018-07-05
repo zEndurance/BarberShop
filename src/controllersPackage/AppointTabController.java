@@ -94,12 +94,8 @@ public class AppointTabController implements Initializable {
 		
 		appointDate.setShowWeekNumbers(true);
 		appointDate.setValue(NOW_LOCAL_DATE());
-		
-	
-		
-		
+
 		loadCellColours();
-		//loadData();
 		
 		load();
 		
@@ -464,7 +460,7 @@ public class AppointTabController implements Initializable {
 		load();
 	}
 	
-	private void load(){
+	public void load(){
 		LocalDate date = appointDate.getValue();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String getDate = date.format(formatter);
@@ -596,6 +592,8 @@ public class AppointTabController implements Initializable {
 				
 				InfoMiniTabController controller = loader.<InfoMiniTabController>getController(); 
 				controller.initData(selected);
+				controller.setATC(this);
+				
 				stage.show(); } 
 			catch (IOException e) { 
 				e.printStackTrace(); 

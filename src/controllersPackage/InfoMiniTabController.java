@@ -46,15 +46,28 @@ public class InfoMiniTabController implements Initializable {
 	
 	
 	private Booking internalBooking;
-	
+	private BookingCell referenceCell;
+	private AppointTabController appointTabController;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 	
 	}
+	
+	
+	public void setATC(AppointTabController atc) {
+		this.appointTabController = atc;
+	}
+	
+	public AppointTabController getATC() {
+		return this.appointTabController;
+	}
 
 	public void initData(BookingCell data) throws FileNotFoundException {
 		
+		
+		// Keep reference to the cell
+		referenceCell = data;
 		
 		// Set the current booking
 		internalBooking = data.getBooking();
@@ -194,8 +207,13 @@ public class InfoMiniTabController implements Initializable {
 		    	 
 		    	// Pass the current username and password to the script and the details of the booking that is to be removed here
 		    	
-		    	deleteBooking(internalBooking.getID());
-		    	
+		    	// if we can delete this booking
+		    	if(deleteBooking(internalBooking.getID())) {
+		    		
+		    		System.out.println("Update parent load function here");
+		    		
+		    		getATC().load();
+		    	}
 		    	
 		    	// Return true if successful
 				return true;

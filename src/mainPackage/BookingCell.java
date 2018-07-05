@@ -6,7 +6,7 @@ public class BookingCell {
 	private final String date;
 	private final String day;
 	private final boolean useable;
-	private final String text;
+	private String text;
 	private Booking booking;
 	
 	public BookingCell(String time, String date, String day, String text, boolean use, Booking data){
@@ -25,6 +25,10 @@ public class BookingCell {
 		this.text = b.getText();
 		this.useable = b.getUseable();
 		this.booking = b.getBooking();
+	}
+	
+	public void setText(String text) {
+		this.text = text;
 	}
 	
 	public String getText(){
