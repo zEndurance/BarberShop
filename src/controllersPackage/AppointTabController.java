@@ -598,6 +598,10 @@ public class AppointTabController implements Initializable {
 			catch (IOException e) { 
 				e.printStackTrace(); 
 			}
+		}else if(selected.getText().equals("Open")) {
+			// Create a new FXML window that allows us to manually create bookings, also send the data to a php script
+			// which will in turn update on the database
+			System.out.println("Create a booking here!");
 		}
 		
 	}

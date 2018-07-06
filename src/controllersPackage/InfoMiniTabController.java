@@ -23,7 +23,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import mainPackage.Booking;
@@ -153,12 +152,8 @@ public class InfoMiniTabController implements Initializable {
 					deleted = false;
 				} else if (query_response.equals("SUCCESSFUL_DELETE_BOOKING")) {
 					
-					
-					
 					System.out.println("We can successfully delete this from the table!!!");
-					
-					
-					// Check if the date has expired so we change it to a grey - 
+					// Check if the date has expired so we change it to a grey
 					
 					// if the date hasn't expired change to green open
 					
