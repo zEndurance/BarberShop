@@ -602,6 +602,9 @@ public class AppointTabController implements Initializable {
 			// Create a new FXML window that allows us to manually create bookings, also send the data to a php script
 			// which will in turn update on the database
 			System.out.println("Create a booking here!");
+		}else if(selected.getText().equals("Closed")) {
+			// Give option to select if we want to override a closed day
+			System.out.println("Change a closed day of booking");
 		}
 		
 	}
