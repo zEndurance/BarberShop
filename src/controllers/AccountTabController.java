@@ -1,4 +1,4 @@
-package controllersPackage;
+package controllers;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
