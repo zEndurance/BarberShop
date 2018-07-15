@@ -1,3 +1,5 @@
+[![BCH compliance](https://bettercodehub.com/edge/badge/zEndurance/BarberShop?branch=master)](https://bettercodehub.com/)
+
 # Barber Program
 An entire system for a basic barber shop.
 
