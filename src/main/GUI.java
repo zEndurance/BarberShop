@@ -1,11 +1,11 @@
-package mainPackage;
+package main;
 
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 public class GUI {
 	/**

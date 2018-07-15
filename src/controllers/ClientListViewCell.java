@@ -1,8 +1,9 @@
-package controllersPackage;
+package controllers;
 
 /* Import java, enumPackage, javafx, mainPackage */
 import java.io.IOException;
-import enumPackage.Status;
+
+import enums.Status;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
-import mainPackage.TodayData;
+import main.TodayData;
 
 public class ClientListViewCell extends ListCell<TodayData>  {
 	@FXML

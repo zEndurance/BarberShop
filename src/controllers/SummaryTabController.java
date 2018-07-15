@@ -1,14 +1,16 @@
-package controllersPackage;
+package controllers;
 
 /* Import java, javafx, mainPackage */
 import java.net.URL;
-import java.util.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.*;
-import javafx.scene.control.*;
-import javafx.scene.chart.*;
+import java.util.ResourceBundle;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 //import mainPackage.ApData;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Label;
 
 public class SummaryTabController implements Initializable {
 	// Collects ApData objects as each MySQL row

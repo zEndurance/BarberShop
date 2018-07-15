@@ -1,4 +1,4 @@
-package mainPackage;
+package main;
 
 public class Profile {
 	

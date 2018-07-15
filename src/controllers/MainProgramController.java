@@ -1,4 +1,4 @@
-package controllersPackage;
+package controllers;
 
 /* Import java, javafx */
 import java.io.IOException;
@@ -17,7 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import mainPackage.User;
+import main.User;
  
 public class MainProgramController implements Initializable {
 	
@@ -36,7 +36,7 @@ public class MainProgramController implements Initializable {
     	if (result.get() == buttonTypeOne){
     		// Reset the users data
     		User.getInstance().logout();
-    		Parent blah = FXMLLoader.load(getClass().getResource("/fxmlPackage/loginPage.fxml"));
+    		Parent blah = FXMLLoader.load(getClass().getResource("/fxml/loginPage.fxml"));
     		Scene scene = new Scene(blah);
     		Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     		appStage.setScene(scene);

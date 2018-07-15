@@ -1,6 +1,6 @@
-package mainPackage;
+package main;
 
-import enumPackage.Status;
+import enums.Status;
 
 public class TodayData {
 	private String clientName;

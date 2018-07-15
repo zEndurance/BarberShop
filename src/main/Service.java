@@ -1,4 +1,4 @@
-package mainPackage;
+package main;
 
 /**
  * Object representation of each MySQL service this current user provides

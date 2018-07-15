@@ -1,4 +1,4 @@
-package controllersPackage;
+package controllers;
 
 import java.io.BufferedReader;
 /* Import java, javafx */
@@ -25,11 +25,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import mainPackage.Booking;
-import mainPackage.BookingCell;
-import mainPackage.Connection;
-import mainPackage.GUI;
-import mainPackage.User;
+import main.Booking;
+import main.BookingCell;
+import main.Connection;
+import main.GUI;
+import main.User;
 
 public class InfoMiniTabController implements Initializable {
 	

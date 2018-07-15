@@ -1,4 +1,4 @@
-package controllersPackage;
+package controllers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,11 +43,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import mainPackage.Booking;
-import mainPackage.BookingCell;
-import mainPackage.BusinessDay;
-import mainPackage.Connection;
-import mainPackage.User;
+import main.Booking;
+import main.BookingCell;
+import main.BusinessDay;
+import main.Connection;
+import main.User;
 
 public class AppointTabController implements Initializable {
 

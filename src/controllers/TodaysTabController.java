@@ -1,17 +1,16 @@
-package controllersPackage;
+package controllers;
 
 /* Import java, javafx, mainPackage, enumPackage */
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import enumPackage.Status;
+import enums.Status;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +20,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import mainPackage.Booking;
-import mainPackage.TodayData;
-import mainPackage.User;
+import main.Booking;
+import main.TodayData;
+import main.User;
 
 public class TodaysTabController implements Initializable {
 	@FXML

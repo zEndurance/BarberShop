@@ -1,4 +1,4 @@
-package controllersPackage;
+package controllers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,10 +30,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import mainPackage.Booking;
-import mainPackage.Connection;
-import mainPackage.Service;
-import mainPackage.User;
+import main.Booking;
+import main.Connection;
+import main.Service;
+import main.User;
 
 public class LoginController implements Initializable {
 	@FXML
@@ -427,7 +427,7 @@ public class LoginController implements Initializable {
 	
 	
 	private void login(ActionEvent event) throws IOException{
-		Parent parent = FXMLLoader.load(getClass().getResource("/fxmlPackage/mainProgram.fxml"));
+		Parent parent = FXMLLoader.load(getClass().getResource("/fxml/mainProgram.fxml"));
 		Scene scene = new Scene(parent);
 		Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		appStage.setScene(scene);

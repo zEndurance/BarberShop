@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="controllersPackage.ServicesTabController">
+	fx:controller="controllers.ServicesTabController">
 	<children>
 		<Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc"
 			height="45.0" layoutX="10.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE"

@@ -1,4 +1,4 @@
-package mainPackage;
+package main;
 
 import java.util.Locale;
 
@@ -26,7 +26,7 @@ public class Main extends Application {
     
     @Override
     public void start(Stage appStage) throws Exception {
-    	Parent root = FXMLLoader.load(getClass().getResource("/fxmlPackage/loginPage.fxml"));
+    	Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginPage.fxml"));
         appStage.setTitle("Barber Shop Login");
         appStage.setScene(new Scene(root, 944, 600));
 		appStage.show();

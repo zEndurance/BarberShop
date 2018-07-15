@@ -1,4 +1,4 @@
-package mainPackage;
+package main;
 
 /**
  * Constants which apply to grabbing json data from the database
