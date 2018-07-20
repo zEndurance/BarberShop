@@ -38,18 +38,21 @@ public class Booking {
 	private Profile profile;
 	private Service service;
 	
-	public Booking(String id, String date, String startTime, String endTime, String person_id, String service_id){
+	public Booking(String[] bookingData){
+		
+		// String id, String date, String startTime, String endTime, String person_id, String service_id
+		
 		
 		// Convert everything in here
-		this.id = Integer.parseInt(id);
+		this.id = Integer.parseInt(bookingData[0]);
 		
 		DateFormat formatterDate = new SimpleDateFormat("dd/mm/yy");
 		DateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
 		
 		try {
-			this.date = formatterDate.parse(date);
-			this.startTime = formatterTime.parse(startTime);
-			this.endTime = formatterTime.parse(endTime);
+			this.date = formatterDate.parse(bookingData[1]);
+			this.startTime = formatterTime.parse(bookingData[2]);
+			this.endTime = formatterTime.parse(bookingData[3]);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -59,9 +62,9 @@ public class Booking {
 		// Try to find this persons ID 
 		for(int i=0; i<rgCustomers.size(); i++){
 			
-			if(person_id.equals(rgCustomers.get(i).getID())){
+			if(bookingData[4].equals(rgCustomers.get(i).getID())){
 				
-				System.out.println("FOUND A CUSTOMER MATCH!!!" + person_id + " @ " + rgCustomers.get(i).getID());
+				System.out.println("FOUND A CUSTOMER MATCH!!!" + bookingData[4] + " @ " + rgCustomers.get(i).getID());
 				this.profile = rgCustomers.get(i);
 				found = true;
 				break;
@@ -71,7 +74,7 @@ public class Booking {
 		
 		if(!found){
 			// Open a URL connection and retrieve the data instead
-			String data = Connection.URL_GET_CUSTOMER + "?id=" + person_id;
+			String data = Connection.URL_GET_CUSTOMER + "?id=" + bookingData[4];
 			
 			System.out.println("Trying to find customer--->" + data);
 			
@@ -148,7 +151,7 @@ public class Booking {
 		found = false;
 		// Link a service
 		for(int i=0; i<User.getInstance().services.size(); i++){
-			if(User.getInstance().services.get(i).getId() == Integer.parseInt(service_id)){
+			if(User.getInstance().services.get(i).getId() == Integer.parseInt(bookingData[5])){
 				this.service = User.getInstance().services.get(i);
 				found = true;
 				break;

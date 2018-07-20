@@ -548,14 +548,17 @@ public class AppointTabController implements Initializable {
 					currentBookings.clear();
 					for(int i = 0 ; i < array.length() ; i++){
 					    // Now add bookings
-					    currentBookings.add(
-					    		new Booking(array.getJSONObject(i).getString("id"),
-					    				array.getJSONObject(i).getString("date"),
-					    				array.getJSONObject(i).getString("start_time"),
-					    				array.getJSONObject(i).getString("end_time"),
-					    				array.getJSONObject(i).getString("person_id"),
-					    				array.getJSONObject(i).getString("service_id")
-					    				));
+						
+						String[] insertBooking = {array.getJSONObject(i).getString("id"),
+			    				array.getJSONObject(i).getString("date"),
+			    				array.getJSONObject(i).getString("start_time"),
+			    				array.getJSONObject(i).getString("end_time"),
+			    				array.getJSONObject(i).getString("person_id"),
+			    				array.getJSONObject(i).getString("service_id")
+			    				};
+						
+						
+					    currentBookings.add(new Booking(insertBooking));
 					}
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");

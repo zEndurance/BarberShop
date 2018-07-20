@@ -182,14 +182,17 @@ public class LoginController implements Initializable {
 				    User.getInstance().flushBookings();
 					
 					for(int i = 0 ; i < array.length() ; i++){
+						
+						String[] insertBooking = {array.getJSONObject(i).getString("id"),
+			    				array.getJSONObject(i).getString("date"),
+			    				array.getJSONObject(i).getString("start_time"),
+			    				array.getJSONObject(i).getString("end_time"),
+			    				array.getJSONObject(i).getString("person_id"),
+			    				array.getJSONObject(i).getString("service_id")};
+						
 					    // Now add bookings
 					    User.getInstance().bookings.add(
-					    		new Booking(array.getJSONObject(i).getString("id"),
-					    				array.getJSONObject(i).getString("date"),
-					    				array.getJSONObject(i).getString("start_time"),
-					    				array.getJSONObject(i).getString("end_time"),
-					    				array.getJSONObject(i).getString("person_id"),
-					    				array.getJSONObject(i).getString("service_id")));
+					    		new Booking(insertBooking));
 					}
 					
 					for(int z=0; z<User.getInstance().bookings.size(); z++){
