@@ -9,10 +9,10 @@ public class BookingCell {
 	private String text;
 	private Booking booking;
 	
-	public BookingCell(String time, String date, String day, String text, boolean use, Booking data){
-		this.time = time;
-		this.date = date;
-		this.day = day;
+	public BookingCell(String[] rgValues, boolean use, Booking data){
+		this.time = rgValues[0];
+		this.date = rgValues[1];
+		this.day = rgValues[2];
 		this.text = text;
 		this.useable = use;
 		this.booking = data;

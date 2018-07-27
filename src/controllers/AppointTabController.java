@@ -180,7 +180,7 @@ public class AppointTabController implements Initializable {
 			List<BookingCell> weekData = new ArrayList<BookingCell>();
 
 			// First value in row is going to be Day
-			weekData.add(new BookingCell("00:00:00", date, day, day, false, null));
+			weekData.add(new BookingCell(new String[] {"00:00:00", date, day, day}, false, null));
 			
 			// Next X values are times
 			for(int z=1; z<columns.size(); z++){
@@ -199,7 +199,7 @@ public class AppointTabController implements Initializable {
 					}
 				}
 				
-				weekData.add(new BookingCell(time, date, day, text, true, b));
+				weekData.add(new BookingCell(new String[] {time, date, day, text}, true, b));
 				
 			}
 			rowsData.add(weekData);
