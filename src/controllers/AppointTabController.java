@@ -375,7 +375,7 @@ public class AppointTabController implements Initializable {
 					String close = animal.getString("CloseTime");
 					String interval = animal.getString("Interval");
 					
-					rgBHours[i] = new BusinessDay(day, open, close, interval);
+					rgBHours[i] = new BusinessDay(day, new String[] {open, close, interval});
 				//	System.out.println("On " + getDay(day) + " the opening hours are " + open
 				//			+ " and closing hours are " + close);
 				}

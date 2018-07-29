@@ -7,15 +7,15 @@ public class BusinessDay {
 	private String closingHours;
 	private String interval;
 	
-	public BusinessDay(int i, String open, String close, String interval){
+	public BusinessDay(int i, String[] rgData){
 		// if validated
 		
 		// change values
 		
 		this.day = getDay(i);
-		this.openingHours = open;
-		this.closingHours = close;
-		this.interval = interval;
+		this.openingHours = rgData[0];
+		this.closingHours = rgData[1];
+		this.interval = rgData[2];
 	}
 	
 	public int getInterval(){
