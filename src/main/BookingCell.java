@@ -13,7 +13,7 @@ public class BookingCell {
 		this.time = rgValues[0];
 		this.date = rgValues[1];
 		this.day = rgValues[2];
-		this.text = text;
+		this.text = rgValues[3];
 		this.useable = use;
 		this.booking = data;
 	}
