@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TodaysTabController">
+   <children>
+      <ListView fx:id="listView" layoutX="24.0" layoutY="89.0" prefHeight="410.0" prefWidth="271.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdddfc" height="44.0" layoutX="24.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="271.0" />
+      <Label layoutX="98.0" layoutY="25.0" text="Today's Appointments" />
+      <WebView fx:id="webView" layoutX="302.0" layoutY="14.0" prefHeight="486.0" prefWidth="630.0" />
+      <DatePicker fx:id="datePicker" onAction="#handleDateButtonAction" layoutX="24.0" layoutY="56.0" prefHeight="17.0" prefWidth="271.0" />
+   </children>
+</AnchorPane>
