@@ -57,6 +57,6 @@
           
         </tabs>
       </TabPane>
-      <Button layoutX="837.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="25.0" prefWidth="57.0" text="Logout" />
-   </children>
+     <Button layoutX="855.0" layoutY="3.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefHeight="25.0" prefWidth="67.0" text="Logout" />
+     </children>
 </AnchorPane>
