@@ -307,68 +307,58 @@ public class LoginController implements Initializable {
 	private void loadServicesData(){
 		String data = Connection.URL_GET_SERVICES + "?id=" + User.getInstance().id;
 		
-		// send these values to the php script
-		System.out.println("Connecting to page ----------> " + data);
-
+		debugConnection(data);
+		
 		try {
-			URL url = new URL(data);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+			response = connectToPage(data);
 
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_result"));
-
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_SERVICE")) {
-					// Give a response to the user that its incorrect
-					System.out.println("Incorrect email or password entered!");
-				} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
-
-					// Read up the JSON values
-					List<String> list = new ArrayList<String>();
-					
-					// Get the amount of objects
-					int len = json.getInt("amount");
-					
-					// Flush Users current service data
-					User.getInstance().flushServices();
-					
-					// Loop through each array element
-					for(int i=0; i<len; i++){
-						JSONObject obj = json.getJSONObject(Integer.toString(i));
-						
-						// Create the service objects of this User
-						String[] vals = new String[3];
-						vals[0] = obj.getString("id");
-						vals[1] = obj.getString("service");
-						vals[2] = obj.getString("price");
-						
-						// Add this to the Users services array
-						User.getInstance().services.add(new Service(vals));
-					}
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			parseJSONServicesData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void parseJSONServicesData(StringBuffer data) {
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_result"));
+
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("FAILED_SERVICE")) {
+				// Give a response to the user that its incorrect
+				System.out.println("Incorrect email or password entered!");
+			} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
+
+				// Read up the JSON values
+				List<String> list = new ArrayList<String>();
+				
+				// Get the amount of objects
+				int len = json.getInt("amount");
+				
+				// Flush Users current service data
+				User.getInstance().flushServices();
+				
+				// Loop through each array element
+				for(int i=0; i<len; i++){
+					JSONObject obj = json.getJSONObject(Integer.toString(i));
+					
+					// Create the service objects of this User
+					String[] vals = new String[3];
+					vals[0] = obj.getString("id");
+					vals[1] = obj.getString("service");
+					vals[2] = obj.getString("price");
+					
+					// Add this to the Users services array
+					User.getInstance().services.add(new Service(vals));
+				}
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
