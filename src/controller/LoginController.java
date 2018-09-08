@@ -5,10 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.json.JSONArray;
@@ -26,7 +24,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import model.Booking;
 import model.Connection;
 import model.Service;
@@ -44,16 +41,23 @@ public class LoginController extends ConnectionController implements Initializab
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO - MySQL grabbing all user data should happen here and not each time a
-		// tab opens
-
-		// DEBUG
 		userField.setText("raj@barbershop.com");
 		passwordField.setText("barber");
 	}
+	
+	private void login(ActionEvent event) throws IOException {
+		Parent parent = FXMLLoader.load(getClass().getResource("/view/mainProgram.fxml"));
+		Scene scene = new Scene(parent);
+		Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		appStage.setScene(scene);
+		appStage.setTitle("Barber Shop");
+		appStage.setWidth(944);
+		appStage.setHeight(600);
+		appStage.show();
+	}
 
 	@FXML
-	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
+	private void handleSubmitButtonAction(ActionEvent event) throws IOException {
 
 		// Get the email & password we entered
 		String email = userField.getText().toString();
@@ -66,8 +70,7 @@ public class LoginController extends ConnectionController implements Initializab
 
 		try {
 			response = connectToPage(data);
-			// Go to next view if correct login JSON details can be parsed from response
-			// page
+			// Go to next view if correct
 			if (parseJSONLoginData(response, email, password)) {
 				login(event);
 			}
@@ -84,16 +87,9 @@ public class LoginController extends ConnectionController implements Initializab
 
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
+			makeJSON(response);
 
-			String query_response = json.getString("query_result");
-
-			if (query_response.equals("FAILED_LOGIN")) {
-				// Give a response to the user that its incorrect
-				System.out.println("Incorrect email or password entered!");
-				actiontarget.setText("Wrong email or password!");
-			} else if (query_response.equals("SUCCESSFUL_LOGIN")) {
+			if (query_response.equals("SUCCESSFUL_LOGIN")) {
 				// We can go to the main program controller
 				System.out.println("Successfull email and password entered!");
 
@@ -123,7 +119,7 @@ public class LoginController extends ConnectionController implements Initializab
 
 			} else {
 				System.out.println("Not enough arguments were entered.. try filling both fields");
-				actiontarget.setText("Enter in both fields!");
+				actiontarget.setText("Incorrect details!");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -131,8 +127,6 @@ public class LoginController extends ConnectionController implements Initializab
 
 		return valid;
 	}
-
-
 
 	private void loadBookingData() {
 		String data = Connection.URL_GET_BOOKINGS + "?id=" + User.getInstance().id;
@@ -153,63 +147,60 @@ public class LoginController extends ConnectionController implements Initializab
 	private void parseJSONBookingData(StringBuffer response) {
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
-
-			String query_response = json.getString("query_result");
+			makeJSON(response);
 
 			if (query_response.equals("FAILED_BOOKINGS")) {
 				// Give a response to the user that its incorrect
 				System.out.println("Incorrect email or password entered!");
 			} else if (query_response.equals("SUCCESSFUL_BOOKINGS")) {
-
-				// Read up the JSON values
-				List<String> list = new ArrayList<String>();
-				JSONArray array = json.getJSONArray("bookings");
-
-				// Clear bookings
-				User.getInstance().flushBookings();
-
-				for (int i = 0; i < array.length(); i++) {
-
-					String[] insertBooking = { array.getJSONObject(i).getString("id"),
-							array.getJSONObject(i).getString("date"), array.getJSONObject(i).getString("start_time"),
-							array.getJSONObject(i).getString("end_time"), array.getJSONObject(i).getString("person_id"),
-							array.getJSONObject(i).getString("service_id") };
-
-					// Now add bookings
-					User.getInstance().bookings.add(new Booking(insertBooking));
-				}
-
-				for (int z = 0; z < User.getInstance().bookings.size(); z++) {
-					System.out.println("Booking: " + User.getInstance().bookings.get(z).toString());
-				}
-
-				// Sort the bookings arraylist
-				Collections.sort(User.getInstance().bookings, new Comparator<Booking>() {
-					@Override
-					public int compare(Booking o1, Booking o2) {
-						try {
-							return new SimpleDateFormat("HH:mm").parse(o1.getStartTime())
-									.compareTo(new SimpleDateFormat("HH:mm").parse(o2.getStartTime()));
-						} catch (ParseException e) {
-							return 0;
-						}
-					}
-				});
-
+				parseSuccessfulBookings();
 			} else {
 				System.out.println("Not enough arguments were entered.. try filling both fields");
 			}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void parseSuccessfulBookings() throws JSONException {
+		JSONArray array = json.getJSONArray("bookings");
+
+		// Clear bookings
+		User.getInstance().flushBookings();
+
+		for (int i = 0; i < array.length(); i++) {
+
+			String[] insertBooking = { array.getJSONObject(i).getString("id"),
+					array.getJSONObject(i).getString("date"), array.getJSONObject(i).getString("start_time"),
+					array.getJSONObject(i).getString("end_time"), array.getJSONObject(i).getString("person_id"),
+					array.getJSONObject(i).getString("service_id") };
+
+			// Now add bookings
+			User.getInstance().bookings.add(new Booking(insertBooking));
+		}
+
+		for (int z = 0; z < User.getInstance().bookings.size(); z++) {
+			System.out.println("Booking: " + User.getInstance().bookings.get(z).toString());
+		}
+
+		// Sort the bookings arraylist
+		Collections.sort(User.getInstance().bookings, new Comparator<Booking>() {
+			@Override
+			public int compare(Booking o1, Booking o2) {
+				try {
+					return new SimpleDateFormat("HH:mm").parse(o1.getStartTime())
+							.compareTo(new SimpleDateFormat("HH:mm").parse(o2.getStartTime()));
+				} catch (ParseException e) {
+					return 0;
+				}
+			}
+		});
 	}
 
 	private void loadProfileData() {
 		// Get values from URL/JSON
 		String data = Connection.URL_GET_PROFILE + "?id=" + User.getInstance().id;
-
 		debugConnection(data);
 
 		try {
@@ -225,10 +216,7 @@ public class LoginController extends ConnectionController implements Initializab
 	private void parseJSONProfileData(StringBuffer data) {
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
-
-			String query_response = json.getString("query_result");
+			makeJSON(response);
 
 			if (query_response.equals("FAILED_PROFILE")) {
 				// Give a response to the user that its incorrect
@@ -261,12 +249,9 @@ public class LoginController extends ConnectionController implements Initializab
 
 	private void loadServicesData() {
 		String data = Connection.URL_GET_SERVICES + "?id=" + User.getInstance().id;
-
 		debugConnection(data);
-
 		try {
 			response = connectToPage(data);
-
 			parseJSONServicesData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -278,51 +263,42 @@ public class LoginController extends ConnectionController implements Initializab
 	private void parseJSONServicesData(StringBuffer response) {
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
-
-			String query_response = json.getString("query_result");
-
-			if (query_response.equals("FAILED_SERVICE")) {
-				// Give a response to the user that its incorrect
-				System.out.println("Incorrect email or password entered!");
-			} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
-
-				// Read up the JSON values
-				List<String> list = new ArrayList<String>();
-
-				// Get the amount of objects
-				int len = json.getInt("amount");
-
-				// Flush Users current service data
-				User.getInstance().flushServices();
-
-				// Loop through each array element
-				for (int i = 0; i < len; i++) {
-					JSONObject obj = json.getJSONObject(Integer.toString(i));
-
-					// Create the service objects of this User
-					String[] vals = new String[3];
-					vals[0] = obj.getString("id");
-					vals[1] = obj.getString("service");
-					vals[2] = obj.getString("price");
-
-					// Add this to the Users services array
-					User.getInstance().services.add(new Service(vals));
-				}
+			makeJSON(response);
+			if (query_response.equals("SUCCESSFUL_SERVICE")) {
+				parseSuccessfulService();
 			} else {
-				System.out.println("Not enough arguments were entered.. try filling both fields");
+				System.out.println("Failed to retrieve service data!");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	private void parseSuccessfulService() throws JSONException {
+		// Get the amount of objects
+		int len = json.getInt("amount");
+
+		// Flush Users current service data
+		User.getInstance().flushServices();
+
+		// Loop through each array element
+		for (int i = 0; i < len; i++) {
+			JSONObject obj = json.getJSONObject(Integer.toString(i));
+
+			// Create the service objects of this User
+			String[] vals = new String[3];
+			vals[0] = obj.getString("id");
+			vals[1] = obj.getString("service");
+			vals[2] = obj.getString("price");
+
+			// Add this to the Users services array
+			User.getInstance().services.add(new Service(vals));
+		}
+	}
 
 	private void loadAllServicesData() {
 		String data = Connection.URL_GET_ALL_SERVICES;
-
 		debugConnection(data);
-
 		try {
 			response = connectToPage(data);
 			parseJSONAllServicesData(response);
@@ -336,53 +312,30 @@ public class LoginController extends ConnectionController implements Initializab
 	private void parseJSONAllServicesData(StringBuffer response) {
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
-
-			String query_response = json.getString("query_result");
-
-			if (query_response.equals("FAILED_SERVICE")) {
-				// Give a response to the user that its incorrect
-				System.out.println("Incorrect email or password entered!");
-			} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
-
-				// Read up the JSON values
-				List<String> list = new ArrayList<String>();
-
-				// Get the amount of objects
-				int len = json.getInt("amount");
-
-				// Flush Users current service data
-				User.getInstance().allServicesNames.clear();
-
-				// Loop through each array element
-				for (int i = 0; i < len; i++) {
-					JSONObject obj = json.getJSONObject(Integer.toString(i));
-					// Add this to the Users services array
-					User.getInstance().allServicesNames.add(obj.getString("name"));
-
-					// Save this to an object also
-
-				}
+			makeJSON(response);
+			if (query_response.equals("SUCCESSFUL_SERVICE")) {
+				parseSuccessfulAllServices();
 			} else {
-				System.out.println("Not enough arguments were entered.. try filling both fields");
+				System.out.println("Unable to load ALL service data");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
+	private void parseSuccessfulAllServices() throws JSONException {
+		// Get the amount of objects
+		int len = json.getInt("amount");
 
-	private void login(ActionEvent event) throws IOException {
-		Parent parent = FXMLLoader.load(getClass().getResource("/view/mainProgram.fxml"));
-		Scene scene = new Scene(parent);
-		Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		appStage.setScene(scene);
-		appStage.setTitle("Barber Shop");
-		appStage.setWidth(944);
-		appStage.setHeight(600);
-		appStage.show();
+		// Flush Users current service data
+		User.getInstance().allServicesNames.clear();
+
+		// Loop through each array element
+		for (int i = 0; i < len; i++) {
+			JSONObject obj = json.getJSONObject(Integer.toString(i));
+			// Add this to the Users services array
+			User.getInstance().allServicesNames.add(obj.getString("name"));
+		}
 	}
 
 }

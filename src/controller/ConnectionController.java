@@ -6,12 +6,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ConnectionController {
 	// Used to open connections to PHP pages
 	protected HttpURLConnection connection;
 	protected URL url;
 	// The string that the PHP pages response with
 	protected StringBuffer response;
+	
+	// JSON parsing variables
+	protected JSONObject json;
+	protected String query_response;
 	
 	protected StringBuffer connectToPage(String data) throws IOException {
 		url = new URL(data);
@@ -30,6 +37,11 @@ public class ConnectionController {
 		in.close();
 		
 		return response;
+	}
+	
+	protected void makeJSON(StringBuffer response) throws JSONException {
+		json = new JSONObject(response.toString());
+		query_response = json.getString("query_result");
 	}
 	
 	protected void debugConnection(String data) {

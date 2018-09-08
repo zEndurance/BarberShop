@@ -514,7 +514,7 @@ public class AppointTabController extends ConnectionController implements Initia
 		// Try connecting to the PHP script and passing the values above to it
 		try {
 			response = connectToPage(data);
-			parseJSONBookingData(response);
+			parseJSONWeeklyBookingData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -522,16 +522,15 @@ public class AppointTabController extends ConnectionController implements Initia
 		}
 	}
 	
-	private void parseJSONBookingData(StringBuffer response) {
+	private boolean parseJSONWeeklyBookingData(StringBuffer response) {
+		
+		boolean valid = false;
+		
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
-
-			String query_response = json.getString("query_result");
-
+			json = new JSONObject(response.toString());
+			query_response = json.getString("query_result");
 			if (query_response.equals("FAILED_BOOKINGS")) {
-				// Give a response to the user that its incorrect
 				System.out.println("Failed or no booking data");
 			} else if (query_response.equals("SUCCESSFUL_BOOKINGS")) {
 				
@@ -549,16 +548,18 @@ public class AppointTabController extends ConnectionController implements Initia
 		    				array.getJSONObject(i).getString("person_id"),
 		    				array.getJSONObject(i).getString("service_id")
 		    				};
-					
-					
 				    currentBookings.add(new Booking(insertBooking));
 				}
+				
+				valid = true;
 			} else {
 				System.out.println("Not enough arguments were entered.. try filling both fields");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
+		return valid;
 	}
 
 	public static final LocalDate NOW_LOCAL_DATE() {
