@@ -49,28 +49,26 @@ import model.BusinessDay;
 import model.Connection;
 import model.User;
 
-public class AppointTabController implements Initializable {
+public class AppointTabController extends ConnectionController implements Initializable {
+	
+	// FXML - GUI Components
+	@FXML
+	TableView<ObservableList<BookingCell>> appointTable;
+	@FXML
+	DatePicker appointDate;
+	
 
 	// Constants
 	private final String BOOKING_COLOURS = "src/colours.csv";
 
-	// FXML Table GUI
-	@FXML
-	private TableView<ObservableList<BookingCell>> appointTable;
-	@FXML
-	private DatePicker appointDate;
-
 	// Table data
-	String headers[] = null;
-	String items[] = null;
+	private String headers[] = null;
+	private String items[] = null;
+	private List<String> columns = new ArrayList<String>();
+	private List<String> rows = new ArrayList<String>();
+	private List<List<BookingCell>> rowsData = new ArrayList<List<BookingCell>>(7); 
 	
-	
-	List<String> columns = new ArrayList<String>();
-	List<String> rows = new ArrayList<String>();
-
-	List<List<BookingCell>> rowsData = new ArrayList<List<BookingCell>>(7); 
-	
-	ObservableList<ObservableList<BookingCell>> csvData = FXCollections.observableArrayList();
+	private ObservableList<ObservableList<BookingCell>> csvData = FXCollections.observableArrayList();
 	
 	private ArrayList<String> closedDays = new ArrayList<String>();
 	// Custom row colour names
@@ -511,64 +509,54 @@ public class AppointTabController implements Initializable {
 		data += "?id=" + User.getInstance().id;
 		data += "&date=" + getDate;
 		
-		System.out.println("Checking url---------->" + data);
+		debugConnection(data);
 		
-		// Try connecting to the php script and passing the values above to it
+		// Try connecting to the PHP script and passing the values above to it
 		try {
-			URL url = new URL(data);
-			URLEncoder.encode(data, "UTF-8");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_result"));
-
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_BOOKINGS")) {
-					// Give a response to the user that its incorrect
-					System.out.println("Failed or no booking data");
-				} else if (query_response.equals("SUCCESSFUL_BOOKINGS")) {
-					
-					JSONArray array = json.getJSONArray("bookings");
-					
-					// Clear previous bookings then recalculate
-					currentBookings.clear();
-					for(int i = 0 ; i < array.length() ; i++){
-					    // Now add bookings
-						
-						String[] insertBooking = {array.getJSONObject(i).getString("id"),
-			    				array.getJSONObject(i).getString("date"),
-			    				array.getJSONObject(i).getString("start_time"),
-			    				array.getJSONObject(i).getString("end_time"),
-			    				array.getJSONObject(i).getString("person_id"),
-			    				array.getJSONObject(i).getString("service_id")
-			    				};
-						
-						
-					    currentBookings.add(new Booking(insertBooking));
-					}
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			response = connectToPage(data);
+			parseJSONBookingData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void parseJSONBookingData(StringBuffer response) {
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_result"));
+
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("FAILED_BOOKINGS")) {
+				// Give a response to the user that its incorrect
+				System.out.println("Failed or no booking data");
+			} else if (query_response.equals("SUCCESSFUL_BOOKINGS")) {
+				
+				JSONArray array = json.getJSONArray("bookings");
+				
+				// Clear previous bookings then recalculate
+				currentBookings.clear();
+				for(int i = 0 ; i < array.length() ; i++){
+				    // Now add bookings
+					
+					String[] insertBooking = {array.getJSONObject(i).getString("id"),
+		    				array.getJSONObject(i).getString("date"),
+		    				array.getJSONObject(i).getString("start_time"),
+		    				array.getJSONObject(i).getString("end_time"),
+		    				array.getJSONObject(i).getString("person_id"),
+		    				array.getJSONObject(i).getString("service_id")
+		    				};
+					
+					
+				    currentBookings.add(new Booking(insertBooking));
+				}
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}

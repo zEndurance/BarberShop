@@ -132,10 +132,7 @@ public class LoginController extends ConnectionController implements Initializab
 		return valid;
 	}
 
-	private void debugConnection(String data) {
-		// Send these values to the PHP script
-		System.out.println("Connecting to page ----------> " + data);
-	}
+
 
 	private void loadBookingData() {
 		String data = Connection.URL_GET_BOOKINGS + "?id=" + User.getInstance().id;
@@ -374,6 +371,8 @@ public class LoginController extends ConnectionController implements Initializab
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	private void login(ActionEvent event) throws IOException {
 		Parent parent = FXMLLoader.load(getClass().getResource("/view/mainProgram.fxml"));

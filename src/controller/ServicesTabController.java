@@ -39,25 +39,26 @@ import model.User;
  * 
  * @author Raj
  */
-public class ServicesTabController implements Initializable {
+public class ServicesTabController extends ConnectionController implements Initializable {
 	
-	// List of all known services this barber can even have
+	// FXML - GUI Components
+	@FXML
+	TableView<Service> serviceTable;
+	@FXML
+	TableColumn<Service, String> serviceID;
+	@FXML
+	TableColumn<Service, String> serviceName;
+	@FXML
+	TableColumn<Service, String> servicePrice;
+	@FXML
+	ChoiceBox<String> serviceChoiceBox;
+	@FXML
+	TextField tfPrice;
+	@FXML
+	Button btnRemoveService;
+	
+	// List of all known services this barber can have
 	public static ArrayList<Service> myServices = new ArrayList<Service>();
-
-	@FXML
-	private TableView<Service> serviceTable;
-	@FXML
-	private TableColumn<Service, String> serviceID;
-	@FXML
-	private TableColumn<Service, String> serviceName;
-	@FXML
-	private TableColumn<Service, String> servicePrice;
-	@FXML
-	private ChoiceBox<String> serviceChoiceBox;
-	@FXML
-	private TextField tfPrice;
-	@FXML
-	private Button btnRemoveService;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -301,45 +302,37 @@ public class ServicesTabController implements Initializable {
 
 		// Try connecting to the php script and passing the values above to it
 		try {
-			URL url = new URL(data);
-			URLEncoder.encode(data, "UTF-8");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+			response = connectToPage(data);
 
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_result"));
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_INSERT_SERVICE")) {
-					// Give a response to the user that its incorrect
-					retStr = "-1";
-				} else if (query_response.equals("SUCCESSFUL_INSERT_SERVICE")) {
-					retStr = Integer.toString(json.getInt("last_id"));
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			retStr = parseJSONInsertService(response, retStr);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		return retStr;
+	}
+	
+	private String parseJSONInsertService(StringBuffer response, String retStr) {
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_result"));
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("FAILED_INSERT_SERVICE")) {
+				// Give a response to the user that its incorrect
+				retStr = "-1";
+			} else if (query_response.equals("SUCCESSFUL_INSERT_SERVICE")) {
+				retStr = Integer.toString(json.getInt("last_id"));
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 		return retStr;
 	}
 }
