@@ -79,6 +79,8 @@ public class AppointTabController extends ConnectionController implements Initia
 	// Whenever we click on a date on the date picker we store the days of the week in date form here
 	private ArrayList<String> currentDates = new ArrayList<String>();
 	
+	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+	
 	private String getDay(int day) {
 		String[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 		return days[day];
@@ -331,96 +333,99 @@ public class AppointTabController extends ConnectionController implements Initia
 		}
 	}
 	
+	private BusinessDay[] loadBusinessHours(BusinessDay[] rgBHours) throws JSONException {
+		for (int i = 0; i < 7; i++) {
+			JSONObject animal = json.getJSONObject(Integer.toString(i));
+			int day = animal.getInt("DayOfWeek");
+			String open = animal.getString("OpenTime");
+			String close = animal.getString("CloseTime");
+			String interval = animal.getString("Interval");
+			
+			rgBHours[i] = new BusinessDay(day, new String[] {open, close, interval});
+			System.out.println("On " + getDay(day) + " the opening hours are " + open
+					+ " and closing hours are " + close);
+		}
+		return rgBHours;
+	}
+	
 	private void parseBusinessHoursColumnNames(StringBuffer response) {
 		// Try reading it in JSON format
 		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_business_hours"));
-			String query_response = json.getString("query_business_hours");
+			json = new JSONObject(response.toString());
+			query_response = json.getString("query_business_hours");
 
-			if (query_response.equals("FAILED_HOURS")) {
-				System.err.println("Couldn't retrieve business hours");
-			} else if (query_response.equals("SUCCESS_HOURS")) {
+			if (query_response.equals("SUCCESS_HOURS")) {
 
 				// 7 Days, Monday-Sunday
 				BusinessDay[] rgBHours = new BusinessDay[7];
-				
 				// Work out the business hours of a week
-				for (int i = 0; i < 7; i++) {
-					JSONObject animal = json.getJSONObject(Integer.toString(i));
-					int day = animal.getInt("DayOfWeek");
-					String open = animal.getString("OpenTime");
-					String close = animal.getString("CloseTime");
-					String interval = animal.getString("Interval");
-					
-					rgBHours[i] = new BusinessDay(day, new String[] {open, close, interval});
-					System.out.println("On " + getDay(day) + " the opening hours are " + open
-							+ " and closing hours are " + close);
-				}
-
-				// Now calculate the earliest opening hour and the latest
-				// closing hour so we can see how many columns
-				// we need to make
-				String startTime = "23:30:00";
-				String closeTime = "00:00:00";
-				int interval = 0;
-				
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-				Date start = simpleDateFormat.parse(startTime);
-				Date end = simpleDateFormat.parse(closeTime);
-				for (int i = 0; i < 7; i++) {
-
-					BusinessDay b = rgBHours[i];
-
-					// firstly check if open and closing are the same, in
-					// which case we can just ignore
-					// assume same times means its a closed day
-					if (!b.getOpeningHours().equals(b.getClosingHours())) {
-
-						Date checkingOpenTime = simpleDateFormat.parse(b.getOpeningHours());
-						Date checkingCloseTime = simpleDateFormat.parse(b.getClosingHours());
-						// Compare dates
-						if (checkingOpenTime.before(start)) {
-							start = checkingOpenTime;
-						}
-
-						if (checkingCloseTime.after(end)) {
-							end = checkingCloseTime;
-						}
-						
-						// Check if a higher interval was found
-						if(b.getInterval() > interval){
-							interval = b.getInterval();
-						}
-
-					} else {
-						System.out.println("It must be closed today on a " + b.getDay());
-						closedDays.add(b.getDay());
-					}
-				}
-
-				System.out.println("Earliest we start the business week is: : " + simpleDateFormat.format(start));
-				System.out.println("Latest we start the business week is: : " + simpleDateFormat.format(end));
-				
-				System.out.println("Biggest interval found: " + interval);
-				
-				long cols = ((Math.abs((start.getTime() - end.getTime())) / 1000) / 60) / interval;
-				System.out.println("We're gunna need this much intervals: " + cols);
-				
-				
-				columns.clear();
-				// Empty first column
-				columns.add("");
-				for(int i=0; i<=cols; i++){
-					columns.add(simpleDateFormat.format(start));
-					start = addMinutesToDate(interval, start);
-				}
-				
+				rgBHours = loadBusinessHours(rgBHours);
+				rgBHours = loadStartEndTime(rgBHours);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private BusinessDay[] loadStartEndTime(BusinessDay[] rgBHours) throws ParseException {
+		// Now calculate the earliest opening hour and the latest
+		// closing hour so we can see how many columns
+		// we need to make
+		String startTime = "23:30:00";
+		String closeTime = "00:00:00";
+		int interval = 0;
+		
+		
+		Date start = simpleDateFormat.parse(startTime);
+		Date end = simpleDateFormat.parse(closeTime);
+		for (int i = 0; i < 7; i++) {
+
+			BusinessDay b = rgBHours[i];
+
+			// firstly check if open and closing are the same, in
+			// which case we can just ignore
+			// assume same times means its a closed day
+			if (!b.getOpeningHours().equals(b.getClosingHours())) {
+
+				Date checkingOpenTime = simpleDateFormat.parse(b.getOpeningHours());
+				Date checkingCloseTime = simpleDateFormat.parse(b.getClosingHours());
+				// Compare dates
+				if (checkingOpenTime.before(start)) {
+					start = checkingOpenTime;
+				}
+
+				if (checkingCloseTime.after(end)) {
+					end = checkingCloseTime;
+				}
+				
+				// Check if a higher interval was found
+				if(b.getInterval() > interval){
+					interval = b.getInterval();
+				}
+
+			} else {
+				System.out.println("It must be closed today on a " + b.getDay());
+				closedDays.add(b.getDay());
+			}
+		}
+
+		
+		loadColumns(new Date[] {start, end}, interval);
+		
+		return rgBHours;
+	}
+	
+	private void loadColumns(Date[] dates, int interval) {
+		long cols = ((Math.abs((dates[0].getTime() - dates[1].getTime())) / 1000) / 60) / interval;
+		
+		columns.clear();
+		// Empty first column
+		columns.add("");
+		for(int i=0; i<=cols; i++){
+			columns.add(simpleDateFormat.format(dates[0]));
+			dates[0] = addMinutesToDate(interval, dates[0]);
 		}
 	}
 
