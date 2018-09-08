@@ -228,33 +228,43 @@ public class AccountTabController extends ConnectionController implements Initia
 		System.out.println("// End of Update Account");
 	}
 
-	private boolean updateProfile(String[] rgVals) {
+	private boolean updateProfile(String[] rgVals) throws IOException {
+		// Assume we can't successfully update the page
 		boolean updated = false;
+		
+		// Get the URL of the page we want to POST data to
 		String data = Connection.URL_UPDATE_PROFILE;
 
-		try {
-			StringBuffer paramsBuilder = new StringBuffer();
-			paramsBuilder.append("id=" + User.getInstance().id);
-			paramsBuilder.append("&fName=" + rgVals[0]);
-			paramsBuilder.append("&mName=" + rgVals[1]);
-			paramsBuilder.append("&lName=" + rgVals[2]);
-			paramsBuilder.append("&age=" + rgVals[3]);
-			paramsBuilder.append("&tel=" + rgVals[4]);
-			paramsBuilder.append("&mob=" + rgVals[5]);
-			paramsBuilder.append("&eName=" + rgVals[6]);
-			paramsBuilder.append("&eTel=" + rgVals[7]);
-			
-			response = connectToPagePost(data, paramsBuilder);
-			updated = parseJSONUpdateProfile(response, rgVals);
-			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("Updated?: " + updated);
+		// Build up the parameters
+		StringBuffer params = buildProfileParameters(rgVals);
+		
+		// Try to connect to the page with parameters
+		response = connectToPagePost(data, params);
+		
+		// Check if we can update by parsing
+		updated = parseJSONUpdateProfile(response, rgVals);
+		
+		// Returns true if successfully updated
 		return updated;
+	}
+	
+	/**
+	 * Build a StringBuffer containing the parameters to send to a POST script
+	 * @param rgVals
+	 * @return
+	 */
+	private StringBuffer buildProfileParameters(String[] rgVals) {
+		StringBuffer p = new StringBuffer();
+		p.append("id=" + User.getInstance().id);
+		p.append("&fName=" + rgVals[0]);
+		p.append("&mName=" + rgVals[1]);
+		p.append("&lName=" + rgVals[2]);
+		p.append("&age=" + rgVals[3]);
+		p.append("&tel=" + rgVals[4]);
+		p.append("&mob=" + rgVals[5]);
+		p.append("&eName=" + rgVals[6]);
+		p.append("&eTel=" + rgVals[7]);
+		return p;
 	}
 	
 	private boolean parseJSONUpdateProfile(StringBuffer response, String[] rgVals) {
@@ -263,10 +273,9 @@ public class AccountTabController extends ConnectionController implements Initia
 		
 		// Read it in JSON
 		try {
-			JSONObject json = new JSONObject(response);
-			System.out.println(json.getString("query_result"));
-			String query_response = json.getString("query_result");
-
+			makeJSON(response);
+			
+			
 			if (query_response.equals("SUCCESSFUL_UPDATE_PROFILE")) {
 				System.out.println("We can successfully delete this from the table!!!");
 				updated = true;
