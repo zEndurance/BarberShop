@@ -12,7 +12,7 @@ import java.net.URLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-abstract class ConnectionController {
+public class ConnectionController {
 	// Used to open connections to PHP pages
 	protected HttpURLConnection connection;
 	protected URL url;
