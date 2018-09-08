@@ -47,10 +47,11 @@ public class LoginController implements Initializable {
 	TextField userField;
 	
 	
-	// Used to open connections to php get pages
+	// Used to open connections to PHP pages
 	private HttpURLConnection connection;
 	private URL url;
-	
+	// The string that the PHP pages response with
+	private StringBuffer response;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -168,15 +169,19 @@ public class LoginController implements Initializable {
 		return response;
 	}
 	
+	private void debugConnection(String data) {
+		// Send these values to the PHP script
+		System.out.println("Connecting to page ----------> " + data);
+	}
+	
 	private void loadBookingData(){
 		String data = Connection.URL_GET_BOOKINGS + "?id=" + User.getInstance().id;
 		
-		// Send these values to the PHP script
-		System.out.println("Connecting to BOOKING DATA ----------> " + data);
+		debugConnection(data);
 
 		// Try connecting to the parse and then parsing the StringBuffer into objects
 		try {
-			StringBuffer response = connectToPage(data);
+			response = connectToPage(data);
 			parseJSONBookingData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -247,65 +252,54 @@ public class LoginController implements Initializable {
 		// Get values from URL/JSON
 		String data = Connection.URL_GET_PROFILE + "?id=" + User.getInstance().id;
 		
-		// send these values to the php script
-		System.out.println("Connecting to page ----------> " + data);
+		debugConnection(data);
 
 		try {
-			URL url = new URL(data);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_result"));
-
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_PROFILE")) {
-					// Give a response to the user that its incorrect
-					System.out.println("Incorrect email or password entered!");
-				} else if (query_response.equals("SUCCESSFUL_PROFILE")) {
-
-					// Read up the JSON values
-					JSONObject obj = json.getJSONObject("0");
-
-					//String id = obj.getString("id");
-					User.getInstance().first_name = obj.getString("first_name");
-					User.getInstance().middle_name = obj.getString("middle_name");
-					User.getInstance().last_name = obj.getString("last_name");
-					User.getInstance().age = obj.getString("age");
-					User.getInstance().home_telephone = obj.getString("home_telephone");
-					User.getInstance().mobile = obj.getString("mobile");
-					User.getInstance().emergency_name = obj.getString("emergency_name");
-					User.getInstance().emergency_number = obj.getString("emergency_number");
-					User.getInstance().profile_picture = obj.getString("profile_picture");
-					
-					
-					// Set values for this logged in user
-					
-					
-					
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			response = connectToPage(data);
+			parseJSONProfileData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void parseJSONProfileData(StringBuffer data) {
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_result"));
+
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("FAILED_PROFILE")) {
+				// Give a response to the user that its incorrect
+				System.out.println("Incorrect email or password entered!");
+			} else if (query_response.equals("SUCCESSFUL_PROFILE")) {
+
+				// Read up the JSON values
+				JSONObject obj = json.getJSONObject("0");
+
+				//String id = obj.getString("id");
+				User.getInstance().first_name = obj.getString("first_name");
+				User.getInstance().middle_name = obj.getString("middle_name");
+				User.getInstance().last_name = obj.getString("last_name");
+				User.getInstance().age = obj.getString("age");
+				User.getInstance().home_telephone = obj.getString("home_telephone");
+				User.getInstance().mobile = obj.getString("mobile");
+				User.getInstance().emergency_name = obj.getString("emergency_name");
+				User.getInstance().emergency_number = obj.getString("emergency_number");
+				User.getInstance().profile_picture = obj.getString("profile_picture");
+				
+				
+				// Set values for this logged in user
+				
+				
+				
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
