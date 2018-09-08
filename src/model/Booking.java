@@ -35,21 +35,44 @@ public class Booking extends ConnectionController {
 	
 	// String id, String date, String startTime, String endTime, String person_id, String service_id
 	public Booking(String[] rgData){
-		// Load ID
-		loadID(rgData);
-		// Try loading times
-		loadTimes(rgData);
 		
-		// Used to check if this booking is able to find certain values
-		boolean found = false;
-		// Try loading the profile associated to this booking
-		found = loadProfileToBooking(rgData, found);
-		// Load the customer JSON data
-		found = loadCustomer(rgData, found);
-		// Reset found
-		found = false;
-		// Try to load the services this booking is linked to
-		found = loadService(rgData, found);
+		if(validate(rgData)) {
+			// Load ID
+			loadID(rgData);
+			// Try loading times
+			loadTimes(rgData);
+			// Used to check if this booking is able to find certain values
+			boolean found = false;
+			// Try loading the profile associated to this booking
+			found = loadProfileToBooking(rgData, found);
+			// Load the customer JSON data
+			found = loadCustomer(rgData, found);
+			// Reset found
+			found = false;
+			// Try to load the services this booking is linked to
+			found = loadService(rgData, found);
+		}else {
+			throw new IllegalArgumentException("Invalid Booking Values!");
+		}
+	}
+	
+	private boolean validate(String[] rgData) {
+		boolean valid = true;
+		
+		// Check that we have enough values
+		if(rgData.length != 6) valid = false;
+		
+		// Check that none are empty strings
+		for(int i=0; i<rgData.length; i++) {
+			if(rgData[i].equals("")) {
+				valid = false;
+				break; // No need to check others
+			}
+		}
+		
+		
+		
+		return valid;
 	}
 	
 	
