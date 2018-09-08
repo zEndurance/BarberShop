@@ -81,8 +81,6 @@ public class ServicesTabController extends ConnectionController implements Initi
 		serviceChoiceBox.setItems(list);
 	}
 
-	
-
 	@FXML
 	protected void handleRemoveService(ActionEvent event) throws IOException {
 
@@ -98,7 +96,7 @@ public class ServicesTabController extends ConnectionController implements Initi
 
 			// Only create a function for the 'yes' button as no will cancel
 			functions[0] = new Callable<Void>() {
-				public Void call() {
+				public Void call() throws IOException {
 					try {
 						Service selectedItems = serviceTable.getSelectionModel().getSelectedItems().get(0);
 						String removeService = selectedItems.toString();
@@ -127,7 +125,7 @@ public class ServicesTabController extends ConnectionController implements Initi
 
 	/**
 	 * Removes a selected service from the table view from the current User
-	 * services arraylist
+	 * services ArrayList
 	 * 
 	 * @param selectedItems
 	 *            the Service to remove
@@ -156,43 +154,57 @@ public class ServicesTabController extends ConnectionController implements Initi
 	 * @param id
 	 *            the id of the service we want to delete
 	 * @return true if a successful delete occurred
+	 * @throws IOException 
 	 */
-	private boolean deleteService(int id) {
+	private boolean deleteService(int id) throws IOException {
 		boolean deleted = false;
 		String data = Connection.URL_DELETE_SERVICE;
 
-		try {
-			// Build parameters
-			StringBuffer paramsBuilder = new StringBuffer();
-			paramsBuilder.append("id=" + id);
+		// Build parameters
+		StringBuffer paramsBuilder = new StringBuffer();
+		paramsBuilder.append("id=" + id);
 
-			// Post them to web page
-			response = connectToPagePost(data, paramsBuilder);
-			deleted = parseJSONDeleteService();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Post them to web page
+		response = connectToPagePost(data, paramsBuilder);
+		deleted = parseJSON("Delete Service");
+		
 
 		return deleted;
 	}
 	
-	private boolean parseJSONDeleteService() {
-		// Read it in JSON
+	@SuppressWarnings("unchecked")
+	private <E> E parseJSON(String value) {
+		
+		E validJSON = null;
+		
 		try {
+			
 			makeJSON(response);
-
-			if (query_response.equals("SUCCESSFUL_DELETE_SERVICE")) {
-				System.out.println("We can successfully delete this from the table!!!");
-				return true;
-			} else {
-				System.out.println("Not enough arguments were entered.. try filling both fields");
+			
+			switch(value) {
+				case "Delete Service":
+					validJSON = (E) parseJSONDeleteService();
+					break;
+				case "Insert Service":
+					validJSON = (E) parseJSONInsertService();
+					break;
 			}
-		} catch (JSONException e) {
+			
+		}catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
+		return validJSON;
+	}
+	
+	private Boolean parseJSONDeleteService() {
+		// Read it in JSON
+		if (query_response.equals("SUCCESSFUL_DELETE_SERVICE")) {
+			System.out.println("We can successfully delete this from the table!!!");
+			return true;
+		} else {
+			System.out.println("Not enough arguments were entered.. try filling both fields");
+		}
 		return false;
 	}
 
@@ -246,8 +258,7 @@ public class ServicesTabController extends ConnectionController implements Initi
 
 				updateGUI();
 			} else {
-				// TODO - Display error message to the user that we couldn't
-				// insert onto the database
+				System.out.println("Couldn't service insert into database");
 			}
 		}
 
@@ -263,13 +274,25 @@ public class ServicesTabController extends ConnectionController implements Initi
 	 * @param price
 	 *            the price of the service with decimals
 	 * @return the last service id entered onto the database
+	 * @throws IOException 
 	 */
-	private String insertService(String service, String price) {
+	private String insertService(String service, String price) throws IOException {
 		// Assume we couldn't insert this
-		String retStr = "-1";
+		String retStr = "";
 
-		// Send values to a php script, get the json value back, return the json
-		// value
+		// Build the URL we need to go to
+		String data = buildServiceURL(service, price);
+
+		// Try connecting to the PHP Script
+		response = connectToPage(data);
+		
+		// Try parsing the JSON string
+		retStr = parseJSON("Insert Service");
+
+		return retStr;
+	}
+	
+	private String buildServiceURL(String service, String price) {
 		String data = Connection.URL_INSERT_SERVICE;
 
 		try {
@@ -280,40 +303,20 @@ public class ServicesTabController extends ConnectionController implements Initi
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
-
-		// Try connecting to the php script and passing the values above to it
-		try {
-			response = connectToPage(data);
-
-			retStr = parseJSONInsertService(response, retStr);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return retStr;
+		
+		return data;
 	}
 	
-	private String parseJSONInsertService(StringBuffer response, String retStr) {
+	private String parseJSONInsertService() throws JSONException {
 		// Try reading it in JSON format
-		try {
-			JSONObject json = new JSONObject(response.toString());
-			System.out.println(json.getString("query_result"));
-			String query_response = json.getString("query_result");
-
-			if (query_response.equals("FAILED_INSERT_SERVICE")) {
-				// Give a response to the user that its incorrect
-				retStr = "-1";
-			} else if (query_response.equals("SUCCESSFUL_INSERT_SERVICE")) {
-				retStr = Integer.toString(json.getInt("last_id"));
-			} else {
-				System.out.println("Not enough arguments were entered.. try filling both fields");
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		String retStr = "-1";
 		
+		if (query_response.equals("SUCCESSFUL_INSERT_SERVICE")) {
+			retStr = Integer.toString(json.getInt("last_id"));
+		} else {
+			System.out.println("Not enough arguments were entered.. try filling both fields");
+		}
+
 		return retStr;
 	}
 }
