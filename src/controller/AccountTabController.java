@@ -228,17 +228,11 @@ public class AccountTabController extends ConnectionController implements Initia
 		System.out.println("// End of Update Account");
 	}
 
-	private void updateProfile(String[] rgVals) {
+	private boolean updateProfile(String[] rgVals) {
 		boolean updated = false;
 		String data = Connection.URL_UPDATE_PROFILE;
 
 		try {
-			URL calledUrl = new URL(data);
-			URLConnection phpConnection = calledUrl.openConnection();
-
-			HttpURLConnection httpBasedConnection = (HttpURLConnection) phpConnection;
-			httpBasedConnection.setRequestMethod("POST");
-			httpBasedConnection.setDoOutput(true);
 			StringBuffer paramsBuilder = new StringBuffer();
 			paramsBuilder.append("id=" + User.getInstance().id);
 			paramsBuilder.append("&fName=" + rgVals[0]);
@@ -249,55 +243,10 @@ public class AccountTabController extends ConnectionController implements Initia
 			paramsBuilder.append("&mob=" + rgVals[5]);
 			paramsBuilder.append("&eName=" + rgVals[6]);
 			paramsBuilder.append("&eTel=" + rgVals[7]);
-
-			PrintWriter requestWriter = new PrintWriter(httpBasedConnection.getOutputStream(), true);
-			requestWriter.print(paramsBuilder.toString());
-			requestWriter.close();
-
-			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
-
-			String receivedLine;
-			StringBuffer responseAppender = new StringBuffer();
-
-			while ((receivedLine = responseReader.readLine()) != null) {
-				responseAppender.append(receivedLine);
-				responseAppender.append("\n");
-			}
-			responseReader.close();
-			String result = responseAppender.toString();
-			System.out.println(result);
-
-			// Read it in JSON
-			try {
-				JSONObject json = new JSONObject(result);
-				System.out.println(json.getString("query_result"));
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_UPDATE_PROFILE")) {
-					updated = false;
-				} else if (query_response.equals("SUCCESSFUL_UPDATE_PROFILE")) {
-					System.out.println("We can successfully delete this from the table!!!");
-					updated = true;
-
-					User usr = User.getInstance();
-
-					// Update the current user
-					usr.first_name = rgVals[0];
-					usr.middle_name = rgVals[1];
-					usr.last_name = rgVals[2];
-					usr.age = rgVals[3];
-					usr.home_telephone = rgVals[4];
-					usr.mobile = rgVals[5];
-					usr.emergency_name = rgVals[6];
-					usr.emergency_number = rgVals[7];
-
-					GUI.createDialog("Profile updated", new String[] { "Ok" }, null);
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			
+			response = connectToPagePost(data, paramsBuilder);
+			updated = parseJSONUpdateProfile(response, rgVals);
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -305,6 +254,44 @@ public class AccountTabController extends ConnectionController implements Initia
 		}
 
 		System.out.println("Updated?: " + updated);
+		return updated;
+	}
+	
+	private boolean parseJSONUpdateProfile(StringBuffer response, String[] rgVals) {
+		
+		boolean updated = false;
+		
+		// Read it in JSON
+		try {
+			JSONObject json = new JSONObject(response);
+			System.out.println(json.getString("query_result"));
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("SUCCESSFUL_UPDATE_PROFILE")) {
+				System.out.println("We can successfully delete this from the table!!!");
+				updated = true;
+
+				User usr = User.getInstance();
+
+				// Update the current user
+				usr.first_name = rgVals[0];
+				usr.middle_name = rgVals[1];
+				usr.last_name = rgVals[2];
+				usr.age = rgVals[3];
+				usr.home_telephone = rgVals[4];
+				usr.mobile = rgVals[5];
+				usr.emergency_name = rgVals[6];
+				usr.emergency_number = rgVals[7];
+
+				GUI.createDialog("Profile updated", new String[] { "Ok" }, null);
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return updated;
 	}
 
 	private boolean validProfile(String[] rgVals) {
