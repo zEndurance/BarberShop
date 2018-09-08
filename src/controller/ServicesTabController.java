@@ -207,62 +207,83 @@ public class ServicesTabController extends ConnectionController implements Initi
 		}
 		return false;
 	}
+	
+	private boolean validService() {
+		
+		// Assume the service is valid
+		boolean valid = true;
+		
+		// Validate that data was selected/entered (service name, price)
+		if (serviceChoiceBox.getValue() == null || tfPrice.getText().equals("")) {
+			GUI.createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
+		} else {
+			// Check if service exists and if we can convert the TextField into a double (both need to be true)
+			valid = isServiceInTable() && isDouble(tfPrice.getText());
+		}
+		
+		return valid;
+	}
+	
+	private boolean isServiceInTable() {
+		boolean valid = true;
+		// Check if this service already exists in the table
+		for (int i = 0; i < User.getInstance().services.size(); i++) {
+			if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
+				System.out.println("This service already exists! ");
+				GUI.createDialog("This service already exists!", new String[] { "Ok" }, null);
+				valid = false;
+				break;
+			}
+		}
+		return valid;
+	}
+	
+	private boolean isDouble(String val) {
+		boolean valid = true;
+		// Check if we can format the price
+		try {
+			Double.parseDouble(val);
+		} catch (NumberFormatException e) {
+			GUI.createDialog("Cannot format string to double!", new String[] { "Ok" }, null);
+			valid = false;
+		}
+		return valid;
+	}
 
 	@FXML
 	protected void handleSubmitService(ActionEvent event) throws IOException {
-
 		boolean valid = true;
-
-		// Validate that data was selected/entered (service name, price)
-		if (serviceChoiceBox.getValue() == null || tfPrice.getText().equals("")) {
-			valid = false;
-			GUI.createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
-		} else {
-			// Both have been filled
-
-			// Check if this service already exists in the table
-			for (int i = 0; i < User.getInstance().services.size(); i++) {
-				if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
-					System.out.println("This service already exists! ");
-					GUI.createDialog("This service already exists!", new String[] { "Ok" }, null);
-					return;
-				}
-			}
-
-			// Check if we can format the price
-			try {
-				double price = Double.parseDouble(tfPrice.getText());
-			} catch (NumberFormatException e) {
-				GUI.createDialog("Incorrect price entered!", new String[] { "Ok" }, null);
-				return;
-			}
-		}
-
-		if (valid) {
-
+		if (validService()) {
 			String service = serviceChoiceBox.getValue();
 			String price = tfPrice.getText();
-
 			// Change it on the database via script, get the ID value back then
 			// update the GUI!
 			String lastID = insertService(service, price);
-
-			if (!lastID.equals("-1")) {
-				String[] args = new String[3];
-				args[0] = lastID; // ID value would be an increment from the
-									// last id (on mysql database)
-				args[1] = service;
-				args[2] = price;
-				// Validate that we can enter this into the table
-				User.getInstance().services.add(new Service(args));
-
-				updateGUI();
-			} else {
-				System.out.println("Couldn't service insert into database");
-			}
+			valid = validLastID(new String[] {lastID, service, price});
 		}
-
 		System.out.println("Can we enter in this table? " + valid);
+	}
+	
+	// String lastID, String service, String price
+	private boolean validLastID(String[] rgStr) {
+		boolean valid = false;
+		if (!rgStr[0].equals("-1")) {
+			String[] args = new String[3];
+			
+			// ID value would be an increment from the last id (on MYSQL database)
+			args[0] = rgStr[0];
+			args[1] = rgStr[1];
+			args[2] = rgStr[2];
+			// Validate that we can enter this into the table
+			User.getInstance().services.add(new Service(args));
+
+			updateGUI();
+			
+			valid = true;
+		} else {
+			System.out.println("Couldn't service insert into database");
+		}
+		return valid;
 	}
 
 	/**
