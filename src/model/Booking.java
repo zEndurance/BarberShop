@@ -77,17 +77,12 @@ public class Booking extends ConnectionController {
 		if(!found){
 			// Open a URL connection and retrieve the data instead
 			String data = Connection.URL_GET_CUSTOMER + "?id=" + bookingData[4];
-			
-			System.out.println("Trying to find customer--->" + data);
-			
 			try {
 				response = connectToPage(data);
-				found = parseJSONBooking(response);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			found = parseJSONBooking(response);
 		}
 		
 		if(!found){
