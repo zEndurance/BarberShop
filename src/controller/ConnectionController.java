@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-abstract class ConnectionController {
+public class ConnectionController {
 	// Used to open connections to PHP pages
 	protected HttpURLConnection connection;
 	protected URL url;
@@ -45,25 +46,33 @@ abstract class ConnectionController {
 	}
 	
 	protected StringBuffer connectToPagePost(String data, StringBuffer paramsBuilder) throws IOException {
-		url = new URL(data);
-		phpConnection = url.openConnection();
-		connection = (HttpURLConnection) phpConnection;
-		connection.setRequestMethod("POST");
-		connection.setDoOutput(true);
 		
-		PrintWriter requestWriter = new PrintWriter(connection.getOutputStream(), true);
-		requestWriter.print(paramsBuilder.toString());
-		requestWriter.close();
-
-		
-		BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
-		String receivedLine;
 		StringBuffer responseAppender = new StringBuffer();
-		while ((receivedLine = responseReader.readLine()) != null) {
-			responseAppender.append(receivedLine);
-			responseAppender.append("\n");
+		
+		try {
+			url = new URL(data);
+			phpConnection = url.openConnection();
+			connection = (HttpURLConnection) phpConnection;
+			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
+			
+			PrintWriter requestWriter = new PrintWriter(connection.getOutputStream(), true);
+			requestWriter.print(paramsBuilder.toString());
+			requestWriter.close();
+	
+			
+			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
+			String receivedLine;
+			while ((receivedLine = responseReader.readLine()) != null) {
+				responseAppender.append(receivedLine);
+				responseAppender.append("\n");
+			}
+			responseReader.close();
+		}catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		responseReader.close();
 		
 		return responseAppender;
 	}

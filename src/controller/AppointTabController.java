@@ -329,18 +329,7 @@ public class AppointTabController extends ConnectionController implements Initia
 
 	private void loadTableColumns() {
 		try {
-			URL url = new URL(Connection.URL_BUSINESS_HOURS);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			
+			response = connectToPage(Connection.URL_BUSINESS_HOURS);
 			// Parse our Column names
 			parseBusinessHoursColumnNames(response);
 			

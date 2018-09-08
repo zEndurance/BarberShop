@@ -228,83 +228,79 @@ public class AccountTabController extends ConnectionController implements Initia
 		System.out.println("// End of Update Account");
 	}
 
-	private void updateProfile(String[] rgVals) {
+	private boolean updateProfile(String[] rgVals) throws IOException {
+		// Assume we can't successfully update the page
 		boolean updated = false;
+		
+		// Get the URL of the page we want to POST data to
 		String data = Connection.URL_UPDATE_PROFILE;
 
+		// Build up the parameters
+		StringBuffer params = buildProfileParameters(rgVals);
+		
+		// Try to connect to the page with parameters
+		response = connectToPagePost(data, params);
+		
+		// Check if we can update by parsing
+		updated = parseJSONUpdateProfile(response, rgVals);
+		
+		// Returns true if successfully updated
+		return updated;
+	}
+	
+	/**
+	 * Build a StringBuffer containing the parameters to send to a POST script
+	 * @param rgVals
+	 * @return
+	 */
+	private StringBuffer buildProfileParameters(String[] rgVals) {
+		StringBuffer p = new StringBuffer();
+		p.append("id=" + User.getInstance().id);
+		p.append("&fName=" + rgVals[0]);
+		p.append("&mName=" + rgVals[1]);
+		p.append("&lName=" + rgVals[2]);
+		p.append("&age=" + rgVals[3]);
+		p.append("&tel=" + rgVals[4]);
+		p.append("&mob=" + rgVals[5]);
+		p.append("&eName=" + rgVals[6]);
+		p.append("&eTel=" + rgVals[7]);
+		return p;
+	}
+	
+	private boolean parseJSONUpdateProfile(StringBuffer response, String[] rgVals) {
+		
+		boolean updated = false;
+		
+		// Read it in JSON
 		try {
-			URL calledUrl = new URL(data);
-			URLConnection phpConnection = calledUrl.openConnection();
+			makeJSON(response);
+			
+			
+			if (query_response.equals("SUCCESSFUL_UPDATE_PROFILE")) {
+				System.out.println("We can successfully delete this from the table!!!");
+				updated = true;
 
-			HttpURLConnection httpBasedConnection = (HttpURLConnection) phpConnection;
-			httpBasedConnection.setRequestMethod("POST");
-			httpBasedConnection.setDoOutput(true);
-			StringBuffer paramsBuilder = new StringBuffer();
-			paramsBuilder.append("id=" + User.getInstance().id);
-			paramsBuilder.append("&fName=" + rgVals[0]);
-			paramsBuilder.append("&mName=" + rgVals[1]);
-			paramsBuilder.append("&lName=" + rgVals[2]);
-			paramsBuilder.append("&age=" + rgVals[3]);
-			paramsBuilder.append("&tel=" + rgVals[4]);
-			paramsBuilder.append("&mob=" + rgVals[5]);
-			paramsBuilder.append("&eName=" + rgVals[6]);
-			paramsBuilder.append("&eTel=" + rgVals[7]);
+				User usr = User.getInstance();
 
-			PrintWriter requestWriter = new PrintWriter(httpBasedConnection.getOutputStream(), true);
-			requestWriter.print(paramsBuilder.toString());
-			requestWriter.close();
+				// Update the current user
+				usr.first_name = rgVals[0];
+				usr.middle_name = rgVals[1];
+				usr.last_name = rgVals[2];
+				usr.age = rgVals[3];
+				usr.home_telephone = rgVals[4];
+				usr.mobile = rgVals[5];
+				usr.emergency_name = rgVals[6];
+				usr.emergency_number = rgVals[7];
 
-			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
-
-			String receivedLine;
-			StringBuffer responseAppender = new StringBuffer();
-
-			while ((receivedLine = responseReader.readLine()) != null) {
-				responseAppender.append(receivedLine);
-				responseAppender.append("\n");
+				GUI.createDialog("Profile updated", new String[] { "Ok" }, null);
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
 			}
-			responseReader.close();
-			String result = responseAppender.toString();
-			System.out.println(result);
-
-			// Read it in JSON
-			try {
-				JSONObject json = new JSONObject(result);
-				System.out.println(json.getString("query_result"));
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_UPDATE_PROFILE")) {
-					updated = false;
-				} else if (query_response.equals("SUCCESSFUL_UPDATE_PROFILE")) {
-					System.out.println("We can successfully delete this from the table!!!");
-					updated = true;
-
-					User usr = User.getInstance();
-
-					// Update the current user
-					usr.first_name = rgVals[0];
-					usr.middle_name = rgVals[1];
-					usr.last_name = rgVals[2];
-					usr.age = rgVals[3];
-					usr.home_telephone = rgVals[4];
-					usr.mobile = rgVals[5];
-					usr.emergency_name = rgVals[6];
-					usr.emergency_number = rgVals[7];
-
-					GUI.createDialog("Profile updated", new String[] { "Ok" }, null);
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println("Updated?: " + updated);
+		
+		return updated;
 	}
 
 	private boolean validProfile(String[] rgVals) {
