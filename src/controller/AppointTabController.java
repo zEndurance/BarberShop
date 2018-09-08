@@ -185,7 +185,7 @@ public class AppointTabController extends ConnectionController implements Initia
 				// Create BookingCell and place it into ObservableData
 				String time = columns.get(z);
 				
-				// TODO - refactor this
+				// re factor this
 				Booking b = booked(time, date);
 				String text = "Open";
 				if(b != null) text = "Booked";
@@ -211,7 +211,7 @@ public class AppointTabController extends ConnectionController implements Initia
 	// Checks whether or not there is a booking on this date
 	private Booking booked(String time, String date) {
 		
-		// TODO - quick hack, not neat!
+		// quick hack, not neat!
 		// Converts 09:00:00 to 09:00 the b.getStartTime() format
 		time = time.substring(0, time.length()-3);
 		
@@ -233,7 +233,7 @@ public class AppointTabController extends ConnectionController implements Initia
 		for(int i=0; i<columns.size(); i++){
 			final int finalIdx = i;
 			
-			// TODO - refactor substring here
+			// re factor substring here
 			String name = columns.get(i);
 			if(name.length()>3){
 				name = name.substring(0, name.length()-3);
@@ -283,7 +283,6 @@ public class AppointTabController extends ConnectionController implements Initia
 					}
 
 					private void colourCells(BookingCell item) {
-						// TODO Auto-generated method stub
 						// Setting the colours based of the csv file
 						for (int i = 0; i < tableNames.size(); i++) {
 							if (item.getText().equals(tableNames.get(i))) {
