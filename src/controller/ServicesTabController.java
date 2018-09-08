@@ -252,35 +252,37 @@ public class ServicesTabController extends ConnectionController implements Initi
 
 	@FXML
 	protected void handleSubmitService(ActionEvent event) throws IOException {
-
 		boolean valid = true;
-
-	
 		if (validService()) {
-
 			String service = serviceChoiceBox.getValue();
 			String price = tfPrice.getText();
-
 			// Change it on the database via script, get the ID value back then
 			// update the GUI!
 			String lastID = insertService(service, price);
-
-			if (!lastID.equals("-1")) {
-				String[] args = new String[3];
-				args[0] = lastID; // ID value would be an increment from the
-									// last id (on mysql database)
-				args[1] = service;
-				args[2] = price;
-				// Validate that we can enter this into the table
-				User.getInstance().services.add(new Service(args));
-
-				updateGUI();
-			} else {
-				System.out.println("Couldn't service insert into database");
-			}
+			valid = validLastID(lastID, service, price);
 		}
-
 		System.out.println("Can we enter in this table? " + valid);
+	}
+	
+	private boolean validLastID(String lastID, String service, String price) {
+		boolean valid = false;
+		if (!lastID.equals("-1")) {
+			String[] args = new String[3];
+			
+			// ID value would be an increment from the last id (on MYSQL database)
+			args[0] = lastID;
+			args[1] = service;
+			args[2] = price;
+			// Validate that we can enter this into the table
+			User.getInstance().services.add(new Service(args));
+
+			updateGUI();
+			
+			valid = true;
+		} else {
+			System.out.println("Couldn't service insert into database");
+		}
+		return valid;
 	}
 
 	/**
