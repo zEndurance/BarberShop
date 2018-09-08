@@ -1,15 +1,11 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/zEndurance/BarberShop?branch=master)](https://bettercodehub.com/)
 
 # Barber Program
-An entire system for a basic barber shop.
 
-A client program that is written in Java using JavaFX, which will allow employees to see
-incoming bookings.
+A desktop client, written for employees of a barber shop. 
 
-Using a MySQL database to store booking data
+- ### Technologies
+	- [ ] Front-End: Java/FX, HTML5, JavaScript, XML
+	- [ ] Back-End: PHP/MySQL
 
-A website for customers to view and book/pay for a haircut
-
-
-Technologies used:
-Java, php, MySQL, XML, javascript
+Requirements:
