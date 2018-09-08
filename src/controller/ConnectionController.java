@@ -3,18 +3,23 @@ package controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ConnectionController {
+abstract class ConnectionController {
 	// Used to open connections to PHP pages
 	protected HttpURLConnection connection;
 	protected URL url;
 	// The string that the PHP pages response with
 	protected StringBuffer response;
+	
+	// Post Connection details
+	protected URLConnection phpConnection;
 	
 	// JSON parsing variables
 	protected JSONObject json;
@@ -37,6 +42,30 @@ public class ConnectionController {
 		in.close();
 		
 		return response;
+	}
+	
+	protected StringBuffer connectToPagePost(String data, StringBuffer paramsBuilder) throws IOException {
+		url = new URL(data);
+		phpConnection = url.openConnection();
+		connection = (HttpURLConnection) phpConnection;
+		connection.setRequestMethod("POST");
+		connection.setDoOutput(true);
+		
+		PrintWriter requestWriter = new PrintWriter(connection.getOutputStream(), true);
+		requestWriter.print(paramsBuilder.toString());
+		requestWriter.close();
+
+		
+		BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
+		String receivedLine;
+		StringBuffer responseAppender = new StringBuffer();
+		while ((receivedLine = responseReader.readLine()) != null) {
+			responseAppender.append(receivedLine);
+			responseAppender.append("\n");
+		}
+		responseReader.close();
+		
+		return responseAppender;
 	}
 	
 	protected void makeJSON(StringBuffer response) throws JSONException {
