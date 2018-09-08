@@ -62,8 +62,6 @@ public class AppointTabController extends ConnectionController implements Initia
 	private final String BOOKING_COLOURS = "src/colours.csv";
 
 	// Table data
-	private String headers[] = null;
-	private String items[] = null;
 	private List<String> columns = new ArrayList<String>();
 	private List<String> rows = new ArrayList<String>();
 	private List<List<BookingCell>> rowsData = new ArrayList<List<BookingCell>>(7); 
@@ -78,7 +76,7 @@ public class AppointTabController extends ConnectionController implements Initia
 	private ArrayList<Booking> currentBookings = new ArrayList<Booking>();
 	
 	
-	// Whenver we click on a date on the datepicker we store the days of the week in date form here
+	// Whenever we click on a date on the date picker we store the days of the week in date form here
 	private ArrayList<String> currentDates = new ArrayList<String>();
 	
 	private String getDay(int day) {
@@ -133,9 +131,9 @@ public class AppointTabController extends ConnectionController implements Initia
 				String l;
 				while ((l = in.readLine()) != null) {
 					// Break up the csv (should be two values e.g:
-					// Booking,lightgreen
+					// Booking, light green
 					// brokenLine[0] = Booking
-					// brokenLine[1] = lightgreen
+					// brokenLine[1] = light green
 					String[] brokenLine = l.split(",");
 
 					// Save to the String ArrayLists to use when colouring cells
@@ -148,33 +146,18 @@ public class AppointTabController extends ConnectionController implements Initia
 		}
 	}
 	
-	
-
+	/**
+	 * We know there is going to be 7 rows (Monday-Sunday)
+	 * We already know how many columns there are (columns array)
+	 * Now we need to create the cell data so that it matches the Dates and Time to each cell
+	 * If X is number of time intervals then total cell data must be 7x + 7(days)
+	 */
 	private void loadTableRows() {
-		
-		// We know there is going to be 7 rows (Monday-Sunday)
-		// We already know how many columns there are (columns array)
-		
-		// Now we need to create the cell data so that it matches the Dates and Time to each cell
-		
-		// If X is number of time intervals then total cell data must be 7x + 7(days)
-		
 		rowsData.clear();
-		
 		// 7 rows
 		for(int i=0; i<7; i++){
-			
-			
-			System.out.println("Loading days");
 			String day = getDay(i);
-			
-			System.out.println("Loading dates");
 			String date = getDate(i);
-			
-			
-			
-			
-			System.out.println("Populating week data");
 			List<BookingCell> weekData = new ArrayList<BookingCell>();
 
 			// First value in row is going to be Day

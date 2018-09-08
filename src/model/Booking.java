@@ -1,56 +1,59 @@
 package model;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import controller.ConnectionController;
 
 public class Booking extends ConnectionController {
 	
-	public static ArrayList<Profile> rgCustomers = new ArrayList<Profile>();
-	
-	private int id;
 
+	private int id;
 	// Format 4/20/2018
 	private Date date;
-	
 	// Format HH:mm:ss
 	private Date startTime;
 	private Date endTime;
-	
-	// unused in local memory
+	// reserved for future
 	private int shop_id;
 	private int user_id;
-	
 	// Connection to a persons booking
 	private Profile profile;
 	private Service service;
+	// Formating the date and time of bookings
+	private DateFormat formatterDate = new SimpleDateFormat("dd/mm/yy");
+	private DateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
+	// ArrayList which holds various Profile objects of customers
+	public static ArrayList<Profile> rgCustomers = new ArrayList<Profile>();
 	
-	public Booking(String[] bookingData){
+	// String id, String date, String startTime, String endTime, String person_id, String service_id
+	public Booking(String[] rgData){
+		// Load ID
+		loadID(rgData);
+		// Try loading times
+		loadTimes(rgData);
 		
-		// String id, String date, String startTime, String endTime, String person_id, String service_id
-		
-		
-		// Convert everything in here
-		this.id = Integer.parseInt(bookingData[0]);
-		
-		DateFormat formatterDate = new SimpleDateFormat("dd/mm/yy");
-		DateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
-		
+		// Used to check if this booking is able to find certain values
+		boolean found = false;
+		// Try loading the profile associated to this booking
+		found = loadProfileToBooking(rgData, found);
+		// Load the customer JSON data
+		found = loadCustomer(rgData, found);
+		// Reset found
+		found = false;
+		// Try to load the services this booking is linked to
+		found = loadService(rgData, found);
+	}
+	
+	
+	private void loadTimes(String[] bookingData) {
 		try {
 			this.date = formatterDate.parse(bookingData[1]);
 			this.startTime = formatterTime.parse(bookingData[2]);
@@ -58,36 +61,38 @@ public class Booking extends ConnectionController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		
-		boolean found = false;
+	}
+	
+	private void loadID(String[] rgData) {
+		// Load ID of booking
+		this.id = Integer.parseInt(rgData[0]);
+	}
+	
+	private boolean loadProfileToBooking(String[] rgData, boolean found) {
 		// Try to find this persons ID 
 		for(int i=0; i<rgCustomers.size(); i++){
 			
-			if(bookingData[4].equals(rgCustomers.get(i).getID())){
+			if(rgData[4].equals(rgCustomers.get(i).getID())){
 				
-				System.out.println("FOUND A CUSTOMER MATCH!!!" + bookingData[4] + " @ " + rgCustomers.get(i).getID());
+				System.out.println("Found Customer: " + rgData[4] + " @ " + rgCustomers.get(i).getID());
 				this.profile = rgCustomers.get(i);
 				found = true;
 				break;
 			}
 		}
-		
-		
+		return found;
+	}
+	
+	private boolean loadCustomer(String[] rgData, boolean found) {
 		if(!found){
 			// Open a URL connection and retrieve the data instead
-			String data = Connection.URL_GET_CUSTOMER + "?id=" + bookingData[4];
-			
-			System.out.println("Trying to find customer--->" + data);
-			
+			String data = Connection.URL_GET_CUSTOMER + "?id=" + rgData[4];
 			try {
 				response = connectToPage(data);
-				found = parseJSONBooking(response);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			found = parseJSONBooking(response);
 		}
 		
 		if(!found){
@@ -98,10 +103,13 @@ public class Booking extends ConnectionController {
 			}
 		}
 		
-		found = false;
+		return found;
+	}
+
+	private boolean loadService(String[] rgData, boolean found) {
 		// Link a service
 		for(int i=0; i<User.getInstance().services.size(); i++){
-			if(User.getInstance().services.get(i).getId() == Integer.parseInt(bookingData[5])){
+			if(User.getInstance().services.get(i).getId() == Integer.parseInt(rgData[5])){
 				this.service = User.getInstance().services.get(i);
 				found = true;
 				break;
@@ -109,12 +117,9 @@ public class Booking extends ConnectionController {
 		}
 		
 		if(!found){
-			try {
-				throw new Exception("Unable to find service!");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			System.out.println("No service was found for: " + rgData[5]);
 		}
+		return found;
 	}
 	
 	private boolean parseJSONBooking(StringBuffer response) {
@@ -125,7 +130,6 @@ public class Booking extends ConnectionController {
 			if (query_response.equals("SUCCESSFUL_CUSTOMER")) {
 
 				// Read up the JSON values
-				List<String> list = new ArrayList<String>();
 				JSONArray array = json.getJSONArray("customer");
 				
 				String[] values = new String[7];
