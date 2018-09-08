@@ -46,7 +46,6 @@ public class LoginController implements Initializable {
 	@FXML
 	TextField userField;
 	
-	
 	// Used to open connections to PHP pages
 	private HttpURLConnection connection;
 	private URL url;
@@ -64,83 +63,21 @@ public class LoginController implements Initializable {
 
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event) throws IOException {
-
-		System.out.println("trying to connect to a php script...");
-
+		
+		// Get the email & password we entered
 		String email = userField.getText().toString();
 		String password = passwordField.getText().toString();
-
-		System.out.println("We entered the values to send: " + email + ":" + password);
-
+		
+		// Page we want to send email & password to
 		String data = Connection.URL_LOGIN + "?email=" + email + "&password=" + password;
 
-		// send these values to the php script
-		System.out.println("Connection: " + data);
-
+		debugConnection(data);
+		
 		try {
-			URL url = new URL(data);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_result"));
-
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_LOGIN")) {
-					// Give a response to the user that its incorrect
-					System.out.println("Incorrect email or password entered!");
-					actiontarget.setText("Wrong email or password!");
-				} else if (query_response.equals("SUCCESSFUL_LOGIN")) {
-					// We can go to the main program controller
-					System.out.println("Successfull email and password entered!");
-					
-					// Read up the JSON values
-					JSONObject obj = json.getJSONObject("0");
-
-					//String id = obj.getString("id");
-					User.getInstance().id = obj.getString("id");
-					User.getInstance().created = obj.getString("created");
-					User.getInstance().type = obj.getString("type");
-					User.getInstance().email = email;
-					User.getInstance().password = password;
-					
-					// Get profile data too
-					loadProfileData();
-					
-					
-					
-					// Get all services available from the boss
-					loadAllServicesData();
-					
-					// Get his service data
-					loadServicesData();
-					
-					// Get his booking data also
-					loadBookingData();
-
-					// Go to next stage
-					login(event);
-					
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-					actiontarget.setText("Enter in both fields!");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			response = connectToPage(data);
+			// Go to next view if correct login JSON details can be parsed from response page
+			if(parseJSONLoginData(response, email, password)) {
+				login(event);
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -149,6 +86,59 @@ public class LoginController implements Initializable {
 		}
 	}
 	
+	private boolean parseJSONLoginData(StringBuffer response, String email, String password) {
+		
+		boolean valid = false;
+		
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_result"));
+
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("FAILED_LOGIN")) {
+				// Give a response to the user that its incorrect
+				System.out.println("Incorrect email or password entered!");
+				actiontarget.setText("Wrong email or password!");
+			} else if (query_response.equals("SUCCESSFUL_LOGIN")) {
+				// We can go to the main program controller
+				System.out.println("Successfull email and password entered!");
+				
+				// Read up the JSON values
+				JSONObject obj = json.getJSONObject("0");
+
+				//String id = obj.getString("id");
+				User.getInstance().id = obj.getString("id");
+				User.getInstance().created = obj.getString("created");
+				User.getInstance().type = obj.getString("type");
+				User.getInstance().email = email;
+				User.getInstance().password = password;
+				
+				// Get profile data too
+				loadProfileData();
+				
+				// Get all services available from the boss
+				loadAllServicesData();
+				
+				// Get his service data
+				loadServicesData();
+				
+				// Get his booking data also
+				loadBookingData();
+				
+				valid = true;
+
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+				actiontarget.setText("Enter in both fields!");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return valid;
+	}
 	
 	private StringBuffer connectToPage(String data) throws IOException {
 		url = new URL(data);
@@ -320,7 +310,7 @@ public class LoginController implements Initializable {
 		}
 	}
 	
-	private void parseJSONServicesData(StringBuffer data) {
+	private void parseJSONServicesData(StringBuffer response) {
 		// Try reading it in JSON format
 		try {
 			JSONObject json = new JSONObject(response.toString());
@@ -363,69 +353,56 @@ public class LoginController implements Initializable {
 		}
 	}
 	
-	
-
 	private void loadAllServicesData(){
 		String data = Connection.URL_GET_ALL_SERVICES;
 		
-		// send these values to the php script
-		System.out.println("Connecting to page ----------> " + data);
-
+		debugConnection(data);
+		
 		try {
-			URL url = new URL(data);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-			// Read the JSON output here
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			// Try reading it in JSON format
-			try {
-				JSONObject json = new JSONObject(response.toString());
-				System.out.println(json.getString("query_result"));
-
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_SERVICE")) {
-					// Give a response to the user that its incorrect
-					System.out.println("Incorrect email or password entered!");
-				} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
-
-					// Read up the JSON values
-					List<String> list = new ArrayList<String>();
-					
-					// Get the amount of objects
-					int len = json.getInt("amount");
-					
-					// Flush Users current service data
-					User.getInstance().allServicesNames.clear();
-					
-					// Loop through each array element
-					for(int i=0; i<len; i++){
-						JSONObject obj = json.getJSONObject(Integer.toString(i));
-						// Add this to the Users services array
-						User.getInstance().allServicesNames.add(obj.getString("name"));
-						
-						// Save this to an object also
-						
-					}
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			response = connectToPage(data);
+			parseJSONAllServicesData(response);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void parseJSONAllServicesData(StringBuffer response) {
+		// Try reading it in JSON format
+		try {
+			JSONObject json = new JSONObject(response.toString());
+			System.out.println(json.getString("query_result"));
+
+			String query_response = json.getString("query_result");
+
+			if (query_response.equals("FAILED_SERVICE")) {
+				// Give a response to the user that its incorrect
+				System.out.println("Incorrect email or password entered!");
+			} else if (query_response.equals("SUCCESSFUL_SERVICE")) {
+
+				// Read up the JSON values
+				List<String> list = new ArrayList<String>();
+				
+				// Get the amount of objects
+				int len = json.getInt("amount");
+				
+				// Flush Users current service data
+				User.getInstance().allServicesNames.clear();
+				
+				// Loop through each array element
+				for(int i=0; i<len; i++){
+					JSONObject obj = json.getJSONObject(Integer.toString(i));
+					// Add this to the Users services array
+					User.getInstance().allServicesNames.add(obj.getString("name"));
+					
+					// Save this to an object also
+					
+				}
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
