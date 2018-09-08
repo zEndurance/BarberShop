@@ -259,20 +259,21 @@ public class ServicesTabController extends ConnectionController implements Initi
 			// Change it on the database via script, get the ID value back then
 			// update the GUI!
 			String lastID = insertService(service, price);
-			valid = validLastID(lastID, service, price);
+			valid = validLastID(new String[] {lastID, service, price});
 		}
 		System.out.println("Can we enter in this table? " + valid);
 	}
 	
-	private boolean validLastID(String lastID, String service, String price) {
+	// String lastID, String service, String price
+	private boolean validLastID(String[] rgStr) {
 		boolean valid = false;
-		if (!lastID.equals("-1")) {
+		if (!rgStr[0].equals("-1")) {
 			String[] args = new String[3];
 			
 			// ID value would be an increment from the last id (on MYSQL database)
-			args[0] = lastID;
-			args[1] = service;
-			args[2] = price;
+			args[0] = rgStr[0];
+			args[1] = rgStr[1];
+			args[2] = rgStr[2];
 			// Validate that we can enter this into the table
 			User.getInstance().services.add(new Service(args));
 
