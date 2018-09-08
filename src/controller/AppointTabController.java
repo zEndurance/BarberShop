@@ -230,6 +230,18 @@ public class AppointTabController extends ConnectionController implements Initia
 
 	private void createTable() {
 		
+		buildTableColumns();
+		buildTableRows();
+		
+		
+		appointTable.setItems(csvData);
+		
+		System.out.println("CSV SIZE: " + csvData.size());
+		System.out.println("ROW SIZE: " + csvData.get(6).size());
+		System.out.println(appointTable.getItems().size());
+	}
+	
+	private void buildTableColumns() {
 		for(int i=0; i<columns.size(); i++){
 			final int finalIdx = i;
 			
@@ -240,62 +252,71 @@ public class AppointTabController extends ConnectionController implements Initia
 			}
 			
 			TableColumn<ObservableList<BookingCell>, BookingCell> column = new TableColumn<>(name);
+			// Set the text of the cells
+			setupColumnNames(column, finalIdx);
+			setupColumnDesign(column);
 			
-			// Set the text of the cell
-			column.setCellValueFactory(
-					param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+			// Add the columns to the table
+			appointTable.getColumns().add(column);
+		}
+	}
+	
+	private void setupColumnNames(TableColumn<ObservableList<BookingCell>, BookingCell> column, int finalIdx) {
+		column.setCellValueFactory(
+				param -> new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx)));
+	}
+	
+	private void setupColumnDesign(TableColumn<ObservableList<BookingCell>, BookingCell> column) {
+		// Set the colour of the cell
+		column.setCellFactory(param -> {
+			return new TableCell<ObservableList<BookingCell>, BookingCell>() {
+				protected void updateItem(BookingCell item, boolean empty) {
+					super.updateItem(item, empty);
 
-			// Set the colour of the cell
-			column.setCellFactory(param -> {
-				return new TableCell<ObservableList<BookingCell>, BookingCell>() {
-					protected void updateItem(BookingCell item, boolean empty) {
-						super.updateItem(item, empty);
+					setText(empty ? "" : getItem().getText());
+					setGraphic(null);
 
-						setText(empty ? "" : getItem().getText());
-						setGraphic(null);
-
-						if (item == null || empty) {
-							System.out.println("ITEM IS EMPTY!" + item + " ? " + empty);
-							setStyle("");
-						} else {
-							// If the date has expired, we choose a different colour!
-							try {
-								// Check that this is not a Day column
-								if(item.getUseable()){
-									if (new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse(item.getDate() + " " + item.getTime()).before(new Date())) {
-										
-										
-										if(item.getText().equals("Open")){
-											setStyle("-fx-background-color:grey");
-											setText("-");
-										}else{
-											colourCells(item);
-										}
-										
+					if (item == null || empty) {
+						System.out.println("ITEM IS EMPTY!" + item + " ? " + empty);
+						setStyle("");
+					} else {
+						// If the date has expired, we choose a different colour!
+						try {
+							// Check that this is not a Day column
+							if(item.getUseable()){
+								if (new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse(item.getDate() + " " + item.getTime()).before(new Date())) {
+									
+									
+									if(item.getText().equals("Open")){
+										setStyle("-fx-background-color:grey");
+										setText("-");
 									}else{
 										colourCells(item);
 									}
+									
+								}else{
+									colourCells(item);
 								}
-							} catch (ParseException e) {
-								e.printStackTrace();
 							}
+						} catch (ParseException e) {
+							e.printStackTrace();
 						}
 					}
+				}
 
-					private void colourCells(BookingCell item) {
-						// Setting the colours based of the csv file
-						for (int i = 0; i < tableNames.size(); i++) {
-							if (item.getText().equals(tableNames.get(i))) {
-								setStyle("-fx-background-color:" + tableColours.get(i));
-							}
+				private void colourCells(BookingCell item) {
+					// Setting the colours based of the csv file
+					for (int i = 0; i < tableNames.size(); i++) {
+						if (item.getText().equals(tableNames.get(i))) {
+							setStyle("-fx-background-color:" + tableColours.get(i));
 						}
 					}
-				};
-			});
-			appointTable.getColumns().add(column);
-		}
-		
-
+				}
+			};
+		});
+	}
+	
+	private void buildTableRows() {
 		for(int i=0; i<rowsData.size(); i++){
 			
 			ObservableList<BookingCell> row = FXCollections.observableArrayList();
@@ -312,16 +333,6 @@ public class AppointTabController extends ConnectionController implements Initia
 			
 			csvData.add(row);
 		}
-		
-		
-		System.out.println("CSV SIZE: " + csvData.size());
-		System.out.println("ROW SIZE: " + csvData.get(6).size());
-		
-		
-		appointTable.setItems(csvData);
-		
-		
-		System.out.println(appointTable.getItems().size());
 	}
 
 	private void loadTableColumns() {
