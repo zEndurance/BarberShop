@@ -80,7 +80,7 @@ public class InfoMiniTabController extends ConnectionController implements Initi
 		labelService.setText("Service: " + data.getBooking().getService().getService());
 		
 		// Format this double
-		NumberFormat currency=NumberFormat.getCurrencyInstance();
+		NumberFormat currency = NumberFormat.getCurrencyInstance();
 		labelPrice.setText("Price: " + data.getBooking().getPrice());
 		
 		

@@ -96,7 +96,6 @@ public class LoginController extends ConnectionController implements Initializab
 				// Read up the JSON values
 				JSONObject obj = json.getJSONObject("0");
 
-				// String id = obj.getString("id");
 				User.getInstance().id = obj.getString("id");
 				User.getInstance().created = obj.getString("created");
 				User.getInstance().type = obj.getString("type");
@@ -226,7 +225,6 @@ public class LoginController extends ConnectionController implements Initializab
 				// Read up the JSON values
 				JSONObject obj = json.getJSONObject("0");
 
-				// String id = obj.getString("id");
 				User.getInstance().first_name = obj.getString("first_name");
 				User.getInstance().middle_name = obj.getString("middle_name");
 				User.getInstance().last_name = obj.getString("last_name");
