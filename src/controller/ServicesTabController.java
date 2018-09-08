@@ -155,57 +155,20 @@ public class ServicesTabController extends ConnectionController implements Initi
 	 * 
 	 * @param id
 	 *            the id of the service we want to delete
-	 * @return true if a successful delete occured
+	 * @return true if a successful delete occurred
 	 */
 	private boolean deleteService(int id) {
-
 		boolean deleted = false;
 		String data = Connection.URL_DELETE_SERVICE;
 
 		try {
-			URL calledUrl = new URL(data);
-			URLConnection phpConnection = calledUrl.openConnection();
-
-			HttpURLConnection httpBasedConnection = (HttpURLConnection) phpConnection;
-			httpBasedConnection.setRequestMethod("POST");
-			httpBasedConnection.setDoOutput(true);
+			// Build parameters
 			StringBuffer paramsBuilder = new StringBuffer();
 			paramsBuilder.append("id=" + id);
 
-			PrintWriter requestWriter = new PrintWriter(httpBasedConnection.getOutputStream(), true);
-			requestWriter.print(paramsBuilder.toString());
-			requestWriter.close();
-
-			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
-
-			String receivedLine;
-			StringBuffer responseAppender = new StringBuffer();
-
-			while ((receivedLine = responseReader.readLine()) != null) {
-				responseAppender.append(receivedLine);
-				responseAppender.append("\n");
-			}
-			responseReader.close();
-			String result = responseAppender.toString();
-			System.out.println(result);
-
-			// Read it in JSON
-			try {
-				JSONObject json = new JSONObject(result);
-				System.out.println(json.getString("query_result"));
-				String query_response = json.getString("query_result");
-
-				if (query_response.equals("FAILED_DELETE_SERVICE")) {
-					deleted = false;
-				} else if (query_response.equals("SUCCESSFUL_DELETE_SERVICE")) {
-					System.out.println("We can successfully delete this from the table!!!");
-					deleted = true;
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			// Post them to web page
+			response = connectToPagePost(data, paramsBuilder);
+			deleted = parseJSONDeleteService();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -213,6 +176,24 @@ public class ServicesTabController extends ConnectionController implements Initi
 		}
 
 		return deleted;
+	}
+	
+	private boolean parseJSONDeleteService() {
+		// Read it in JSON
+		try {
+			makeJSON(response);
+
+			if (query_response.equals("SUCCESSFUL_DELETE_SERVICE")) {
+				System.out.println("We can successfully delete this from the table!!!");
+				return true;
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 	@FXML

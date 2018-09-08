@@ -31,17 +31,18 @@ import model.Connection;
 import model.GUI;
 import model.User;
 
-public class InfoMiniTabController implements Initializable {
+public class InfoMiniTabController extends ConnectionController implements Initializable {
 	
-	@FXML private Button btnOK;
-	@FXML private TextArea textArea;
-	@FXML private Label labelDate;
-	@FXML private Label labelTime;
-	@FXML private Label labelName;
-	@FXML private Label labelContact;
-	@FXML private Label labelPrice;
-	@FXML private Label labelService;
-	@FXML private ImageView imageView;
+	// FXML - GUI Components
+	@FXML Button btnOK;
+	@FXML TextArea textArea;
+	@FXML Label labelDate;
+	@FXML Label labelTime;
+	@FXML Label labelName;
+	@FXML Label labelContact;
+	@FXML Label labelPrice;
+	@FXML Label labelService;
+	@FXML ImageView imageView;
 	
 	
 	private Booking internalBooking;
@@ -110,54 +111,26 @@ public class InfoMiniTabController implements Initializable {
 		String data = Connection.URL_DELETE_BOOKING;
 
 		try {
-			URL calledUrl = new URL(data);
-			URLConnection phpConnection = calledUrl.openConnection();
-
-			HttpURLConnection httpBasedConnection = (HttpURLConnection) phpConnection;
-			httpBasedConnection.setRequestMethod("POST");
-			httpBasedConnection.setDoOutput(true);
+			// Build the parameters
 			StringBuffer paramsBuilder = new StringBuffer();
 			paramsBuilder.append("id=" + id);
 			paramsBuilder.append("&email=" + User.getInstance().email);
 			paramsBuilder.append("&password=" + User.getInstance().password);
-			
-			
 			System.out.println(paramsBuilder.toString());
 			
-
-			PrintWriter requestWriter = new PrintWriter(httpBasedConnection.getOutputStream(), true);
-			requestWriter.print(paramsBuilder.toString());
-			requestWriter.close();
-
-			BufferedReader responseReader = new BufferedReader(new InputStreamReader(phpConnection.getInputStream()));
-
-			String receivedLine;
-			StringBuffer responseAppender = new StringBuffer();
-
-			while ((receivedLine = responseReader.readLine()) != null) {
-				responseAppender.append(receivedLine);
-				responseAppender.append("\n");
-			}
-			responseReader.close();
-			String result = responseAppender.toString();
-			System.out.println(result);
-
+			// Send parameters to web page
+			response = connectToPagePost(data, paramsBuilder);
+			
 			// Read it in JSON
 			try {
-				JSONObject json = new JSONObject(result);
-				System.out.println(json.getString("query_result"));
-				String query_response = json.getString("query_result");
-
+				makeJSON(response);
 				if (query_response.equals("FAILED_DELETE_BOOKING")) {
 					deleted = false;
 				} else if (query_response.equals("SUCCESSFUL_DELETE_BOOKING")) {
-					
+					// TODO - Delete booking parse
 					System.out.println("We can successfully delete this from the table!!!");
 					// Check if the date has expired so we change it to a grey
-					
 					// if the date hasn't expired change to green open
-					
-					
 					deleted = true;
 				} else {
 					System.out.println("Not enough arguments were entered.. try filling both fields");
