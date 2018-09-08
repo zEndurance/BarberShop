@@ -1,67 +1,53 @@
 package model;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import controller.ConnectionController;
 
 public class Booking extends ConnectionController {
 	
-	public static ArrayList<Profile> rgCustomers = new ArrayList<Profile>();
-	
-	private int id;
 
+	private int id;
 	// Format 4/20/2018
 	private Date date;
-	
 	// Format HH:mm:ss
 	private Date startTime;
 	private Date endTime;
-	
-	// unused in local memory
+	// reserved for future
 	private int shop_id;
 	private int user_id;
-	
 	// Connection to a persons booking
 	private Profile profile;
 	private Service service;
-	
+	// Formating the date and time of bookings
 	private DateFormat formatterDate = new SimpleDateFormat("dd/mm/yy");
 	private DateFormat formatterTime = new SimpleDateFormat("HH:mm:ss");
-	
+	// ArrayList which holds various Profile objects of customers
+	public static ArrayList<Profile> rgCustomers = new ArrayList<Profile>();
 	
 	// String id, String date, String startTime, String endTime, String person_id, String service_id
 	public Booking(String[] rgData){
-		// Used to check if this booking is able to find certain values
-		boolean found = false;
-		
 		// Load ID
 		loadID(rgData);
 		// Try loading times
 		loadTimes(rgData);
-
+		
+		// Used to check if this booking is able to find certain values
+		boolean found = false;
 		// Try loading the profile associated to this booking
 		found = loadProfileToBooking(rgData, found);
 		// Load the customer JSON data
 		found = loadCustomer(rgData, found);
-
 		// Reset found
 		found = false;
-		
 		// Try to load the services this booking is linked to
 		found = loadService(rgData, found);
 	}
