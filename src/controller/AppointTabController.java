@@ -165,16 +165,16 @@ public class AppointTabController extends ConnectionController implements Initia
 		for(int i=0; i<7; i++){
 			
 			
-			//System.out.println("Loading days");
+			System.out.println("Loading days");
 			String day = getDay(i);
 			
-			//System.out.println("Loading dates");
+			System.out.println("Loading dates");
 			String date = getDate(i);
 			
 			
 			
 			
-			//System.out.println("Populating week data");
+			System.out.println("Populating week data");
 			List<BookingCell> weekData = new ArrayList<BookingCell>();
 
 			// First value in row is going to be Day
@@ -240,8 +240,6 @@ public class AppointTabController extends ConnectionController implements Initia
 			}
 			
 			TableColumn<ObservableList<BookingCell>, BookingCell> column = new TableColumn<>(name);
-			//column.setSortable(false);
-			
 			
 			// Set the text of the cell
 			column.setCellValueFactory(
@@ -257,7 +255,7 @@ public class AppointTabController extends ConnectionController implements Initia
 						setGraphic(null);
 
 						if (item == null || empty) {
-							//System.out.println("ITEM IS EMPTY!!!!!!!!!!!!!!!!!!" + item + " ? " + empty);
+							System.out.println("ITEM IS EMPTY!" + item + " ? " + empty);
 							setStyle("");
 						} else {
 							// If the date has expired, we choose a different colour!
@@ -363,8 +361,8 @@ public class AppointTabController extends ConnectionController implements Initia
 					String interval = animal.getString("Interval");
 					
 					rgBHours[i] = new BusinessDay(day, new String[] {open, close, interval});
-				//	System.out.println("On " + getDay(day) + " the opening hours are " + open
-				//			+ " and closing hours are " + close);
+					System.out.println("On " + getDay(day) + " the opening hours are " + open
+							+ " and closing hours are " + close);
 				}
 
 				// Now calculate the earliest opening hour and the latest
@@ -403,18 +401,18 @@ public class AppointTabController extends ConnectionController implements Initia
 						}
 
 					} else {
-					//	System.out.println("It must be closed today on a " + b.getDay());
+						System.out.println("It must be closed today on a " + b.getDay());
 						closedDays.add(b.getDay());
 					}
 				}
 
-				//System.out.println("Earliest we start the business week is: : " + simpleDateFormat.format(start));
-				//System.out.println("Latest we start the business week is: : " + simpleDateFormat.format(end));
+				System.out.println("Earliest we start the business week is: : " + simpleDateFormat.format(start));
+				System.out.println("Latest we start the business week is: : " + simpleDateFormat.format(end));
 				
-				//System.out.println("Biggest interval found: " + interval);
+				System.out.println("Biggest interval found: " + interval);
 				
 				long cols = ((Math.abs((start.getTime() - end.getTime())) / 1000) / 60) / interval;
-				//System.out.println("We're gunna need this much intervals: " + cols);
+				System.out.println("We're gunna need this much intervals: " + cols);
 				
 				
 				columns.clear();

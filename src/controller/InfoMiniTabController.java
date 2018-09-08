@@ -72,9 +72,7 @@ public class InfoMiniTabController extends ConnectionController implements Initi
 		// Set the current booking
 		internalBooking = data.getBooking();
 		
-		
 		labelName.setText("Client name: " + data.getBooking().getProfile().getName());
-		//textArea.setText("Client notes: " + desc);
 		labelDate.setText("Date: " + data.getBooking().getDate());
 		labelTime.setText("Time: " + data.getBooking().getStartTime());
 		labelContact.setText("Contact Info: " + data.getBooking().getProfile().getMobileNumber());
