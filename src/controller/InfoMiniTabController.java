@@ -103,6 +103,15 @@ public class InfoMiniTabController extends ConnectionController implements Initi
 	    stage.close();
 	}
 	
+	private StringBuffer buildParams(int id) {
+		// Build the parameters
+		StringBuffer paramsBuilder = new StringBuffer();
+		paramsBuilder.append("id=" + id);
+		paramsBuilder.append("&email=" + User.getInstance().email);
+		paramsBuilder.append("&password=" + User.getInstance().password);
+		return paramsBuilder;
+	}
+	
 	private boolean deleteBooking(int id) {
 
 		boolean deleted = false;
@@ -110,38 +119,37 @@ public class InfoMiniTabController extends ConnectionController implements Initi
 
 		try {
 			// Build the parameters
-			StringBuffer paramsBuilder = new StringBuffer();
-			paramsBuilder.append("id=" + id);
-			paramsBuilder.append("&email=" + User.getInstance().email);
-			paramsBuilder.append("&password=" + User.getInstance().password);
-			System.out.println(paramsBuilder.toString());
-			
+			StringBuffer paramsBuilder = buildParams(id);
 			// Send parameters to web page
 			response = connectToPagePost(data, paramsBuilder);
-			
-			// Read it in JSON
-			try {
-				makeJSON(response);
-				if (query_response.equals("FAILED_DELETE_BOOKING")) {
-					deleted = false;
-				} else if (query_response.equals("SUCCESSFUL_DELETE_BOOKING")) {
-					// TODO - Delete booking parse
-					System.out.println("We can successfully delete this from the table!!!");
-					// Check if the date has expired so we change it to a grey
-					// if the date hasn't expired change to green open
-					deleted = true;
-				} else {
-					System.out.println("Not enough arguments were entered.. try filling both fields");
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			deleted = parseJSONDeleteBooking();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		return deleted;
+	}
+	
+	private boolean parseJSONDeleteBooking() {
+		boolean deleted = false;
+		// Read it in JSON
+		try {
+			makeJSON(response);
+			if (query_response.equals("SUCCESSFUL_DELETE_BOOKING")) {
+				// TODO - Delete booking parse
+				System.out.println("We can successfully delete this from the table!!!");
+				// Check if the date has expired so we change it to a grey
+				// if the date hasn't expired change to green open
+				deleted = true;
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 		return deleted;
 	}
 	
