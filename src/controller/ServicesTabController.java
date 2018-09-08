@@ -125,7 +125,7 @@ public class ServicesTabController extends ConnectionController implements Initi
 
 	/**
 	 * Removes a selected service from the table view from the current User
-	 * services arraylist
+	 * services ArrayList
 	 * 
 	 * @param selectedItems
 	 *            the Service to remove
@@ -172,6 +172,7 @@ public class ServicesTabController extends ConnectionController implements Initi
 		return deleted;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private <E> E parseJSON(String value) {
 		
 		E validJSON = null;
@@ -280,8 +281,19 @@ public class ServicesTabController extends ConnectionController implements Initi
 		// Assume we couldn't insert this
 		String retStr = "";
 
-		// Send values to a php script, get the json value back, return the json
-		// value
+		// Build the URL we need to go to
+		String data = buildServiceURL(service, price);
+
+		// Try connecting to the PHP Script
+		response = connectToPage(data);
+		
+		// Try parsing the JSON string
+		retStr = parseJSON("Insert Service");
+
+		return retStr;
+	}
+	
+	private String buildServiceURL(String service, String price) {
 		String data = Connection.URL_INSERT_SERVICE;
 
 		try {
@@ -292,12 +304,8 @@ public class ServicesTabController extends ConnectionController implements Initi
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
-
-		// Try connecting to the php script and passing the values above to it
-		response = connectToPage(data);
-		retStr = parseJSON("Insert Service");
-
-		return retStr;
+		
+		return data;
 	}
 	
 	private String parseJSONInsertService() throws JSONException {
