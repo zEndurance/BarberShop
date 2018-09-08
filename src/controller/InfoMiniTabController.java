@@ -1,21 +1,14 @@
 package controller;
 
-import java.io.BufferedReader;
-/* Import java, javafx */
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.NumberFormat;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
