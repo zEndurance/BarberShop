@@ -17,7 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Booking {
+import controller.ConnectionController;
+
+public class Booking extends ConnectionController {
 	
 	public static ArrayList<Profile> rgCustomers = new ArrayList<Profile>();
 	
@@ -79,60 +81,8 @@ public class Booking {
 			System.out.println("Trying to find customer--->" + data);
 			
 			try {
-				URL url = new URL(data);
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				connection.setRequestMethod("GET");
-				connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-				// Read the JSON output here
-				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String inputLine;
-
-				StringBuffer response = new StringBuffer();
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-
-				// Try reading it in JSON format
-				try {
-					JSONObject json = new JSONObject(response.toString());
-					System.out.println(json.getString("query_result"));
-
-					String query_response = json.getString("query_result");
-
-					if (query_response.equals("FAILED_CUSTOMER")) {
-						
-					} else if (query_response.equals("SUCCESSFUL_CUSTOMER")) {
-
-						// Read up the JSON values
-						List<String> list = new ArrayList<String>();
-						JSONArray array = json.getJSONArray("customer");
-						
-						String[] values = new String[7];
-						
-						for(int i = 0 ; i < array.length() ; i++){
-						    // Now create the profile
-							values[0] = array.getJSONObject(i).getString("id");
-							values[1] = array.getJSONObject(i).getString("first_name");
-							values[2] = array.getJSONObject(i).getString("last_name");
-							values[3] = array.getJSONObject(i).getString("age");
-							values[4] = array.getJSONObject(i).getString("phone_number");
-							values[5] = array.getJSONObject(i).getString("profile_picture");
-							values[6] = array.getJSONObject(i).getString("account_id");
-						}
-						
-						Profile profile = new Profile(values);
-						rgCustomers.add(profile);
-						this.profile = profile;
-						
-						found = true;
-					} else {
-						System.out.println("Not enough arguments were entered.. try filling both fields");
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+				response = connectToPage(data);
+				found = parseJSONBooking(response);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -165,6 +115,45 @@ public class Booking {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private boolean parseJSONBooking(StringBuffer response) {
+		boolean found = false;
+		// Try reading it in JSON format
+		try {
+			makeJSON(response);
+			if (query_response.equals("SUCCESSFUL_CUSTOMER")) {
+
+				// Read up the JSON values
+				List<String> list = new ArrayList<String>();
+				JSONArray array = json.getJSONArray("customer");
+				
+				String[] values = new String[7];
+				
+				for(int i = 0 ; i < array.length() ; i++){
+				    // Now create the profile
+					values[0] = array.getJSONObject(i).getString("id");
+					values[1] = array.getJSONObject(i).getString("first_name");
+					values[2] = array.getJSONObject(i).getString("last_name");
+					values[3] = array.getJSONObject(i).getString("age");
+					values[4] = array.getJSONObject(i).getString("phone_number");
+					values[5] = array.getJSONObject(i).getString("profile_picture");
+					values[6] = array.getJSONObject(i).getString("account_id");
+				}
+				
+				Profile profile = new Profile(values);
+				rgCustomers.add(profile);
+				this.profile = profile;
+				
+				found = true;
+			} else {
+				System.out.println("Not enough arguments were entered.. try filling both fields");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return found;
 	}
 	
 	public int getID() {
