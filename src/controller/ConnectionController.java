@@ -31,4 +31,9 @@ public class ConnectionController {
 		
 		return response;
 	}
+	
+	protected void debugConnection(String data) {
+		// Send these values to the PHP script
+		System.out.println("Connecting to page ----------> " + data);
+	}
 }
