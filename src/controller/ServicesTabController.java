@@ -207,38 +207,56 @@ public class ServicesTabController extends ConnectionController implements Initi
 		}
 		return false;
 	}
+	
+	private boolean validService() {
+		
+		// Assume the service is valid
+		boolean valid = true;
+		
+		// Validate that data was selected/entered (service name, price)
+		if (serviceChoiceBox.getValue() == null || tfPrice.getText().equals("")) {
+			GUI.createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
+		} else {
+			// Check if service exists and if we can convert the TextField into a double (both need to be true)
+			valid = isServiceInTable() && isDouble(tfPrice.getText());
+		}
+		
+		return valid;
+	}
+	
+	private boolean isServiceInTable() {
+		boolean valid = true;
+		// Check if this service already exists in the table
+		for (int i = 0; i < User.getInstance().services.size(); i++) {
+			if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
+				System.out.println("This service already exists! ");
+				GUI.createDialog("This service already exists!", new String[] { "Ok" }, null);
+				valid = false;
+				break;
+			}
+		}
+		return valid;
+	}
+	
+	private boolean isDouble(String val) {
+		boolean valid = true;
+		// Check if we can format the price
+		try {
+			Double.parseDouble(val);
+		} catch (NumberFormatException e) {
+			GUI.createDialog("Cannot format string to double!", new String[] { "Ok" }, null);
+			valid = false;
+		}
+		return valid;
+	}
 
 	@FXML
 	protected void handleSubmitService(ActionEvent event) throws IOException {
 
 		boolean valid = true;
 
-		// Validate that data was selected/entered (service name, price)
-		if (serviceChoiceBox.getValue() == null || tfPrice.getText().equals("")) {
-			valid = false;
-			GUI.createDialog("Either service or price is not entered!", new String[] { "Ok" }, null);
-		} else {
-			// Both have been filled
-
-			// Check if this service already exists in the table
-			for (int i = 0; i < User.getInstance().services.size(); i++) {
-				if (serviceChoiceBox.getValue().equals(User.getInstance().services.get(i).getService())) {
-					System.out.println("This service already exists! ");
-					GUI.createDialog("This service already exists!", new String[] { "Ok" }, null);
-					return;
-				}
-			}
-
-			// Check if we can format the price
-			try {
-				double price = Double.parseDouble(tfPrice.getText());
-			} catch (NumberFormatException e) {
-				GUI.createDialog("Incorrect price entered!", new String[] { "Ok" }, null);
-				return;
-			}
-		}
-
-		if (valid) {
+	
+		if (validService()) {
 
 			String service = serviceChoiceBox.getValue();
 			String price = tfPrice.getText();
