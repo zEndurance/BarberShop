@@ -258,8 +258,7 @@ public class ServicesTabController extends ConnectionController implements Initi
 
 				updateGUI();
 			} else {
-				// TODO - Display error message to the user that we couldn't
-				// insert onto the database
+				System.out.println("Couldn't service insert into database");
 			}
 		}
 
